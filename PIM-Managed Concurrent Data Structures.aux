@@ -1,0 +1,64 @@
+\relax 
+\citation{Boroumand16}
+\@writefile{toc}{\contentsline {section}{\numberline {1}Introduction}{1}}
+\@writefile{toc}{\contentsline {section}{\numberline {2}The Model}{1}}
+\newlabel{section:model}{{2}{1}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}Hardware model}{1}}
+\newlabel{section:hardware_model}{{2.1}{1}}
+\citation{Azarkhish16}
+\citation{David13}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces The PIM model}}{2}}
+\newlabel{figure:model}{{1}{2}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}Performance model}{3}}
+\newlabel{section:performance_model}{{2.2}{3}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}Pointer-Chasing Data Structure}{3}}
+\newlabel{section:pointer_chasing}{{3}{3}}
+\citation{Heller05}
+\citation{Hendler10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}PIM-managed linked-list}{4}}
+\newlabel{section:linked_list}{{3.1}{4}}
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Experimental results of linked-lists}}{5}}
+\newlabel{figure:linkedlist_data}{{2}{5}}
+\citation{website:HMC}
+\citation{Hendler10}
+\citation{Herlihy08}
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}PIM-managed skip-list}{6}}
+\newlabel{section:skip_list}{{3.2}{6}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.1}Base algorithm}{6}}
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces A PIM-managed FIFO queue with three partitions}}{7}}
+\newlabel{figure:skiplist_structure}{{3}{7}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Experimental results of skip-lists}}{8}}
+\newlabel{figure:skiplist_data}{{4}{8}}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.2}Rebalancing skip-list}{8}}
+\citation{Herlihy08}
+\@writefile{toc}{\contentsline {subsubsection}{\numberline {3.2.3}Parallelism of memory accesses}{9}}
+\citation{Herlihy08}
+\@writefile{toc}{\contentsline {section}{\numberline {4}Contended Data Structure}{11}}
+\newlabel{section:contended}{{4}{11}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}PIM-managed FIFO queue}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A PIM-managed FIFO queue with three segments}}{12}}
+\newlabel{figure:queue_structure}{{5}{12}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces PIM core's execution upon receiving an enqueue request.}}{13}}
+\newlabel{figure:enq}{{6}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces PIM core's execution upon receiving a dequeue request.}}{14}}
+\newlabel{figure:deq}{{7}{14}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Functions to create and retrieve new segments.}}{14}}
+\newlabel{figure:newSegment}{{8}{14}}
+\citation{Morrison13}
+\citation{Morrison13}
+\citation{Hendler10}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}Performance analysis}{16}}
+\bibstyle{abbrv}
+\bibdata{refs_pim}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) illustrates the pipelining optimization, where a PIM core can start executing a new deq() (i.e., step 1 of deq() for the CPU on the left), without waiting for the dequeued node of the previous deq() to get back to a CPU (step 3 of the deq() for the CPU on the right). (b) shows the timeline of pipelining the three steps of four deq() requests.}}{17}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{17}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{17}}
+\newlabel{figure:queue_pipeline}{{9}{17}}
+\bibcite{Azarkhish16}{1}
+\bibcite{Boroumand16}{2}
+\bibcite{website:HMC}{3}
+\bibcite{David13}{4}
+\bibcite{Heller05}{5}
+\bibcite{Hendler10}{6}
+\bibcite{Herlihy08}{7}
+\bibcite{Morrison13}{8}

@@ -1,0 +1,56 @@
+\begin{thebibliography}{1}
+
+\bibitem{Azarkhish16}
+E.~Azarkhish, D.~Rossi, I.~Loi, and L.~Benini.
+\newblock Design and evaluation of a processing-in-memory architecture for the
+  smart memory cube.
+\newblock In {\em Proceedings of the 29th International Conference on
+  Architecture of Computing Systems -- ARCS 2016 - Volume 9637}, pages 19--31,
+  New York, NY, USA, 2016. Springer-Verlag New York, Inc.
+
+\bibitem{Boroumand16}
+A.~Boroumand, S.~Ghose, M.~Patel, H.~Hassan, B.~Lucia, K.~Hsieh, K.~T. Malladi,
+  H.~Zheng, and O.~Mutlu.
+\newblock Lazypim: An efficient cache coherence mechanism for
+  processing-in-memory.
+\newblock In {\em IEEE Computer Architecture Letters}, CAL '16, pages ?--?, ?,
+  2016. IEEE.
+
+\bibitem{website:HMC}
+H.~M.~C. Consortium.
+\newblock Hybrid memory cube specification 1.0.
+
+\bibitem{David13}
+T.~David, R.~Guerraoui, and V.~Trigonakis.
+\newblock Everything you always wanted to know about synchronization but were
+  afraid to ask.
+\newblock In {\em Proceedings of the Twenty-Fourth ACM Symposium on Operating
+  Systems Principles}, SOSP '13, pages 33--48, New York, NY, USA, 2013. ACM.
+
+\bibitem{Heller05}
+S.~Heller, M.~Herlihy, V.~Luchangco, M.~Moir, W.~N. Scherer, and N.~Shavit.
+\newblock A lazy concurrent list-based set algorithm.
+\newblock In {\em Proceedings of the 9th International Conference on Principles
+  of Distributed Systems}, OPODIS'05, pages 3--16, Berlin, Heidelberg, 2006.
+  Springer-Verlag.
+
+\bibitem{Hendler10}
+D.~Hendler, I.~Incze, N.~Shavit, and M.~Tzafrir.
+\newblock Flat combining and the synchronization-parallelism tradeoff.
+\newblock In {\em Proceedings of the Twenty-second Annual ACM Symposium on
+  Parallelism in Algorithms and Architectures}, SPAA '10, pages 355--364, New
+  York, NY, USA, 2010. ACM.
+
+\bibitem{Herlihy08}
+M.~Herlihy and N.~Shavit.
+\newblock {\em The Art of Multiprocessor Programming}.
+\newblock Morgan Kaufmann Publishers Inc., San Francisco, CA, USA, 2008.
+
+\bibitem{Morrison13}
+A.~Morrison and Y.~Afek.
+\newblock Fast concurrent queues for x86 processors.
+\newblock In {\em Proceedings of the 18th ACM SIGPLAN Symposium on Principles
+  and Practice of Parallel Programming}, PPoPP '13, pages 103--112, New York,
+  NY, USA, 2013. ACM.
+
+\end{thebibliography}
