@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.8.15)  25 SEP 2016 22:35
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.8.15)  23 JAN 2017 21:53
 entering extended mode
 **PIM-Managed*Concurrent*Data*Structures.tex
 
-("D:\Dropbox\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Data
- Structures.tex"
+("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
+a Structures.tex"
 LaTeX2e <2011/06/27>
 Babel <v3.8m> and hyphenation patterns for english, afrikaans, ancientgreek, ar
 abic, armenian, assamese, basque, bengali, bokmal, bulgarian, catalan, coptic, 
@@ -275,20 +275,20 @@ Package: multicol 2011/06/27 v1.7a multicolumn formatting (FMi)
 )
 \c@theorem=\count108
 
-("D:\Dropbox\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Data
- Structures.aux")
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 45.
-LaTeX Font Info:    ... okay on input line 45.
+("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
+a Structures.aux")
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 46.
+LaTeX Font Info:    ... okay on input line 46.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: pdftex
@@ -298,15 +298,15 @@ LaTeX Font Info:    ... okay on input line 45.
 * layout: <same size as paper>
 * layoutoffset:(h,v)=(0.0pt,0.0pt)
 * modes: 
-* h-part:(L,W,R)=(92.14519pt, 430.00462pt, 92.14519pt)
-* v-part:(T,H,B)=(95.39737pt, 556.47656pt, 143.09605pt)
+* h-part:(L,W,R)=(72.26999pt, 469.75502pt, 72.26999pt)
+* v-part:(T,H,B)=(72.26999pt, 650.43001pt, 72.26999pt)
 * \paperwidth=614.295pt
 * \paperheight=794.96999pt
-* \textwidth=430.00462pt
-* \textheight=556.47656pt
-* \oddsidemargin=19.8752pt
-* \evensidemargin=19.8752pt
-* \topmargin=23.12738pt
+* \textwidth=469.75502pt
+* \textheight=650.43001pt
+* \oddsidemargin=0.0pt
+* \evensidemargin=0.0pt
+* \topmargin=0.0pt
 * \headheight=0.0pt
 * \headsep=0.0pt
 * \topskip=11.0pt
@@ -338,196 +338,197 @@ LaTeX Font Info:    ... okay on input line 45.
 \makeMPintoPDFobject=\count114
 \everyMPtoPDFconversion=\toks18
 )
-LaTeX Font Info:    Try loading font information for U+msa on input line 46.
+LaTeX Font Info:    Try loading font information for U+msa on input line 47.
  (D:\MiKTeX\tex\latex\amsfonts\umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 46.
+LaTeX Font Info:    Try loading font information for U+msb on input line 47.
  (D:\MiKTeX\tex\latex\amsfonts\umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
+) [1
+
+{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}]
 Package epstopdf Info: Source file: <model.eps>
-(epstopdf)                    date: 2016-09-25 21:30:14
+(epstopdf)                    date: 2016-09-25 20:30:14
 (epstopdf)                    size: 6070387 bytes
 (epstopdf)             Output file: <model-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-25 21:31:21
+(epstopdf)                    date: 2016-09-25 20:31:21
 (epstopdf)                    size: 168720 bytes
 (epstopdf)             Command: <epstopdf --outfile=model-eps-converted-to.pdf 
 model.eps>
-(epstopdf)             \includegraphics on input line 85.
+(epstopdf)             \includegraphics on input line 132.
 Package epstopdf Info: Output file is already uptodate.
-<model-eps-converted-to.pdf, id=1, 2392.94pt x 2055.68pt>
+
+<model-eps-converted-to.pdf, id=8, 2392.94pt x 2055.68pt>
 File: model-eps-converted-to.pdf Graphic file (type pdf)
 
 <use model-eps-converted-to.pdf>
-Package pdftex.def Info: model-eps-converted-to.pdf used on input line 85.
-(pdftex.def)             Requested size: 258.00539pt x 221.64pt.
- [1
+Package pdftex.def Info: model-eps-converted-to.pdf used on input line 132.
+(pdftex.def)             Requested size: 234.8775pt x 201.75325pt.
+ [2] [3 <D:/research/PIM-Managed Concurrent Data Structures/model-eps-converted
+-to.pdf>] [4]
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 304.
 
-{C:/ProgramData/MiKTeX/2.9/pdftex/config/pdftex.map}] [2 <D:/Dropbox/PIM-Manage
-d Concurrent Data Structures/model-eps-converted-to.pdf>] [3]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 238.
 
- (D:\MiKTeX\tex\latex\base\omscmr.fd
+(D:\MiKTeX\tex\latex\base\omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
-LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 238.
- [4]
+LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 304.
+ [5]
 Package epstopdf Info: Source file: <linkedlist_data.eps>
-(epstopdf)                    date: 2016-09-16 13:09:22
+(epstopdf)                    date: 2016-09-16 12:09:22
 (epstopdf)                    size: 1488729 bytes
 (epstopdf)             Output file: <linkedlist_data-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 13:12:00
+(epstopdf)                    date: 2016-09-16 12:12:00
 (epstopdf)                    size: 290121 bytes
 (epstopdf)             Command: <epstopdf --outfile=linkedlist_data-eps-convert
 ed-to.pdf linkedlist_data.eps>
-(epstopdf)             \includegraphics on input line 290.
+(epstopdf)             \includegraphics on input line 356.
 Package epstopdf Info: Output file is already uptodate.
 
-<linkedlist_data-eps-converted-to.pdf, id=31, 4657.4pt x 2621.795pt>
+<linkedlist_data-eps-converted-to.pdf, id=37, 4657.4pt x 2621.795pt>
 File: linkedlist_data-eps-converted-to.pdf Graphic file (type pdf)
 
 <use linkedlist_data-eps-converted-to.pdf>
 Package pdftex.def Info: linkedlist_data-eps-converted-to.pdf used on input lin
-e 290.
-(pdftex.def)             Requested size: 344.005pt x 193.62573pt.
- [5 <D:/Dropbox/PIM-Managed Concurrent Data Structures/linkedlist_data-eps-conv
-erted-to.pdf>]
+e 356.
+(pdftex.def)             Requested size: 375.80544pt x 211.54813pt.
+ [6 <D:/research/PIM-Managed Concurrent Data Structures/linkedlist_data-eps-con
+verted-to.pdf>]
 Package epstopdf Info: Source file: <skiplist_structure.eps>
-(epstopdf)                    date: 2016-09-16 15:27:32
+(epstopdf)                    date: 2016-09-16 14:27:32
 (epstopdf)                    size: 8729893 bytes
 (epstopdf)             Output file: <skiplist_structure-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 15:27:59
+(epstopdf)                    date: 2016-09-16 14:27:59
 (epstopdf)                    size: 351950 bytes
 (epstopdf)             Command: <epstopdf --outfile=skiplist_structure-eps-conv
 erted-to.pdf skiplist_structure.eps>
-(epstopdf)             \includegraphics on input line 344.
+(epstopdf)             \includegraphics on input line 410.
 Package epstopdf Info: Output file is already uptodate.
 
-<skiplist_structure-eps-converted-to.pdf, id=42, 4243.855pt x 2115.905pt>
+<skiplist_structure-eps-converted-to.pdf, id=44, 4243.855pt x 2115.905pt>
 File: skiplist_structure-eps-converted-to.pdf Graphic file (type pdf)
 
 <use skiplist_structure-eps-converted-to.pdf>
 Package pdftex.def Info: skiplist_structure-eps-converted-to.pdf used on input 
-line 344.
-(pdftex.def)             Requested size: 344.005pt x 171.5036pt.
- [6] [7 <D:/Dropbox/PIM-Managed Concurrent Data Structures/skiplist_structure-e
-ps-converted-to.pdf>]
+line 410.
+(pdftex.def)             Requested size: 375.80544pt x 187.35605pt.
+ [7 <D:/research/PIM-Managed Concurrent Data Structures/skiplist_structure-eps-
+converted-to.pdf>]
 Package epstopdf Info: Source file: <skiplist_data.eps>
-(epstopdf)                    date: 2016-09-16 13:09:24
+(epstopdf)                    date: 2016-09-16 12:09:24
 (epstopdf)                    size: 2112457 bytes
 (epstopdf)             Output file: <skiplist_data-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 13:15:16
+(epstopdf)                    date: 2016-09-16 12:15:16
 (epstopdf)                    size: 456653 bytes
 (epstopdf)             Command: <epstopdf --outfile=skiplist_data-eps-converted
 -to.pdf skiplist_data.eps>
-(epstopdf)             \includegraphics on input line 422.
+(epstopdf)             \includegraphics on input line 488.
 Package epstopdf Info: Output file is already uptodate.
 
-<skiplist_data-eps-converted-to.pdf, id=53, 4758.77875pt x 2623.8025pt>
+<skiplist_data-eps-converted-to.pdf, id=52, 4758.77875pt x 2623.8025pt>
 File: skiplist_data-eps-converted-to.pdf Graphic file (type pdf)
 
 <use skiplist_data-eps-converted-to.pdf>
 Package pdftex.def Info: skiplist_data-eps-converted-to.pdf used on input line 
-422.
-(pdftex.def)             Requested size: 344.005pt x 189.6503pt.
- [8 <D:/Dropbox/PIM-Managed Concurrent Data Structures/skiplist_data-eps-conver
-ted-to.pdf>] [9] [10]
+488.
+(pdftex.def)             Requested size: 375.80544pt x 207.18605pt.
+ [8 <D:/research/PIM-Managed Concurrent Data Structures/skiplist_data-eps-conve
+rted-to.pdf>] [9] [10] [11]
 Package epstopdf Info: Source file: <queue_structure.eps>
-(epstopdf)                    date: 2016-09-16 15:47:45
-(epstopdf)                    size: 4309262 bytes
+(epstopdf)                    date: 2017-01-22 22:19:52
+(epstopdf)                    size: 4300477 bytes
 (epstopdf)             Output file: <queue_structure-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 15:50:18
-(epstopdf)                    size: 315370 bytes
+(epstopdf)                    date: 2017-01-22 22:20:32
+(epstopdf)                    size: 302606 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_structure-eps-convert
 ed-to.pdf queue_structure.eps>
-(epstopdf)             \includegraphics on input line 594.
+(epstopdf)             \includegraphics on input line 690.
 Package epstopdf Info: Output file is already uptodate.
 
-<queue_structure-eps-converted-to.pdf, id=66, 3994.925pt x 1429.34pt>
+<queue_structure-eps-converted-to.pdf, id=68, 3994.925pt x 1429.34pt>
 File: queue_structure-eps-converted-to.pdf Graphic file (type pdf)
 
 <use queue_structure-eps-converted-to.pdf>
 Package pdftex.def Info: queue_structure-eps-converted-to.pdf used on input lin
-e 594.
-(pdftex.def)             Requested size: 344.005pt x 123.0735pt.
- [11] [12 <D:/Dropbox/PIM-Managed Concurrent Data Structures/queue_structure-ep
-s-converted-to.pdf>] [13] [14]
-[15]
+e 690.
+(pdftex.def)             Requested size: 375.80544pt x 134.4583pt.
+ [12 <D:/research/PIM-Managed Concurrent Data Structures/queue_structure-eps-co
+nverted-to.pdf>] [13] [14]
 Package epstopdf Info: Source file: <queue_pipeline.eps>
-(epstopdf)                    date: 2016-09-16 16:07:47
+(epstopdf)                    date: 2016-09-16 15:07:47
 (epstopdf)                    size: 1564562 bytes
 (epstopdf)             Output file: <queue_pipeline-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 16:11:08
+(epstopdf)                    date: 2016-09-16 15:11:08
 (epstopdf)                    size: 174785 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_pipeline-eps-converte
 d-to.pdf queue_pipeline.eps>
-(epstopdf)             \includegraphics on input line 847.
+(epstopdf)             \includegraphics on input line 913.
 Package epstopdf Info: Output file is already uptodate.
- <queue_pipeline-eps-converted-to.pdf, id=89, 2308.625pt x 1437.37pt>
+
+<queue_pipeline-eps-converted-to.pdf, id=84, 2308.625pt x 1437.37pt>
 File: queue_pipeline-eps-converted-to.pdf Graphic file (type pdf)
 
 <use queue_pipeline-eps-converted-to.pdf>
 Package pdftex.def Info: queue_pipeline-eps-converted-to.pdf used on input line
- 847.
-(pdftex.def)             Requested size: 193.50076pt x 120.47507pt.
+ 913.
+(pdftex.def)             Requested size: 211.38832pt x 131.59483pt.
 Package epstopdf Info: Source file: <queue_pipeline_timeline.eps>
-(epstopdf)                    date: 2016-09-16 16:38:48
+(epstopdf)                    date: 2016-09-16 15:38:48
 (epstopdf)                    size: 3531903 bytes
 (epstopdf)             Output file: <queue_pipeline_timeline-eps-converted-to.p
 df>
-(epstopdf)                    date: 2016-09-16 16:39:17
+(epstopdf)                    date: 2016-09-16 15:39:17
 (epstopdf)                    size: 77773 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_pipeline_timeline-eps
 -converted-to.pdf queue_pipeline_timeline.eps>
-(epstopdf)             \includegraphics on input line 848.
+(epstopdf)             \includegraphics on input line 914.
 Package epstopdf Info: Output file is already uptodate.
 
-<queue_pipeline_timeline-eps-converted-to.pdf, id=90, 3700.82625pt x 1249.66875
+<queue_pipeline_timeline-eps-converted-to.pdf, id=85, 3700.82625pt x 1249.66875
 pt>
 File: queue_pipeline_timeline-eps-converted-to.pdf Graphic file (type pdf)
  <use queue_pipeline_timeline-eps-converted-to.pdf>
 Package pdftex.def Info: queue_pipeline_timeline-eps-converted-to.pdf used on i
-nput line 848.
-(pdftex.def)             Requested size: 193.50076pt x 65.32828pt.
- [16]
-("D:\Dropbox\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Data
- Structures.bbl" [17 <D:/Dropbox/PIM-Managed Concurrent Data Structures/queue_p
-ipeline-eps-converted-to.pdf> <D:/Dropbox/PIM-Managed Concurrent Data Structure
-s/queue_pipeline_timeline-eps-converted-to.pdf>]) [18]
-("D:\Dropbox\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Data
- Structures.aux") )
+nput line 914.
+(pdftex.def)             Requested size: 211.38832pt x 71.37296pt.
+ [15]
+("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
+a Structures.bbl" [16 <D:/research/PIM-Managed Concurrent Data Structures/queue
+_pipeline-eps-converted-to.pdf> <D:/research/PIM-Managed Concurrent Data Struct
+ures/queue_pipeline_timeline-eps-converted-to.pdf>] [17]) [18]
+("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
+a Structures.aux") )
 (\end occurred inside a group at level 1)
 
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 3636 strings out of 493921
- 52383 string characters out of 3154500
- 131790 words of memory out of 3000000
- 6860 multiletter control sequences out of 15000+200000
- 16264 words of font info for 62 fonts, out of 3000000 for 9000
+ 3650 strings out of 493921
+ 52583 string characters out of 3154500
+ 132899 words of memory out of 3000000
+ 6874 multiletter control sequences out of 15000+200000
+ 14864 words of font info for 56 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
- 42i,22n,41p,492b,2496s stack positions out of 5000i,500n,10000p,200000b,50000s
+ 42i,22n,40p,492b,2435s stack positions out of 5000i,500n,10000p,200000b,50000s
 <D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbx10.pfb><D:/MiKTeX
 /fonts/type1/public/amsfonts/cm/cmbx12.pfb><D:/MiKTeX/fonts/type1/public/amsfon
 ts/cm/cmbx8.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmbxti10.pfb><D:/MiKT
 eX/fonts/type1/public/amsfonts/cm/cmex10.pfb><D:/MiKTeX/fonts/type1/public/amsf
-onts/cm/cmmi10.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi5.pfb><D:/MiKT
-eX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><D:/MiKTeX/fonts/type1/public/amsfo
-nts/cm/cmmi7.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi9.pfb><D:/MiKTeX
-/fonts/type1/public/amsfonts/cm/cmr10.pfb><D:/MiKTeX/fonts/type1/public/amsfont
-s/cm/cmr17.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr6.pfb><D:/MiKTeX/fo
-nts/type1/public/amsfonts/cm/cmr7.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm
-/cmr9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy10.pfb><D:/MiKTeX/fonts
-/type1/public/amsfonts/cm/cmsy7.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/c
-msy8.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy9.pfb><D:/MiKTeX/fonts/t
-ype1/public/amsfonts/cm/cmti10.pfb>
-Output written on "PIM-Managed Concurrent Data Structures.pdf" (18 pages, 21067
-76 bytes).
+onts/cm/cmmi10.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmmi6.pfb><D:/MiKT
+eX/fonts/type1/public/amsfonts/cm/cmmi8.pfb><D:/MiKTeX/fonts/type1/public/amsfo
+nts/cm/cmmi9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr10.pfb><D:/MiKTeX
+/fonts/type1/public/amsfonts/cm/cmr17.pfb><D:/MiKTeX/fonts/type1/public/amsfont
+s/cm/cmr6.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><D:/MiKTeX/fon
+ts/type1/public/amsfonts/cm/cmr9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmsy10.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><D:/MiKTeX/fonts
+/type1/public/amsfonts/cm/cmsy9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/c
+mti10.pfb>
+Output written on "PIM-Managed Concurrent Data Structures.pdf" (18 pages, 20889
+94 bytes).
 PDF statistics:
- 168 PDF objects out of 1000 (max. 8388607)
+ 160 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
  36 words of extra memory for PDF output out of 10000 (max. 10000000)
 
