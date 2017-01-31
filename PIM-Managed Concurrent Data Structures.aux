@@ -72,39 +72,41 @@
 \newlabel{figure:skiplist_structure}{{3}{7}}
 \@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Experimental results of skip-lists}}{8}}
 \newlabel{figure:skiplist_data}{{4}{8}}
-\citation{hsieh2016accelerating}
 \@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.2}Rebalancing skip-list}{9}}
-\@writefile{toc}{\contentsline {subsubsection}{\numberline {4.2.3}Parallelism of memory accesses}{9}}
-\citation{Herlihy08}
-\citation{Herlihy08}
-\@writefile{toc}{\contentsline {section}{\numberline {5}Contended Data Structure}{11}}
-\newlabel{section:contended}{{5}{11}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}PIM-managed FIFO queue}{11}}
-\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A PIM-managed FIFO queue with three segments}}{12}}
-\newlabel{figure:queue_structure}{{5}{12}}
-\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces PIM core's execution upon receiving an enqueue request.}}{13}}
-\newlabel{figure:enq}{{6}{13}}
-\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces PIM core's execution upon receiving a dequeue request.}}{13}}
-\newlabel{figure:deq}{{7}{13}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}Contended Data Structure}{9}}
+\newlabel{section:contended}{{5}{9}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}PIM-managed FIFO queue}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces A PIM-managed FIFO queue with three segments}}{10}}
+\newlabel{figure:queue_structure}{{5}{10}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces PIM core's execution upon receiving an enqueue request.}}{11}}
+\newlabel{figure:enq}{{6}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces PIM core's execution upon receiving a dequeue request.}}{11}}
+\newlabel{figure:deq}{{7}{11}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Functions to create and retrieve new segments.}}{12}}
+\newlabel{figure:newSegment}{{8}{12}}
 \citation{Hendler10}
 \citation{Morrison13}
 \citation{Morrison13}
 \citation{Hendler10}
-\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces Functions to create and retrieve new segments.}}{14}}
-\newlabel{figure:newSegment}{{8}{14}}
-\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Performance analysis}{14}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}Performance analysis}{13}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) illustrates the pipelining optimization, where a PIM core can start executing a new deq() (i.e., step 1 of deq() for the CPU on the left), without waiting for the dequeued node of the previous deq() to get back to a CPU (step 3 of the deq() for the CPU on the right). (b) shows the timeline of pipelining the three steps of four deq() requests.}}{14}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{14}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{14}}
+\newlabel{figure:queue_pipeline}{{9}{14}}
 \bibstyle{abbrv}
 \bibdata{refs_pim}
 \bibcite{Ahn2015:2}{1}
 \bibcite{Ahn2015:1}{2}
 \bibcite{Akin2015:DRM}{3}
 \bibcite{AzarkhishPRLB17}{4}
-\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces (a) illustrates the pipelining optimization, where a PIM core can start executing a new deq() (i.e., step 1 of deq() for the CPU on the left), without waiting for the dequeued node of the previous deq() to get back to a CPU (step 3 of the deq() for the CPU on the right). (b) shows the timeline of pipelining the three steps of four deq() requests.}}{16}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{16}}
-\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{16}}
-\newlabel{figure:queue_pipeline}{{9}{16}}
 \bibcite{Azarkhish2015}{5}
 \bibcite{Azarkhish16}{6}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces (a) Flat-combining queue without hyperthreading. (b) Flat-combining queue with hyperthreading. (c) F\&A-based queue without hyperthreading. (d) F\&A-based queue with hyperthreading. }}{16}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(a)}{\ignorespaces {}}}{16}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(b)}{\ignorespaces {}}}{16}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(c)}{\ignorespaces {}}}{16}}
+\@writefile{lof}{\contentsline {subfigure}{\numberline{(d)}{\ignorespaces {}}}{16}}
+\newlabel{figure:FC_FandA_queues}{{10}{16}}
 \bibcite{Black2006}{7}
 \bibcite{boroumand2016}{8}
 \bibcite{website:HMC}{9}
@@ -127,3 +129,8 @@
 \bibcite{Zhang2014:TTP}{26}
 \bibcite{ZhuASSHPF13}{27}
 \bibcite{ZhuGSPF13}{28}
+\@writefile{toc}{\contentsline {section}{\numberline {A}Parallelism of memory accesses}{18}}
+\citation{hsieh2016accelerating}
+\citation{hsieh2016accelerating}
+\citation{Herlihy08}
+\citation{Herlihy08}

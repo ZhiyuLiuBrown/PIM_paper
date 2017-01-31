@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.8.15)  23 JAN 2017 21:53
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.8.15)  30 JAN 2017 23:39
 entering extended mode
 **PIM-Managed*Concurrent*Data*Structures.tex
 
@@ -367,33 +367,33 @@ Package pdftex.def Info: model-eps-converted-to.pdf used on input line 132.
 (pdftex.def)             Requested size: 234.8775pt x 201.75325pt.
  [2] [3 <D:/research/PIM-Managed Concurrent Data Structures/model-eps-converted
 -to.pdf>] [4]
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 304.
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 303.
 
 
 (D:\MiKTeX\tex\latex\base\omscmr.fd
 File: omscmr.fd 1999/05/25 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10.95> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 304.
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 303.
  [5]
 Package epstopdf Info: Source file: <linkedlist_data.eps>
-(epstopdf)                    date: 2016-09-16 12:09:22
-(epstopdf)                    size: 1488729 bytes
+(epstopdf)                    date: 2017-01-26 18:29:23
+(epstopdf)                    size: 1595690 bytes
 (epstopdf)             Output file: <linkedlist_data-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 12:12:00
-(epstopdf)                    size: 290121 bytes
+(epstopdf)                    date: 2017-01-26 18:30:10
+(epstopdf)                    size: 346242 bytes
 (epstopdf)             Command: <epstopdf --outfile=linkedlist_data-eps-convert
 ed-to.pdf linkedlist_data.eps>
-(epstopdf)             \includegraphics on input line 356.
+(epstopdf)             \includegraphics on input line 355.
 Package epstopdf Info: Output file is already uptodate.
 
-<linkedlist_data-eps-converted-to.pdf, id=37, 4657.4pt x 2621.795pt>
+<linkedlist_data-eps-converted-to.pdf, id=37, 4802.94376pt x 2755.29375pt>
 File: linkedlist_data-eps-converted-to.pdf Graphic file (type pdf)
 
 <use linkedlist_data-eps-converted-to.pdf>
 Package pdftex.def Info: linkedlist_data-eps-converted-to.pdf used on input lin
-e 356.
-(pdftex.def)             Requested size: 375.80544pt x 211.54813pt.
+e 355.
+(pdftex.def)             Requested size: 375.80544pt x 215.55109pt.
  [6 <D:/research/PIM-Managed Concurrent Data Structures/linkedlist_data-eps-con
 verted-to.pdf>]
 Package epstopdf Info: Source file: <skiplist_structure.eps>
@@ -404,7 +404,7 @@ Package epstopdf Info: Source file: <skiplist_structure.eps>
 (epstopdf)                    size: 351950 bytes
 (epstopdf)             Command: <epstopdf --outfile=skiplist_structure-eps-conv
 erted-to.pdf skiplist_structure.eps>
-(epstopdf)             \includegraphics on input line 410.
+(epstopdf)             \includegraphics on input line 409.
 Package epstopdf Info: Output file is already uptodate.
 
 <skiplist_structure-eps-converted-to.pdf, id=44, 4243.855pt x 2115.905pt>
@@ -412,30 +412,30 @@ File: skiplist_structure-eps-converted-to.pdf Graphic file (type pdf)
 
 <use skiplist_structure-eps-converted-to.pdf>
 Package pdftex.def Info: skiplist_structure-eps-converted-to.pdf used on input 
-line 410.
+line 409.
 (pdftex.def)             Requested size: 375.80544pt x 187.35605pt.
  [7 <D:/research/PIM-Managed Concurrent Data Structures/skiplist_structure-eps-
 converted-to.pdf>]
 Package epstopdf Info: Source file: <skiplist_data.eps>
-(epstopdf)                    date: 2016-09-16 12:09:24
-(epstopdf)                    size: 2112457 bytes
+(epstopdf)                    date: 2017-01-26 18:37:10
+(epstopdf)                    size: 2086728 bytes
 (epstopdf)             Output file: <skiplist_data-eps-converted-to.pdf>
-(epstopdf)                    date: 2016-09-16 12:15:16
-(epstopdf)                    size: 456653 bytes
+(epstopdf)                    date: 2017-01-26 18:38:08
+(epstopdf)                    size: 525335 bytes
 (epstopdf)             Command: <epstopdf --outfile=skiplist_data-eps-converted
 -to.pdf skiplist_data.eps>
-(epstopdf)             \includegraphics on input line 488.
+(epstopdf)             \includegraphics on input line 487.
 Package epstopdf Info: Output file is already uptodate.
 
-<skiplist_data-eps-converted-to.pdf, id=52, 4758.77875pt x 2623.8025pt>
+<skiplist_data-eps-converted-to.pdf, id=52, 5035.81375pt x 2650.90375pt>
 File: skiplist_data-eps-converted-to.pdf Graphic file (type pdf)
 
 <use skiplist_data-eps-converted-to.pdf>
 Package pdftex.def Info: skiplist_data-eps-converted-to.pdf used on input line 
-488.
-(pdftex.def)             Requested size: 375.80544pt x 207.18605pt.
+487.
+(pdftex.def)             Requested size: 375.80544pt x 197.79796pt.
  [8 <D:/research/PIM-Managed Concurrent Data Structures/skiplist_data-eps-conve
-rted-to.pdf>] [9] [10] [11]
+rted-to.pdf>] [9]
 Package epstopdf Info: Source file: <queue_structure.eps>
 (epstopdf)                    date: 2017-01-22 22:19:52
 (epstopdf)                    size: 4300477 bytes
@@ -444,18 +444,18 @@ Package epstopdf Info: Source file: <queue_structure.eps>
 (epstopdf)                    size: 302606 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_structure-eps-convert
 ed-to.pdf queue_structure.eps>
-(epstopdf)             \includegraphics on input line 690.
+(epstopdf)             \includegraphics on input line 598.
 Package epstopdf Info: Output file is already uptodate.
 
-<queue_structure-eps-converted-to.pdf, id=68, 3994.925pt x 1429.34pt>
+<queue_structure-eps-converted-to.pdf, id=62, 3994.925pt x 1429.34pt>
 File: queue_structure-eps-converted-to.pdf Graphic file (type pdf)
 
 <use queue_structure-eps-converted-to.pdf>
 Package pdftex.def Info: queue_structure-eps-converted-to.pdf used on input lin
-e 690.
+e 598.
 (pdftex.def)             Requested size: 375.80544pt x 134.4583pt.
- [12 <D:/research/PIM-Managed Concurrent Data Structures/queue_structure-eps-co
-nverted-to.pdf>] [13] [14]
+ [10 <D:/research/PIM-Managed Concurrent Data Structures/queue_structure-eps-co
+nverted-to.pdf>] [11] [12] [13]
 Package epstopdf Info: Source file: <queue_pipeline.eps>
 (epstopdf)                    date: 2016-09-16 15:07:47
 (epstopdf)                    size: 1564562 bytes
@@ -464,15 +464,15 @@ Package epstopdf Info: Source file: <queue_pipeline.eps>
 (epstopdf)                    size: 174785 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_pipeline-eps-converte
 d-to.pdf queue_pipeline.eps>
-(epstopdf)             \includegraphics on input line 913.
+(epstopdf)             \includegraphics on input line 825.
 Package epstopdf Info: Output file is already uptodate.
 
-<queue_pipeline-eps-converted-to.pdf, id=84, 2308.625pt x 1437.37pt>
+<queue_pipeline-eps-converted-to.pdf, id=81, 2308.625pt x 1437.37pt>
 File: queue_pipeline-eps-converted-to.pdf Graphic file (type pdf)
 
 <use queue_pipeline-eps-converted-to.pdf>
 Package pdftex.def Info: queue_pipeline-eps-converted-to.pdf used on input line
- 913.
+ 825.
 (pdftex.def)             Requested size: 211.38832pt x 131.59483pt.
 Package epstopdf Info: Source file: <queue_pipeline_timeline.eps>
 (epstopdf)                    date: 2016-09-16 15:38:48
@@ -483,21 +483,99 @@ df>
 (epstopdf)                    size: 77773 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_pipeline_timeline-eps
 -converted-to.pdf queue_pipeline_timeline.eps>
-(epstopdf)             \includegraphics on input line 914.
+(epstopdf)             \includegraphics on input line 826.
 Package epstopdf Info: Output file is already uptodate.
 
-<queue_pipeline_timeline-eps-converted-to.pdf, id=85, 3700.82625pt x 1249.66875
+<queue_pipeline_timeline-eps-converted-to.pdf, id=82, 3700.82625pt x 1249.66875
 pt>
 File: queue_pipeline_timeline-eps-converted-to.pdf Graphic file (type pdf)
  <use queue_pipeline_timeline-eps-converted-to.pdf>
 Package pdftex.def Info: queue_pipeline_timeline-eps-converted-to.pdf used on i
-nput line 914.
+nput line 826.
 (pdftex.def)             Requested size: 211.38832pt x 71.37296pt.
+ [14 <D:/research/PIM-Managed Concurrent Data Structures/queue_pipeline-eps-con
+verted-to.pdf> <D:/research/PIM-Managed Concurrent Data Structures/queue_pipeli
+ne_timeline-eps-converted-to.pdf>]
+Package epstopdf Info: Source file: <queue_FC.eps>
+(epstopdf)                    date: 2017-01-26 18:08:19
+(epstopdf)                    size: 1103204 bytes
+(epstopdf)             Output file: <queue_FC-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-01-26 18:10:06
+(epstopdf)                    size: 168463 bytes
+(epstopdf)             Command: <epstopdf --outfile=queue_FC-eps-converted-to.p
+df queue_FC.eps>
+(epstopdf)             \includegraphics on input line 922.
+Package epstopdf Info: Output file is already uptodate.
+ <queue_FC-eps-converted-to.pdf, id=92, 4313.11375pt x 2658.93375pt>
+File: queue_FC-eps-converted-to.pdf Graphic file (type pdf)
+
+<use queue_FC-eps-converted-to.pdf>
+Package pdftex.def Info: queue_FC-eps-converted-to.pdf used on input line 922.
+(pdftex.def)             Requested size: 199.64731pt x 123.0549pt.
+Package epstopdf Info: Source file: <queue_FC_hyperthreads.eps>
+(epstopdf)                    date: 2017-01-26 18:08:20
+(epstopdf)                    size: 1189604 bytes
+(epstopdf)             Output file: <queue_FC_hyperthreads-eps-converted-to.pdf
+>
+(epstopdf)                    date: 2017-01-26 18:10:08
+(epstopdf)                    size: 191538 bytes
+(epstopdf)             Command: <epstopdf --outfile=queue_FC_hyperthreads-eps-c
+onverted-to.pdf queue_FC_hyperthreads.eps>
+(epstopdf)             \includegraphics on input line 923.
+Package epstopdf Info: Output file is already uptodate.
+
+<queue_FC_hyperthreads-eps-converted-to.pdf, id=93, 4497.80376pt x 2618.78375pt
+>
+File: queue_FC_hyperthreads-eps-converted-to.pdf Graphic file (type pdf)
+ <use queue_FC_hyperthreads-eps-converted-to.pdf>
+Package pdftex.def Info: queue_FC_hyperthreads-eps-converted-to.pdf used on inp
+ut line 923.
+(pdftex.def)             Requested size: 211.38832pt x 123.07486pt.
+Package epstopdf Info: Source file: <queue_FandA.eps>
+(epstopdf)                    date: 2017-01-26 18:08:18
+(epstopdf)                    size: 1080725 bytes
+(epstopdf)             Output file: <queue_FandA-eps-converted-to.pdf>
+(epstopdf)                    date: 2017-01-26 18:10:10
+(epstopdf)                    size: 170975 bytes
+(epstopdf)             Command: <epstopdf --outfile=queue_FandA-eps-converted-t
+o.pdf queue_FandA.eps>
+(epstopdf)             \includegraphics on input line 924.
+Package epstopdf Info: Output file is already uptodate.
+
+<queue_FandA-eps-converted-to.pdf, id=94, 4216.75375pt x 2482.27374pt>
+File: queue_FandA-eps-converted-to.pdf Graphic file (type pdf)
+
+<use queue_FandA-eps-converted-to.pdf>
+Package pdftex.def Info: queue_FandA-eps-converted-to.pdf used on input line 92
+4.
+(pdftex.def)             Requested size: 211.38832pt x 124.42397pt.
+Package epstopdf Info: Source file: <queue_FandA_hyperthreads.eps>
+(epstopdf)                    date: 2017-01-26 18:08:19
+(epstopdf)                    size: 1154991 bytes
+(epstopdf)             Output file: <queue_FandA_hyperthreads-eps-converted-to.
+pdf>
+(epstopdf)                    date: 2017-01-26 18:10:11
+(epstopdf)                    size: 222625 bytes
+(epstopdf)             Command: <epstopdf --outfile=queue_FandA_hyperthreads-ep
+s-converted-to.pdf queue_FandA_hyperthreads.eps>
+(epstopdf)             \includegraphics on input line 925.
+Package epstopdf Info: Output file is already uptodate.
+
+<queue_FandA_hyperthreads-eps-converted-to.pdf, id=95, 4216.75375pt x 2498.3337
+6pt>
+File: queue_FandA_hyperthreads-eps-converted-to.pdf Graphic file (type pdf)
+ <use queue_FandA_hyperthreads-eps-converted-to.pdf>
+Package pdftex.def Info: queue_FandA_hyperthreads-eps-converted-to.pdf used on 
+input line 925.
+(pdftex.def)             Requested size: 211.38832pt x 125.22897pt.
  [15]
 ("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
 a Structures.bbl" [16 <D:/research/PIM-Managed Concurrent Data Structures/queue
-_pipeline-eps-converted-to.pdf> <D:/research/PIM-Managed Concurrent Data Struct
-ures/queue_pipeline_timeline-eps-converted-to.pdf>] [17]) [18]
+_FC-eps-converted-to.pdf> <D:/research/PIM-Managed Concurrent Data Structures/q
+ueue_FC_hyperthreads-eps-converted-to.pdf> <D:/research/PIM-Managed Concurrent 
+Data Structures/queue_FandA-eps-converted-to.pdf> <D:/research/PIM-Managed Conc
+urrent Data Structures/queue_FandA_hyperthreads-eps-converted-to.pdf>] [17])
+[18] [19] [20]
 ("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
 a Structures.aux") )
 (\end occurred inside a group at level 1)
@@ -505,10 +583,10 @@ a Structures.aux") )
 ### simple group (level 1) entered at line 1061 ({)
 ### bottom level 
 Here is how much of TeX's memory you used:
- 3650 strings out of 493921
- 52583 string characters out of 3154500
- 132899 words of memory out of 3000000
- 6874 multiletter control sequences out of 15000+200000
+ 3671 strings out of 493921
+ 53355 string characters out of 3154500
+ 131908 words of memory out of 3000000
+ 6891 multiletter control sequences out of 15000+200000
  14864 words of font info for 56 fonts, out of 3000000 for 9000
  841 hyphenation exceptions out of 8191
  42i,22n,40p,492b,2435s stack positions out of 5000i,500n,10000p,200000b,50000s
@@ -525,10 +603,10 @@ ts/type1/public/amsfonts/cm/cmr9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmsy10.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><D:/MiKTeX/fonts
 /type1/public/amsfonts/cm/cmsy9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/c
 mti10.pfb>
-Output written on "PIM-Managed Concurrent Data Structures.pdf" (18 pages, 20889
-94 bytes).
+Output written on "PIM-Managed Concurrent Data Structures.pdf" (20 pages, 29647
+62 bytes).
 PDF statistics:
- 160 PDF objects out of 1000 (max. 8388607)
+ 183 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
- 36 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 56 words of extra memory for PDF output out of 10000 (max. 10000000)
 

@@ -62,7 +62,7 @@ and FIFO queue, as an example of contended data structures.
 Designing and implementing concurrent data structures with the normal DRAM memory 
 is known to be notoriously hard for non-experts. 
 We show that in the PIM model, PIM-managed concurrent data structures can be much simpler. 
-With the help of different optimizations like combining, partitioning and pipelining, 
+With the help of different optimizations, such as combining, partitioning and pipelining, 
 our PIM-managed concurrent data structures can in theory be better than, or at least as good as, 
 all other existing algorithms we are aware of, based on our performance model. 
 Our preliminary experiments that indirectly compare our PIM-managed concurrent data structures 
@@ -154,11 +154,10 @@ We may alternatively assume vaults are accessible by CPUs as well,
 but at the cost of dealing with cache coherence between CPUs and PIM cores. 
 Although some cache coherence mechanisms for PIM memory have be proposed 
 and claimed to be not costly (e.g., \cite{boroumand2016}), 
-we tend to keep the hardware simple and we will show we are still able to 
+we prefer to keep the hardware model simple and we will show that we are still able to 
 design efficient concurrent data structure algorithms without CPUs accessing PIM vaults. }
 and a PIM core can only access its local vault\footnote{
-Some papers (e.g., \cite{} TBD: coudn't find one, but have vague memory of at least one) 
-assume that a PIM core can have direct access to a remote vault,
+We may alternatively assume a PIM core has direct access to remote vaults,
 at a larger cost. Even the PIM cores in our model are a little less powerful than that,
 we can still design efficient concurrent data structures with them.}.
 Although a PIM core is relatively slow computationally,
@@ -458,9 +457,9 @@ in order to find the location of its key in a skip-list
 The flat-combining skip-list with $k$ partitions is one that has $k$ combiner locks,
 each for a partition, so that CPUs compete for locks of partitions their operation
 keys belong to.
-Note that in the analytical results above, we ignored some overheads in the flat-combining
-algorithms, such as maintaining combiner locks and combining arrays
-(we will discuss combining arrays in more detail in Section \ref{section:contended}).
+Note that in the analysis above, we ignored some overheads in the flat-combining
+algorithms, such as maintaining combiner locks and publication lists
+(we will discuss publication lists in more detail in Section \ref{section:contended}).
 We also overestimated the performance of the lock-free skip-list by not counting the
 CAS operations used in add() and delete() requests, as well as the cost of retries
 caused by conflicts of updates.
@@ -530,97 +529,6 @@ in order to serve as sentinels) and migrate one of them to another PIM vault;
 2) If two consecutive partitions are both small, we can merge then by moving one to the vault 
 containing the other. 
 If rebalancing happens infrequently, its overhead is affordable. 
-
-\subsubsection{Parallelism of memory accesses}
-If the distribution of requests to the PIM-managed skip-list is very sharp, that is, 
-a lot of requests hit a small range of keys, we may have to rebalance the skip-list too often, 
-incurring significant performance overhead. 
-However, if we don't rebalance the skip-list frequently, 
-a large number of requests may be sent one PIM core, which becomes the performance bottleneck. 
-On the other hand, even existing concurrent skip-list algorithms in which threads execute 
-their operations by themselves in parallel cannot have good performance either, 
-since concurrent updates (i.e., add() and delete()) within a small range conflict with one another. 
-Thus, we believe a PIM-managed skip-list can achieve competitive throughput if each PIM core can 
-execute multiple read-only requests (i.e., contains()) and at most one update request efficiently. 
-We have assumed each PIM core can only deal with one request at a time, 
-but in fact it has the potential to execute multiple requests in parallel.
-
-Hsieh et al. \cite{hsieh2016accelerating} proposed how to design a PIM core that 
-can make multiple memory accesses for multiple pointer-chasing based requests in parallel. 
-The idea is that, after requiring a memory access for an operation request A, 
-it can immediately retrieve another request B without waiting for the data of the memory access for A. 
-The PIM core will later resume A once the data of the memory access is returned.  
-In other words, the PIM core can hide its memory access latency by making multiple accesses in 
-multiple requests in parallel. 
-In theory, if the sum of the latency of doing the computation between two memory accesses 
-for a pointer-chasing based request and the latency of switching from one request to another 
-is only $1/k$ of the latency of a memory access by the PIM core, 
-the PIM core can essentially execute $k$ requests in parallel without 
-delaying the pointer-chasing procedure of each request (see \cite{} (TBD) for more detail). 
-Those requests can therefore be thought of as requests executed in parallel
-by different hardware threads of the PIM core. 
-
-Now we explain in detail how each kind of requests to a PIM-managed skip-list is executed. 
-For a contains($x$) request of key $x$, a PIM core simply does the search procedure for key $x$
-as in a normal sequential skip-list algorithm. 
-For an add($x$) request, The PIM core also does the same search procedure first. 
-If a node of key $x$ already exists in the skip-list, the execution is completed.
-Otherwise, the search procedure must has collected the predecessor and successor nodes 
-between which a new node of key $x$ will be inserted 
-(see \cite{Herlihy08} for more details, where the search procedure is denoted as the find function). 
-The new node of random height is then generated and inserted \textbf{from the bottom layer up}: at each layer, 
-the PIM core first sets the ``next node" pointer of the new node to point to its successor at the layer 
-and then sets the ``next node" pointer of its predecessor at the layer to point to the new node. 
-Similarly, for a delete($x$) request, the PIM core first does the search for key $x$. 
-If a node with key $x$ is in the skip-list, the PIM core removes it \textbf{from the top layer down}: 
-at each layer, the PIM core sets the ``next node" pointer of the node's predecessor to point to its successor.
-To free the memory space of the node, the PIM core can later physically deleted it, either in a quiescent 
-state, or after the PIM core have completed another $k$ requests, since there are at almost $k$ contains() 
-requests executed concurrently with the delete($x$) request and requests after that will never reach the node. 
-
-Now we prove that this PIM-managed skip-list is linearizable. 
-
-\proof
-What we need to prove is that each partition of the PIM-managed skip-list, 
-which is essentially a skip-list within a smaller range of keys in a single PIM vault, 
-is linearizable when there are at most one update request and multiple contains() executed concurrently.   
-
-We start with the linearization points of requests. 
-For a contains($x$) request that finds a node with key $x$ in the skip-list at some layer, 
-its linearization point is the moment the PIM core reads the predecessor of the node at that layer. 
-For a contains($x$) request that doesn't find a node with key $x$, its linearization point is the moment 
-the PIM core reads the predecessor of the first node with key greater than $x$ at the bottom layer 
-(i.e., the node at the bottom layer in the ``predecessor array" return by the find($x$) function \cite{Herlihy08}). 
-For an unsuccessful update to $x$, that is, a delete($x$) that doesn't find an existing node with key $x$ 
-or an add($x$) that finds an existing node with key $x$), 
-its execution is in fact the same as that of a contains($x$) and so does its linearization point. 
-For a successful add($x$) (which doesn't find an existing node with key $x$ and needs to insert a new node), 
-its linearization point is the moment the PIM core modifies the ``next node" pointer of the predecessor 
-of the new node at the bottom layer to point to the new node 
-(that is, the step of inserting the new node at the bottom layer).  
-For a successful delete($x$) (which finds an existing node with key $x$), its linearization point is 
-the moment the PIM core modifies the ``next node" pointer of the predecessor of the node to point to 
-the successor of the node at the bottom level (that is, the step of removing the node at the bottom layer). 
-
-Since update requests are executed sequentially and contains() requests are read-only, 
-it is obvious that the results (i.e., responses) of update requests are consistent 
-with the sequential history defined by the linearization points we just described. 
-To see that a contains($x$) request is also correctly linearized, we first consider the case where 
-the last successful update to $x$ linearized before contains($x$) is a successful add($x$) and 
-the first successful update to $x$ linearized after contains($x$) is a successful delete($x$). 
-We can prove that contains($x$) must find a node with key $x$, consistent with the sequential history. 
-To prove it by contradiction, we assume contains($x$) doesn't find such a node and hence is linearized 
-at the moment it reads the predecessor of the first node with key greater than $x$ at the bottom layer. 
-However, since the last successful update to $x$ linearized before contains($x$) is a successful add($x$), 
-a node with key $x$ must have been inserted between the node contains($x$) is about to read and the first 
-node with key greater than $x$ at the first layer, according to the way we linearize a successful add($x$). 
-Therefore the node contains($x$) is about to read cannot pointer to a node with key greater than $x$, 
-a contradiction, and hence contains($x$) must find a node with key $x$. 
-By very similar proofs that are omitted here, we can show that a contains($x$) is also correctly linearized 
-when the last successful update to $x$ linearized before contains($x$) is a successful delete($x$), or
-the first successful update to $x$ linearized after contains($x$) is a successful add($x$). 
-This completes the proof. 
-\qed
 
 
 \section{Contended Data Structure}
@@ -860,50 +768,54 @@ This optimization is also used in the flat-combining FIFO queue \cite{Hendler10}
 Even without this optimization, our algorithm still performs well, as we will show next. 
 
 \subsection{Performance analysis}
-We will compare the performance of three concurrent FIFO algorithms---our PIM-manged FIFO queue, 
+We will compare the performance of three concurrent FIFO queue algorithms---our PIM-manged FIFO queue, 
 a flat-combining FIFO queue and the F\&A-based FIFO queue \cite{Morrison13}. 
 The F\&A-based FIFO queue is the most efficient concurrent FIFO queue we are aware of, 
 where threads make F\&A operations on two shared variables, 
 one for enqueues and the other for dequeues, to compete for the slots in the FIFO queue to 
 enqueue and dequeue nodes (see \cite{Morrison13} for more details). 
-The flat-combing FIFO queue we consider is based on the one proposed by \cite{Hendler10}, 
-after our modifications, so that threads compete for two ``combiner locks", 
-one for enqueues and the other for dequeues, 
-and we simplify it by assuming the queue is always non-empty so that it doesn't have to deal with 
-the synchronization issue between an enqueue and a dequeue when the queue is empty. 
+The flat-combining FIFO queue we consider is based on the one proposed by \cite{Hendler10}, 
+with a modifications that threads compete for two ``combiner locks", 
+one for enqueues and the other for dequeues. 
+We also simplify it by assuming the queue is always non-empty, so that it doesn't have to deal with 
+the synchronization issue between enqueues and dequeues when the queue is empty. 
 
-We start with the analysis of the algorithms when a queue is long enough such that the PIM-managed 
-FIFO queue has more than one segment and 
-therefore enqueue and dequeue requests can are executed separately. 
-Since creating and changing enqueue and dequeue segments happens very infrequently, its overhead is negligible and assume it never happens in order to simplify our performance analysis.
-(If the threshold of segment length at line 14 in Figure \ref{figure:enq} is some large integer $n$, 
-then, in the worst case, changing enqueue segment can happen only once every $n$ enqueues and 
-changing dequeue segment can happen only once every $n$ dequeues. 
-Also, the cost of do so is only the latency of sending one message and a few steps of local computation.)
-
-Since enqueues and dequeues are isolated, we focus on dequeues here,
+Let us first assume that a queue is long enough such that the PIM-managed FIFO queue 
+has more than one segment and therefore enqueue and dequeue requests can be executed separately. 
+Since creating and changing enqueue and dequeue segments happens very infrequently, 
+its overhead is negligible and therefore ignored to simplify our analysis.
+(If the threshold of segment length at line 14 in Figure \ref{figure:enq} is a large integer $n$, 
+then, in the worst case, changing enqueue or dequeue segments happens only once every $n$ requests, 
+and the cost is only the latency of sending one message and a few steps of local computation.)
+Since enqueues and dequeues are isolated in all the three algorithms, we will focus on dequeues, 
 and the analysis of enqueues is almost identical. 
-Assume there are $p$ concurrent dequeue requests by $p$ CPUs. 
-Since each CPU needs to make a F\&A operation on a shared variable in the F\&A-based algorithm and 
+
+Assume there are $p$ concurrent dequeue requests by $p$ threads. 
+Since each thread needs to make a F\&A operation on a shared variable in the F\&A-based algorithm and 
 F\&A operations on a shared variable are essentially serialized, 
 the execution time of $p$ requests in the algorithm is at least $p\latato$. 
 Similarly, if we assume a CPU makes a request immediately after its previous request is completed, 
 we can prove that the throughput of the algorithm is at most ${1 \over \latato}$.
 
-In the flat-combining FIFO queue, the flat combiner has to go through the combining array to 
-retrieve pending requests and later write results back to the combining array. 
-Since other CUPs with pending requests spin on this shared combining array, 
-each access by the flat combiner to a slot of the combining array incurs at least a last-level cache access. 
-Therefore, the execution time of $p$ requests in the algorithm is at least $2p\latllc$ and 
+The flat-combining FIFO queue maintains a sequential FIFO queue and threads submit operation requests 
+of the queue into a publication list. 
+The publication list consists of slots, one for each thread, to store those requests.
+After writing a request into the list, a thread competes with other threads for acquiring a lock 
+to become the ``flat combiner". 
+The flat combiner then goes through the publication list to retrieve requests, executes operations for 
+those requests and writes results back to the list, while other threads spin on their slots, 
+waiting for the results. 
+The flat combiner therefore makes two last-level cache accesses to each slot, 
+one for reading the request and one for writing the result back. 
+Thus, the execution time of $p$ requests in the algorithm is at least $2p\latllc$ and 
 the throughput of the algorithm is at most ${1 \over 2\latllc}$.
 
-Note that we made quite optimistic analysis for the F\&A-based and flat-combining algorithms 
-by counting only the costs in part of their executions and ignoring their performance degrading under contention. 
-For example, under heavy contention, the F\&A-based algorithm may suffer significant performance degradation 
-because contended atomic operations, such as F\&A and CAS, usually perform much worse in practice.  
-Also, the latency of accessing and modifying nodes by a flat combiner is ignored here. 
-For dequeue requests, this latency can be very high: since nodes to be dequeued in a long queue is unlikely to 
-be cached, a flat combiner has to make a sequence of memory accesses to dequeue them one by one.  
+Note that we has made quite optimistic analysis for the F\&A-based and flat-combining algorithms by counting  only the costs in part of their executions and ignoring their performance degrading under contention. 
+For example, the latency of accessing and modifying queue nodes by the flat combiner is ignored here. 
+For dequeue operations, this latency can be high: since nodes to be dequeued in a long queue is unlikely 
+to be cached, the flat combiner has to make a sequence of memory accesses to dequeue them one by one.  
+Also, the F\&A-based algorithm may suffer performance degradation under heavy contention, 
+because contended atomic operations, such as F\&A and CAS, usually perform worse in practice.
 
 \begin{figure}[ht!]
 %$\hrulefill$
@@ -923,40 +835,200 @@ to get back to a CPU (step 3 of the deq() for the CPU on the right).
 
 The performance of our PIM-managed FIFO queue seems poor at first sight: although a PIM core can update 
 the queue efficiently, it takes a lot of time for the PIM core to send results back to CPUs one by one. 
-However, its performance can be much improved, if we have the PIM core \textit{pipeline} 
-the executions of requests as follows. 
+To improve its performance, the PIM core can \textit{pipeline} the executions of requests, 
+as illustrated in Figure \ref{figure:queue_pipeline}(a). 
 Suppose $p$ CPUs send $p$ dequeue requests concurrently to the PIM core, which takes time $\latmes$. 
 The PIM core fist retrieves a request from its message buffer (step 1 in the figure), 
-dequeues a node (step 2), and sends the node back to a CPU (step 3). 
-Note that, after the PIM core sends off the message containing the node, it can immediately retrieve the next 
-request in its buffer, without waiting for the message to arrive at its receiver 
-(see Figure \ref{figure:queue_pipeline}). 
-Therefore, the PIM core can pipeline requests by overlapping the latency of message transfer (step 3) 
-and the latency of memory accesses and local computations (steps 1 and 2) in multiple request. 
+dequeues a node (step 2) for the request, and sends the node back to a CPU (step 3). 
+After the PIM core sends off the message containing the node, it immediately retrieves the next 
+request from its buffer, without waiting for the message to arrive at its receiver. 
+This way, the PIM core can pipeline requests by overlapping the latency of message transfer (step 3) 
+and the latency of memory accesses and local computations (steps 1 and 2) in multiple requests 
+(see Figure \ref{figure:queue_pipeline}(b)). 
 Note that, during the execution of a dequeue, the PIM core only needs one memory access to read the node 
-to be dequeued, and two L1 cache accesses to read and modify the tail node 
-when the tail node is accessed frequently and hence cached by the PIM core.  
-It is easy to show that the execution time of $p$ requests is only $\latmes + p(\latpim + \epsilon) + \latmes$, 
-where $\epsilon$ is the total latency of two L1 cache accesses, local computation and sending off the message, 
+to be dequeued, and two L1 cache accesses to read and modify the tail node of the dequeue segment.  
+It is easy to prove that the execution time of $p$ requests, including the time CPUs send 
+their requests to the PIM core, is only $\latmes + p(\latpim + \epsilon) + \latmes$, where $\epsilon$ 
+is the PIM core's cost of two L1 cache accesses, doing local computation and sending off one message, 
 which is negligible in our performance model. 
-If we assume a CPU makes a request immediately after its previous request is completed, 
+If each CPU makes another request immediately after it receives the result of its previous request, 
 we can prove that the throughput of the PIM-managed FIFO queue is 
 $${1 - 2\latmes \over \latpim + \epsilon} \approx {1 - 2\latmes \over \latpim} 
-\approx {1 \over \latpim}$$
+\approx {1 \over \latpim}.$$
+Therefore, the throughput of the PIM-managed queue is expected twice that of the flat-combining queue
+and three times that of the F\&A queue, in our performance model assuming $\latato = 3\latllc = 3\latpim$, 
+when the enqueue and dequeue segments are held by two different PIM cores. 
 
-Hence, the throughput of the PIM-managed FIFO queue is expected at least twice the throughput of each of 
-the other two algorithms in our performance model assuming $\latato = 3\latllc = 3\latpim$, 
-when the PIM-managed FIFO queue has more than one segment. 
+When the PIM-managed FIFO queue is short, it may contain only one segment and 
+the segment deals with both enqueue and dequeue requests. 
+In this case, its throughput is only half of the throughput shown above, 
+but it is still at least as good as the throughput of the other two algorithms. 
 
-When a queue is short, the PIM-managed FIFO queue may always have only one segment 
-which deals with both enqueue and dequeue requests. 
-In this case, the throughput of the PIM-managed FIFO queue is only half of that in the case when 
-the queue consists of more than one segment, but still at least as good as the other two algorithms. 
+We have run preliminary experiments for the flat-combining queue and the F\&A-based queue. 
+To be consistent with our analysis above, we have modified the two algorithms in order to 
+measure the performance of the parts we focused in our analysis.  
+More specifically, in the flat-combining queue, the flat combiner does not make 
+real enqueue or dequeue operations for requests. 
+Instead, after retrieving a request from the publication list, 
+the flat combiner simply waits time $t_1$ and then writes a fake result back, 
+where $t_1$ is the average execuion time of enqueuing or dequeuing a node in the original algorithm. 
+This way, we can easily use Linux perf to count the last-level cache accesses incurred 
+on the publication list, in which we are interested, while simulating the rest of the algorithm we omit. 
+In the F\&A-based queue, each thread only makes a F\&A operation on one of the two shared objects 
+to compete for a slot of the queue, and the rest of the algorithm, 
+which does the real enqueue and dequeue operations, is omitted. 
+Again, to simulate the latency of the operations omitted, each thread stays idle for time $t_2$ after 
+the F\&A operation, where $t_2$ is the average execution time of those operations in the original algorithm.
+
+
+The experiments were run on a machine with 14 cores, each having two hyperthreads. 
+To evaluate the algorithms with and without hyperthreading, we chose two settings for the experiments: 
+1) (without hyperthreading) for $1 \le n \le 14$, 
+each of the $n$ threads was pinned to a hyperthread of a different core, and
+2) (with hyperthreading) for $1 \le n \le 28$ and any $1\le i \le n/2$, 
+the $i$th pair of threads were pinned to the two hyperthreads of the $i$th core respectively. 
+The results of our experiments are presented in Figure \ref{figure:FC_FandA_queues}. 
+In each experiment, each thread made $10^7$ requests and we counted the average number of last-level cache 
+accesses a request incurred. 
+
+In the the Flat-combining queue without hyperthreading (Figure \ref{figure:FC_FandA_queues}(a)), 
+each request incurred on average roughly 4.8-4.9 last-level cache accesses. 
+Note that a thread submitting a request can make at most 3 last-level cache accesses: 
+one when it writes the request into the publication list, one when it tries to acquires the lock, 
+one when it reads the result returned by the flat combiner. 
+Thus, we can conclude that the flat combiner incurred at least 1.8-1.9 last-level cache accesses 
+on average for a request, and this result is very close to our expectation (i.e., $2\latllc$ per request). 
+With hyperthreading(Figure \ref{figure:FC_FandA_queues}(b)), 
+each request incurred 4.0-4.5 last-level cache accesses when we had more than 10 threads, 
+and therefore the flat combiner incurred at least 1.0-1.5 last-level cache accesses per request. 
+Although this improves the performance by 90\%-20\%, our PIM-managed queue is still better in theory, 
+given that the performance of our algorithm is expected twice the performance of the Flat-combining queue 
+without hyperthreading in our performance model. 
+
+In the F\&A-based queue without hyperthreading (Figure \ref{figure:FC_FandA_queues}(c)), 
+each request incurred almost one last-level cache access, which is a F\&A operation, 
+meeting our expectation (i.e., $\latato$ per request) in earlier analysis. 
+With hyperthreading (Figure \ref{figure:FC_FandA_queues}(d)), each request made roughly 0.55-0.8 
+last-level cache access (F\&A operation), improving the performance by 82\%-25\%.
+Given that the PIM-managed queue's performance is expected three times better than the F\&A-based queue's 
+in our analysis, the PIM-managed queue should still outperform the F\&A-based queue with hyperthreading. 
+
+
+\begin{figure}[ht!]
+%$\hrulefill$
+%\\
+%\\
+\centering
+\subfigure[]{\includegraphics[width=.425\linewidth]{queue_FC.eps}}
+\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FC_hyperthreads.eps}}
+\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FandA.eps}}
+\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FandA_hyperthreads.eps}}
+
+%$\hrulefill$
+\caption{(a) Flat-combining queue without hyperthreading. (b) Flat-combining queue with hyperthreading. 
+(c) F\&A-based queue without hyperthreading. (d) F\&A-based queue with hyperthreading. }
+\label{figure:FC_FandA_queues}
+\end{figure}
+
+
+\newpage
 
 
 \bibliographystyle{abbrv}
 \bibliography{refs_pim}
 
+\appendix
+
+\section{Parallelism of memory accesses}
+If the distribution of requests to the PIM-managed skip-list is very sharp, that is, 
+a lot of requests hit a small range of keys, we may have to rebalance the skip-list too often, 
+incurring significant performance overhead. 
+However, if we don't rebalance the skip-list frequently, 
+a large number of requests may be sent one PIM core, which becomes the performance bottleneck. 
+On the other hand, even existing concurrent skip-list algorithms in which threads execute 
+their operations by themselves in parallel cannot have good performance either, 
+since concurrent updates (i.e., add() and delete()) within a small range conflict with one another. 
+Thus, we believe a PIM-managed skip-list can achieve competitive throughput if each PIM core can 
+execute multiple read-only requests (i.e., contains()) and at most one update request efficiently. 
+We have assumed each PIM core can only deal with one request at a time, 
+but in fact it has the potential to execute multiple requests in parallel.
+
+Hsieh et al. \cite{hsieh2016accelerating} proposed how to design a PIM core that 
+can make multiple memory accesses for multiple pointer-chasing based requests in parallel. 
+The idea is that, after requiring a memory access for an operation request A, 
+it can immediately retrieve another request B without waiting for the data of the memory access for A. 
+The PIM core will later resume A once the data of the memory access is returned.  
+In other words, the PIM core can hide its memory access latency by making multiple accesses 
+in multiple requests in parallel. 
+In theory, if the sum of the latency of doing the computation between two memory accesses 
+for a pointer-chasing based request and the latency of switching from one request to another 
+is only $1/k$ of the latency of a memory access by the PIM core, 
+the PIM core can essentially execute $k$ requests in parallel without delaying the pointer-chasing 
+procedure of each request (see \cite{hsieh2016accelerating} for more details). 
+Those requests can therefore be thought of as requests executed in parallel
+by different hardware threads of the PIM core. 
+
+Now we explain in detail how each kind of requests to a PIM-managed skip-list is executed. 
+For a contains($x$) request of key $x$, a PIM core simply does the search procedure for key $x$
+as in a normal sequential skip-list algorithm. 
+For an add($x$) request, The PIM core also does the same search procedure first. 
+If a node of key $x$ already exists in the skip-list, the execution is completed.
+Otherwise, the search procedure must has collected the predecessor and successor nodes 
+between which a new node of key $x$ will be inserted 
+(see \cite{Herlihy08} for more details, where the search procedure is denoted as the find function). 
+The new node of random height is then generated and inserted \textbf{from the bottom layer up}: at each layer, 
+the PIM core first sets the ``next node" pointer of the new node to point to its successor at the layer 
+and then sets the ``next node" pointer of its predecessor at the layer to point to the new node. 
+Similarly, for a delete($x$) request, the PIM core first does the search for key $x$. 
+If a node with key $x$ is in the skip-list, the PIM core removes it \textbf{from the top layer down}: 
+at each layer, the PIM core sets the ``next node" pointer of the node's predecessor to point to its successor.
+To free the memory space of the node, the PIM core can later physically deleted it, either in a quiescent 
+state, or after the PIM core have completed another $k$ requests, since there are at almost $k$ contains() 
+requests executed concurrently with the delete($x$) request and requests after that will never reach the node. 
+
+Now we prove that this PIM-managed skip-list is linearizable. 
+
+\proof
+What we need to prove is that each partition of the PIM-managed skip-list, 
+which is essentially a skip-list within a smaller range of keys in a single PIM vault, 
+is linearizable when there are at most one update request and multiple contains() executed concurrently.   
+
+We start with the linearization points of requests. 
+For a contains($x$) request that finds a node with key $x$ in the skip-list at some layer, 
+its linearization point is the moment the PIM core reads the predecessor of the node at that layer. 
+For a contains($x$) request that doesn't find a node with key $x$, its linearization point is the moment 
+the PIM core reads the predecessor of the first node with key greater than $x$ at the bottom layer 
+(i.e., the node at the bottom layer in the ``predecessor array" return by the find($x$) function \cite{Herlihy08}). 
+For an unsuccessful update to $x$, that is, a delete($x$) that doesn't find an existing node with key $x$ 
+or an add($x$) that finds an existing node with key $x$), 
+its execution is in fact the same as that of a contains($x$) and so does its linearization point. 
+For a successful add($x$) (which doesn't find an existing node with key $x$ and needs to insert a new node), 
+its linearization point is the moment the PIM core modifies the ``next node" pointer of the predecessor 
+of the new node at the bottom layer to point to the new node 
+(that is, the step of inserting the new node at the bottom layer).  
+For a successful delete($x$) (which finds an existing node with key $x$), its linearization point is 
+the moment the PIM core modifies the ``next node" pointer of the predecessor of the node to point to 
+the successor of the node at the bottom level (that is, the step of removing the node at the bottom layer). 
+
+Since update requests are executed sequentially and contains() requests are read-only, 
+it is obvious that the results (i.e., responses) of update requests are consistent 
+with the sequential history defined by the linearization points we just described. 
+To see that a contains($x$) request is also correctly linearized, we first consider the case where 
+the last successful update to $x$ linearized before contains($x$) is a successful add($x$) and 
+the first successful update to $x$ linearized after contains($x$) is a successful delete($x$). 
+We can prove that contains($x$) must find a node with key $x$, consistent with the sequential history. 
+To prove it by contradiction, we assume contains($x$) doesn't find such a node and hence is linearized 
+at the moment it reads the predecessor of the first node with key greater than $x$ at the bottom layer. 
+However, since the last successful update to $x$ linearized before contains($x$) is a successful add($x$), 
+a node with key $x$ must have been inserted between the node contains($x$) is about to read and the first 
+node with key greater than $x$ at the first layer, according to the way we linearize a successful add($x$). 
+Therefore the node contains($x$) is about to read cannot pointer to a node with key greater than $x$, 
+a contradiction, and hence contains($x$) must find a node with key $x$. 
+By very similar proofs that are omitted here, we can show that a contains($x$) is also correctly linearized 
+when the last successful update to $x$ linearized before contains($x$) is a successful delete($x$), or
+the first successful update to $x$ linearized after contains($x$) is a successful add($x$). 
+This completes the proof. 
+\qed
 
 
 \end{document}  
