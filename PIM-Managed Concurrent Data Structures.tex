@@ -893,11 +893,14 @@ accesses a request incurred.
 
 In the the Flat-combining queue without hyperthreading (Figure \ref{figure:FC_FandA_queues}(a)), 
 each request incurred on average roughly 4.8-4.9 last-level cache accesses. 
-Note that a thread submitting a request can make at most 3 last-level cache accesses: 
-one when it writes the request into the publication list, one when it tries to acquires the lock, 
+Note that a thread submitting a request usually makes at most 3 last-level cache accesses---one 
+when it writes the request into the publication list, one when it tries to acquires the lock, 
 one when it reads the result returned by the flat combiner. 
+(A thread may retry to acquire the lock, incurring more last-level cache accesses, 
+if its request was missed by the previous flat combiner. 
+However, this situation happened rarely in our experiments and therefore its impact can be ignored.) 
 Thus, we can conclude that the flat combiner incurred at least 1.8-1.9 last-level cache accesses 
-on average for a request, and this result is very close to our expectation (i.e., $2\latllc$ per request). 
+on average per request, and this result is very close to our expectation (i.e., $2\latllc$ per request). 
 With hyperthreading(Figure \ref{figure:FC_FandA_queues}(b)), 
 each request incurred 4.0-4.5 last-level cache accesses when we had more than 10 threads, 
 and therefore the flat combiner incurred at least 1.0-1.5 last-level cache accesses per request. 

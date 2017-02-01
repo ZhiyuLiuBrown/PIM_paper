@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.8.15)  30 JAN 2017 23:39
+This is pdfTeX, Version 3.1415926-2.5-1.40.14 (MiKTeX 2.9 64-bit) (preloaded format=pdflatex 2015.8.15)  31 JAN 2017 19:38
 entering extended mode
 **PIM-Managed*Concurrent*Data*Structures.tex
 
@@ -504,13 +504,13 @@ Package epstopdf Info: Source file: <queue_FC.eps>
 (epstopdf)                    size: 168463 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_FC-eps-converted-to.p
 df queue_FC.eps>
-(epstopdf)             \includegraphics on input line 922.
+(epstopdf)             \includegraphics on input line 925.
 Package epstopdf Info: Output file is already uptodate.
  <queue_FC-eps-converted-to.pdf, id=92, 4313.11375pt x 2658.93375pt>
 File: queue_FC-eps-converted-to.pdf Graphic file (type pdf)
 
 <use queue_FC-eps-converted-to.pdf>
-Package pdftex.def Info: queue_FC-eps-converted-to.pdf used on input line 922.
+Package pdftex.def Info: queue_FC-eps-converted-to.pdf used on input line 925.
 (pdftex.def)             Requested size: 199.64731pt x 123.0549pt.
 Package epstopdf Info: Source file: <queue_FC_hyperthreads.eps>
 (epstopdf)                    date: 2017-01-26 18:08:20
@@ -521,7 +521,7 @@ Package epstopdf Info: Source file: <queue_FC_hyperthreads.eps>
 (epstopdf)                    size: 191538 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_FC_hyperthreads-eps-c
 onverted-to.pdf queue_FC_hyperthreads.eps>
-(epstopdf)             \includegraphics on input line 923.
+(epstopdf)             \includegraphics on input line 926.
 Package epstopdf Info: Output file is already uptodate.
 
 <queue_FC_hyperthreads-eps-converted-to.pdf, id=93, 4497.80376pt x 2618.78375pt
@@ -529,7 +529,7 @@ Package epstopdf Info: Output file is already uptodate.
 File: queue_FC_hyperthreads-eps-converted-to.pdf Graphic file (type pdf)
  <use queue_FC_hyperthreads-eps-converted-to.pdf>
 Package pdftex.def Info: queue_FC_hyperthreads-eps-converted-to.pdf used on inp
-ut line 923.
+ut line 926.
 (pdftex.def)             Requested size: 211.38832pt x 123.07486pt.
 Package epstopdf Info: Source file: <queue_FandA.eps>
 (epstopdf)                    date: 2017-01-26 18:08:18
@@ -539,7 +539,7 @@ Package epstopdf Info: Source file: <queue_FandA.eps>
 (epstopdf)                    size: 170975 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_FandA-eps-converted-t
 o.pdf queue_FandA.eps>
-(epstopdf)             \includegraphics on input line 924.
+(epstopdf)             \includegraphics on input line 927.
 Package epstopdf Info: Output file is already uptodate.
 
 <queue_FandA-eps-converted-to.pdf, id=94, 4216.75375pt x 2482.27374pt>
@@ -547,7 +547,7 @@ File: queue_FandA-eps-converted-to.pdf Graphic file (type pdf)
 
 <use queue_FandA-eps-converted-to.pdf>
 Package pdftex.def Info: queue_FandA-eps-converted-to.pdf used on input line 92
-4.
+7.
 (pdftex.def)             Requested size: 211.38832pt x 124.42397pt.
 Package epstopdf Info: Source file: <queue_FandA_hyperthreads.eps>
 (epstopdf)                    date: 2017-01-26 18:08:19
@@ -558,7 +558,7 @@ pdf>
 (epstopdf)                    size: 222625 bytes
 (epstopdf)             Command: <epstopdf --outfile=queue_FandA_hyperthreads-ep
 s-converted-to.pdf queue_FandA_hyperthreads.eps>
-(epstopdf)             \includegraphics on input line 925.
+(epstopdf)             \includegraphics on input line 928.
 Package epstopdf Info: Output file is already uptodate.
 
 <queue_FandA_hyperthreads-eps-converted-to.pdf, id=95, 4216.75375pt x 2498.3337
@@ -566,7 +566,7 @@ Package epstopdf Info: Output file is already uptodate.
 File: queue_FandA_hyperthreads-eps-converted-to.pdf Graphic file (type pdf)
  <use queue_FandA_hyperthreads-eps-converted-to.pdf>
 Package pdftex.def Info: queue_FandA_hyperthreads-eps-converted-to.pdf used on 
-input line 925.
+input line 928.
 (pdftex.def)             Requested size: 211.38832pt x 125.22897pt.
  [15]
 ("D:\research\PIM-Managed Concurrent Data Structures\PIM-Managed Concurrent Dat
@@ -603,8 +603,8 @@ ts/type1/public/amsfonts/cm/cmr9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/
 cmsy10.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8.pfb><D:/MiKTeX/fonts
 /type1/public/amsfonts/cm/cmsy9.pfb><D:/MiKTeX/fonts/type1/public/amsfonts/cm/c
 mti10.pfb>
-Output written on "PIM-Managed Concurrent Data Structures.pdf" (20 pages, 29647
-62 bytes).
+Output written on "PIM-Managed Concurrent Data Structures.pdf" (20 pages, 29649
+96 bytes).
 PDF statistics:
  183 PDF objects out of 1000 (max. 8388607)
  0 named destinations out of 1000 (max. 500000)
