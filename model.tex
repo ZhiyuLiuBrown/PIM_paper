@@ -1,9 +1,9 @@
 \subsection{Performance model}
 \label{section:performance_model}
-Based on the latency numbers in prior work on PIM memory, in particular on the Hybrid Memory Cube 
-\cite{website:HMC, Azarkhish16}, 
+Based on the latency numbers in prior work on PIM memory, 
+in particular on the Hybrid Memory Cube \cite{website:HMC, Azarkhish16}, 
 and on the evalutation of operations in multiprocessor architectures \cite{David13},
-we propose the following simple performance model that we will use to compare
+we propose the following simple performance model to compare 
 our PIM-managed algorithms with existing concurrent data structure algorithms.
 For read and write operations, we assume 
 $$\latcpu = 3\latpim = 3\latllc,$$
@@ -12,30 +12,20 @@ $\latpim$ is the latency of a local memory access by a PIM core, and
 $\latllc$ is the latency of a last-level cache access by a CPU.
 We ignore the costs of cache accesses of other levels in our performance model,
 as they are negligible in the concurrent data structure algorithms we will consider.
-
-We assume that the latency of making an atomic operation, such as a CAS or a F\&A,
+We assume that the latency of a CPU making an atomic operation, such as a CAS or a F\&A,
 to a cache line is 
 $$\latato = \latcpu,$$ 
 even if the cache line is currently in cache.
 This is because an atomic operation hitting the cache is usually 
 as costly as a memory access by a CPU, acorrding to \cite{David13}.
 When there are $k$ atomic operations competing for a cache line concurrently,
-we assume that they are executed sequentially in an arbitrary order, that is,
+we assume that they are executed sequentially, that is,
 they complete in times $\latato, 2\latato,..., k\latato$, respectively.
-Here we ignore the potential performance degrading of atomic operations
-when they compete for a contended cache line.
-As we will see in Sections \ref{section:pointer_chasing} and
-\ref{section:contended}, this is a conservative assumption
-in the sense that it sometimes overestimates the performance of some existing
-concurrent data structures in our analysis,
-making the comparisons a little unfair against our PIM-managed algorithms.
-
 
 We assume that the size of a message sent by a PIM core or a CPU is at most 
 the size of a cache line.
 Given that a message transferred between a CPU and a PIM core goes through
-the crossbar network, we assume that the latency for such a message to
-arrive at its receiver is 
+the crossbar network, we assume that the latency for a message to arrive at its receiver is 
 $$\latmes = \latcpu.$$
 We make a conservative assumption that the latency of a message transferred 
 between two PIM cores is also $\latmes$.
@@ -46,3 +36,4 @@ the message arrives at the buffer of its receiver.
 We ignore the time spent in other parts of a message passing procedure,
 such as preprocessing and constructing the message,
 as it is negligible compared to the time spent in message transfer.
+

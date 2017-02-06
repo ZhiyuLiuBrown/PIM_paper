@@ -9,39 +9,39 @@
 %\\
 %\\
 \centering
-\includegraphics[width=.5\linewidth]{model.eps}
+\includegraphics[width=.4\linewidth]{model.eps}
 %$\hrulefill$
 \caption{The PIM model}
 \label{figure:model}
 \end{figure}
 
-
 In the hardware model called the \emph{PIM model}, multiple CPUs are connected to the main
 memory, via a shared crossbar network, as illustrated in Figure \ref{figure:model}.
-Each CPU has access to a hierarchy of cache and
-the last-level cache is shared by them. 
 The main memory consists of two parts---one is a normal DRAM accessible by CPUs 
 and the other, called the \emph{PIM memory}, is divided into multiple partitions, 
 called \emph{PIM vaults} or simply vaults.  
+According to the Hybrid Memory Cube specification 1.0 \cite{website:HMC}, each HMC consists of 16 or 
+32 vaults and has total size 2GB or 4 GB (so each vault has size roughly 100MB). 
+We assume the same specifications in our PIM model, although the size of a PIM memory and 
+the number of its vaults can be greater in theory. 
+Each CPU also has access to a hierarchy of cache, coherent to the normal DRAM, 
+and the last-level cache is shared among CPUs. 
+
 Each vault has a \emph{PIM core} directly attached to it.
 we say a vault is \emph{local} to the PIM core attached to it, and vice versa.
 A PIM core is a lightweight CPU that may be slower than a full-fledged CPU
 with respect to computation speed.\footnote{
-We can assume a PIM core is an in-order CPU with only small private L1 cache and 
-it doesn't have some of the optimizations that full-fledged CPUs usually have.}
-A vault can be accessed only by its local PIM core\footnote{
-We may alternatively assume vaults are accessible by CPUs as well, 
+A PIM core can be thought of as an in-order CPU with only small private L1 cache and 
+without some optimizations that full-fledged CPUs usually have.}
+A vault can be accessed only by its local PIM core.\footnote{
+We may alternatively assume that a PIM core has direct access to remote vaults, at a larger cost. 
+We may also assume that vaults are accessible by CPUs as well, 
 but at the cost of dealing with cache coherence between CPUs and PIM cores. 
-Although some cache coherence mechanisms for PIM memory have be proposed 
-and claimed to be not costly (e.g., \cite{boroumand2016}), 
-we prefer to keep the hardware model simple and we will show that we are still able to 
-design efficient concurrent data structure algorithms without CPUs accessing PIM vaults. }
-and a PIM core can only access its local vault\footnote{
-We may alternatively assume a PIM core has direct access to remote vaults,
-at a larger cost. Even the PIM cores in our model are a little less powerful than that,
-we can still design efficient concurrent data structures with them.}.
-Although a PIM core is relatively slow computationally,
-it has much faster access to its local vault than a CPU does.
+Some cache coherence mechanisms for PIM memory have be proposed 
+and claimed to be not costly (e.g., \cite{boroumand2016}). 
+However, we prefer to keep the hardware model simple and we will show that we are still able to 
+design efficient concurrent data structure algorithms with this simple, less powerful PIM memory.}
+Although a PIM core is relatively slow computationally, it has fast access to its local vault.
 
 A PIM core communicates with other PIM cores and CPUs via messages.
 Each PIM, as well as each CPU, has a buffer for storing incoming messages.
@@ -49,16 +49,8 @@ A message is guaranteed to eventually arrive at the buffer of its receiver.
 Messages from the same sender to the same receiver have the FIFO order: 
 the message sent first arrives at the receiver first. 
 However, messages from different senders or to different receivers can arrive in an arbitrary order. 
-Although A PIM core cannot access remote vaults directly, it can in theory send a message
-to the local PIM core of a remote vault to request for the data stored in that vault.
 
-To keep the PIM memory simple, 
-we assume a PIM core can only make read and write operations to its local vault,
-while a CPU also supports more powerful atomic operations, such as CAS and F\&A.
-Virtual memory is cheap to be achieved, by having each PIM core maintain 
-its own page table for its local vaults.
-
-According to the Hybrid Memory Cube specification 1.0 \cite{website:HMC}, each HMC consists of 16 or 
-32 vaults and has size 2GB or 4 GB (so each vault has size roughly 100MB). 
-Therefore, we assume the same specification in our PIM model, although the size of a PIM memory and 
-the number of its vaults can be greater in theory. 
+To keep the PIM memory simple, we assume that a PIM core can only make read and write operations 
+to its local vault, while a CPU also supports more powerful atomic operations, such as CAS and F\&A.
+Virtual memory is cheap to be achieved in our model, 
+by having each PIM core maintain its own page table for its local vault.
