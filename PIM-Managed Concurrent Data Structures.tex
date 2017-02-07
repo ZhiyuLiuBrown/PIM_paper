@@ -47,7 +47,7 @@
 \maketitle
 
 \begin{abstract}
-The process-in-memory (PIM) model has reemerged and drawn a lot of attention recently, 
+The process-in-memory (near-memory or PIM) model has reemerged and drawn a lot of attention recently, 
 as breakthroughs on 3D die-stacked technology make PIM architectures viable. 
 In the PIM model, some lightweight computing units, called PIM cores, are directly attached to 
 the main memory, making memory access by PIM cores much faster than by CPUs. 
@@ -56,8 +56,7 @@ such as embarrassingly parallel, data-intensive algorithms and
 pointer-chasing traversals in sequential data structures, in PIM architectures. 
 
 In this paper, we explore ways to design efficient concurrent data structures in the PIM model. 
-The concurrent data structures we consider include linked-list and skip-list, 
-as examples of pointer-chasing data structures, 
+We consider linked-list and skip-list, as examples of pointer-chasing data structures, 
 and FIFO queue, as an example of contended data structures.  
 Designing and implementing concurrent data structures with the normal DRAM memory 
 is known to be notoriously hard for non-experts. 
@@ -68,6 +67,7 @@ all other existing algorithms we are aware of, based on our performance model.
 Our preliminary experiments that indirectly compare our PIM-managed concurrent data structures 
 with other algorithms also indicate that our algorithms are expected to outperform others. 
 \end{abstract}
+
 \newpage
 
 

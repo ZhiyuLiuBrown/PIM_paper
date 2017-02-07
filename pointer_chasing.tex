@@ -38,12 +38,12 @@ the performance of the naive PIM-managed linked-list is much worse than
 that of the concurrent linked-list with fine-grained locks \cite{Heller05}.
 
 To improve the performance of the PIM-managed linked-list,
-we apply the following \emph{combining optimization} to it:
+we apply the following \textit{combining optimization} to it:
 the PIM core retrieves all pending requests from its buffer and
 executes all of them during only one traversal over the linked-list.
 It is not hard to see that the role of the PIM core in our PIM-managed linked-list
 is very similar to that of the combiner in a concurrent linked-list implemented
-using flat combining \cite{Hendler10}, where, roughly speaking,
+using \textit{flat combining} \cite{Hendler10}, where, roughly speaking,
 threads compete for a ``combiner lock" to become the combiner, and
 the combiner will take over all operation requests from other threads and execute them.
 Therefore, we think the performance of the flat-combining linked-list is a good indicator to
@@ -62,7 +62,7 @@ so that the size of each linked-list nearly doesn't change).
 We also assume that a CPU makes a new operation request immediately after
 its previous one completes.
 The approximate expected throughputs (per second) of the concurrent linked-lists
-are listed below, given $n >> p$ and $N >> p$: 
+are listed below, given $n \gg p$ and $N \gg p$: 
 \begin{itemize}
 \item Concurrent linked-list with fine-grained locks:
 	${2p \over (n+1)\latcpu}$
@@ -99,7 +99,7 @@ We implemented the linked-list with fine-grained locks
 and the flat-combining link-list with and without the combining optimization.
 We ran them on a machine of 28 hardware threads
 and their throughputs are presented in Figure \ref{figure:linkedlist_data}.
-The results meet our expectation based on the analytical results above.
+The results confirmed the validity of our analysis above.
 The throughput of the flat-combining algorithm without combining optimization
 is much worse than the algorithm with fine-grained locks.
 Since we believe the performance of the flat-combining linked-list is a good 
@@ -148,26 +148,26 @@ On the other hand, PIM memory usually consists of many vaults and PIM cores.
 For instance, the first generation of Hybrid Memory Cube \cite{website:HMC} has up to 32 vaults.
 Hence, a PIM-managed skip-list may achieve much better performance if
 we can exploit the parallelism of multiple vaults.
-Here we present our PIM-managed skip-list with a \emph{partitioning optimization}:
+Here we present our PIM-managed skip-list with a \textit{partitioning optimization}:
 A skip-list is divided into partitions of disjoint ranges of keys,
 stored in different vaults, so that a CPU sends its operation request to
 the PIM core of the vault to which the key of the operation belongs.
 
 Figure \ref{figure:skiplist_structure} illustrates the structure of a PIM-managed skip-list.
-Each partition of a skip-list starts with a \emph{sentinel node}
+Each partition of a skip-list starts with a \textit{sentinel node}
 which is a node of the max height. 
 For simplicity, assume the max height $H_{max}$ is predefined.
-The key range a partition covers is between the key of its sentinel node and
+A partition covers a key range between the key of its sentinel node and
 the key of the sentinel node of the next partition.
 CPUs also store a copy of each sentinel node in the normal DRAM and 
 the copy has an extra variable indicating the vault containing the sentinel node.
 Since the number of nodes of the max height is very small with high probability, 
-those copies of those sentinel nodes can almost for certain stay in cache
+those copies of those sentinel nodes can almost certainly stay in cache
 if CPUs access them frequently.
 
-When a CPU wants to make an operation of some key to the skip-list,
-it first compares the key with those of the sentinels, finds out the vault
-the key belongs to, and then sends its operation request to the PIM core of the vault.
+When a CPU applies an operation for a key to the skip-list,
+it first compares the key with those of the sentinels, discovers which vault
+the key belongs to, and then sends its operation request to that vault's PIM core.
 Once the PIM core retrieves the request, it executes the operation in the local vault 
 and finally sends the result back to the CPU.
 
@@ -194,7 +194,7 @@ If a new node to be added has the same key as a sentinel node,
 we insert it immediately after the sentinel node.
 
 We compare the performance of our PIM-managed skip-list with partitions 
-with the performance of a flat-combining skip-list \cite{Hendler10}
+to the performance of a flat-combining skip-list \cite{Hendler10}
 and a lock-free skip-list \cite{Herlihy08}, 
 where $p$ CPUs keeps making operation requests.
 We also apply the partitioning optimization to the flat-combining skip-list, 
@@ -256,7 +256,7 @@ in order to maintain good performance.
 To do so, we can migrate consecutive nodes from one vault to another without blocking requests.  
 
 To move consecutive nodes from its local vault to another vault $v$, a PIM core $p$ 
-can send messages of requests of adding those nodes to the local PIM core $q$ of $v$ as follows. 
+can send messages requesting those nodes to be added to the local PIM core $q$ of $v$ as follows. 
 First, $p$ sends a message notifying $q$ of the start of the migration. 
 Then $p$ sends messages of adding those nodes to $q$ one by one in an ascending order 
 according to the keys of the nodes. 
@@ -268,14 +268,14 @@ to another vault again until $p$ finishes its node migration.
 
 During this node migration, $p$ can still periodically check its message buffer for requests from CPUs.
 Assume that a request with key $k_1$ is sent to $p$ when $p$ is migrating nodes 
-in a key range $k_1$ is in.  
+in a key range containing $k_1$.  
 If $p$ is about to migrate a node with $k_2$ at the moment and $k_1 \ge k_2$, 
 $p$ serves the request itself. 
 Otherwise $p$ forwards the request to $q$. 
 In either case, $p$ can then continue its node migration without blocking concurrent requests. 
-It is not hard to see the correctness of the algorithm with the presence of requests: 
+This algorithm is correct in the presence of requests, because 
 a request will eventually reach the vault that 
-currently contains nodes in the key range that the request belongs to.
+currently contains nodes in the key range that the request belongs to: 
 If a request arrives to $p$ which no longer holds the partition the request belongs to, 
 $p$ can simply reply with a rejection to the CPU and the CPU will resend its request to 
 the correct PIM core, 

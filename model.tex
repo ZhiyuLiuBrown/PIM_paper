@@ -20,7 +20,7 @@ This is because an atomic operation hitting the cache is usually
 as costly as a memory access by a CPU, acorrding to \cite{David13}.
 When there are $k$ atomic operations competing for a cache line concurrently,
 we assume that they are executed sequentially, that is,
-they complete in times $\latato, 2\latato,..., k\latato$, respectively.
+they complete in times $\latato, 2\latato,..., k\cdot\latato$, respectively.
 
 We assume that the size of a message sent by a PIM core or a CPU is at most 
 the size of a cache line.

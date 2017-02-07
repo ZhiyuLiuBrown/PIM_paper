@@ -1,21 +1,19 @@
 \section{Related Work}
-
-Researchers have studied the PIM model for decades (e.g., \cite{Stone1970, Kogge1994, 
-Gokhale1995, Patterson1997, Oskin1998, KangHYKGLTP99, Hall1999}). 
-Implementations of PIM memory have become much more feasible recently due to the advancements 
-in 3D-stacked technology that can stack memory dies on top of a logic layer 
-\cite{jeddeloh2012, Loh2008, Black2006}. 
-Based on this technology, Micron and other vendors together implemented a prototype of 
-PIM memory called the Hybrid Memory Cube \cite{website:HMC} a few years ago. 
-Since then, the PIM model has drawn a lot of attention in the computer architectures community. 
+The PIM model is undergoing a renaissance. 
+Studied for decades 
+(e.g., \cite{Stone1970, Kogge1994, Gokhale1995, Patterson1997, Oskin1998, KangHYKGLTP99, Hall1999}), 
+this model has recently re-emerged due to advances in 3D-stacked techology that 
+can stack memory dies on top of a logic layer \cite{jeddeloh2012, Loh2008, Black2006}. 
+For example, Micron and others have recently released a PIM prototype called 
+the \emph{Hybrid Memory Cube} \cite{website:HMC}, and the model has again become the focus of architectural research.
 Different PIM-based architectures have been proposed, either for general purposes or for 
 specific applications \cite{Ahn2015:1, Ahn2015:2, Zhang2014:TTP, hsieh2016accelerating,
 Azarkhish16, Akin2015:DRM, Azarkhish2015, AzarkhishPRLB17, boroumand2016, ZhuASSHPF13, ZhuGSPF13}.
 
-Besides PIM memory's low energy consumption and high bandwidth 
-(e.g., \cite{Ahn2015:2, Zhang2014:TTP, ZhuASSHPF13, AzarkhishPRLB17}), 
-researchers have also explored the benefits of PIM memory's low memory access latency
-\cite{Loh2008, hsieh2016accelerating, Azarkhish16}, which is what we focus on in this paper. 
+The PIM model has many advantages, including low energy consumption and high bandwidth 
+(e.g., \cite{Ahn2015:2, Zhang2014:TTP, ZhuASSHPF13, AzarkhishPRLB17}). 
+Here, we focus on one more: low memory access latency 
+\cite{Loh2008, hsieh2016accelerating, Azarkhish16}.
 To our knowledge, however, we are the first to utilize PIM memory for designing efficient 
 concurrent data structures. 
 Although some researchers have studied how PIM memory can help speed up concurrent 
@@ -28,17 +26,14 @@ This makes designing concurrent data structures with correctness guarantees like
 linearizability \cite{Herlihy90} very challenging. 
 
 Moreover, no one has ever compared the performance of data structures in the PIM model 
-with that of existing concurrent data structures in the classic shared memory model. 
+with that of state-of-the-art concurrent data structures in the classic shared memory model. 
 We analyze and evaluate concurrent linked-lists and skip-lists, 
 as representatives of pointer-chasing data structures, and concurrent FIFO queues, 
 as representatives of contended data structures.
-For linked-lists, we compare our PIM-managed implementation with the concurrent linked-list with 
-fine-grained locks \cite{Heller05}, and the one implemented using flat combining 
-\cite{Hendler10}, a generic technique to design concurrent data structures.  
+For linked-lists, we compare our PIM-managed implementation with well-known approaches 
+such as fine-grained locking \cite{Heller05} and flat combining \cite{Hendler10}.
+
 For skip-lists, we compare our implementation with the lock-free skip-list \cite{Herlihy08} 
 and a skip-list with flat combining and partitioning optimization. 
 For FIFO queues, we compare our implementation with the flat-combining FIFO queue 
-\cite{Hendler10} and the F\&A-based FIFO queue \cite{Morrison13}.  
-As we will show in the paper, our simple PIM-managed concurrent data structures can in theory 
-outperform those concurrent data structures, 
-making PIM memory a promising platform to run concurrent data structures.
+\cite{Hendler10} and the F\&A-based FIFO queue \cite{Morrison13}. 
