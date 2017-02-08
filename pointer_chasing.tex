@@ -75,31 +75,32 @@ To simplify the analysis, we assume that CPUs only make $contains()$ requests
 so that the size of each linked-list nearly doesn't change).
 We also assume that a CPU makes a new operation request immediately after
 its previous one completes.
-The approximate expected throughputs (per second) of the concurrent linked-lists
-are listed below, given $n \gg p$ and $N \gg p$: 
-\begin{itemize}
-\item Concurrent linked-list with fine-grained locks:
-	${2p \over (n+1)\latcpu}$
-
-\item Flat-combining linked-list without combining optimization: 
-	${2 \over (n+1)\latcpu}$
-
-\item PIM-managed linked-list without combining optimization:
-	${2 \over (n+1)\latpim}$
-
-\item Flat-combining linked-list with combining optimization:
-    ${p \over (n-\Sp)\latcpu}$
-
-\item PIM-managed linked-list with combining optimization:
-    ${p \over (n-\Sp)\latpim}$
-\end{itemize}
+Assuming that $n \gg p$ and $N \gg p$, the approximate expected throughputs (per second) 
+of the concurrent linked-lists are presented in Table \ref{tab:linkedlist}, 
 where $\Sp = \sum\limits_{i=1}^{n} ({i \over n+1})^{p}$.\footnote{
 We define the rank of an operation request to a linked-list as the number of pointers
 it has to traverse until it finds the right position for it in the linked-list.
 $\Sp$ is the expected rank of the operation request with the biggest key
 among $p$ random requests a PIM core or a combiner has to combine,
 which is essentially the expected number of pointers a PIM core or a combiner
-has to go through during one pointer chasing procedure.} 
+has to go through during one pointer chasing procedure.}
+
+\begin{table*}[ht!]
+\begin{center}
+    \begin{tabular}{| l | l |}
+    \hline
+    Algorithm & Throughput\\ \hline
+    Concurrent linked-list with fine-grained locks & ${2p \over (n+1)\latcpu}$ \\ \hline
+    Flat-combining linked-list without combining optimization & ${2 \over (n+1)\latcpu}$ \\ \hline
+    PIM-managed linked-list without combining optimization & ${2 \over (n+1)\latpim}$ \\ \hline
+    Flat-combining linked-list with combining optimization & ${p \over (n-\Sp)\latcpu}$ \\ \hline
+    PIM-managed linked-list with combining optimization & ${p \over (n-\Sp)\latpim}$ \\ \hline
+    \end{tabular}
+\end{center}
+\caption{Throughputs of linked-list algorithms.}
+\label{tab:linkedlist}
+\end{table*}
+
 It is easy to see that the PIM-managed linked-list with combining outperforms 
 the linked-list with fine-grained locks, which is the best one among other algorithms, 
 as long as ${\latcpu \over \latpim} > {2(n - \Sp)\over n + 1}$.
@@ -108,7 +109,6 @@ the throughput of the PIM-managed linked-list with combining should be at least
 1.5 times the throughput of the linked-list with fine-grained locks.
 Without combining, however, the PIM-managed linked-list cannot
 beat the linked-list with fine-grained locks when $p > 6$.
-
 
 We implemented the linked-list with fine-grained locks and the flat-combining link-list 
 with and without the combining optimization.
@@ -121,7 +121,7 @@ Each core has 2 hyperthreads, for a total of 28 hyperthreads.
 Cache lines have 64 bytes.
 
 The throughputs of the algorithms are presented in Figure \ref{figure:linkedlist_data}.
-The results confirmed the validity of our analysis above.
+The results confirmed the validity of our analysis in Table \ref{tab:linkedlist}.
 The throughput of the flat-combining algorithm without combining optimization
 is much worse than the algorithm with fine-grained locks.
 Since we believe the performance of the flat-combining linked-list is a good 
@@ -154,7 +154,8 @@ linked-list with combining optimization now beats all others'.
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=1.0\linewidth]{linkedlist_data.eps} % first figure itself
-    \caption{Experimental results of linked-lists}
+    \caption{Experimental results of linked-lists. We evaluated the linked-list with Fine-grained locks 
+        and the flat-combining linked-list (FC) with and without the combining optimization.}
    \label{figure:linkedlist_data}
 \end{figure}
 
@@ -233,25 +234,7 @@ initial structure (expect that skip-lists with partitions have extra sentinel no
 and all the operations are contains() operations
 (or the number of $add()$ requests is the same as the number of $delete()$ 
 so that the size of each skip-list nearly doesn't change).
-Their approximate expected throughputs are as follows:
-\begin{itemize}
-\item Look-free skip-list:
-	${p \over \beta\latcpu}$
-
-\item Flat-combining skip-list without partitioning:
-	${1 \over \beta\latcpu}$
-
-\item PIM-managed skip-list without partitioning:
-
-	${1 \over (\beta\latpim + \latmes)}$
-
-\item Flat-combining skip-list with $k$ partitions:
-    ${k \over \beta\latcpu}$
-
-\item PIM-managed linked-list with $k$ partitions:
-
-    ${k \over (\beta\latpim + \latmes)}$
-\end{itemize}
+Their approximate expected throughputs are presented in Table \ref{tab:skiplist}, 
 where $\beta$ is the average number of nodes an operation has to go through
 in order to find the location of its key in a skip-list
 ($\beta = \Theta(\log N)$, where $N$ is the size of the skip-list).
@@ -265,6 +248,22 @@ Even so, our PIM-managed linked-list with partitioning optimization is
 still expected to outperform the second best algorithm, the lock-free skip-list 
 when $k > {(\beta\latpim + \latmes)p \over \beta\latcpu}$.
 Given that $\latmes = \latcpu = 3\latpim$, $k > p/3$ should suffice.
+
+\begin{table*}[ht!]
+\begin{center}
+    \begin{tabular}{| l | l |}
+    \hline
+    Algorithm & Throughput\\ \hline
+    Look-free skip-list & ${p \over \beta\latcpu}$ \\ \hline
+    Flat-combining skip-list without partitioning & ${1 \over \beta\latcpu}$ \\ \hline
+    PIM-managed skip-list without partitioning & ${1 \over (\beta\latpim + \latmes)}$ \\ \hline
+    Flat-combining skip-list with $k$ partitions & ${k \over \beta\latcpu}$ \\ \hline
+    PIM-managed skip-list with $k$ partitions & ${k \over (\beta\latpim + \latmes)}$ \\ \hline
+    \end{tabular}
+\end{center}
+\caption{Throughputs of skip-list algorithms.}
+\label{tab:skiplist}
+\end{table*}
 
 Our experiments have revealed similar results, 
 as presented in Figure \ref{figure:skiplist_data}.
@@ -282,7 +281,8 @@ it is expected to outperform the lock-free skip-list with up to 28 hardware thre
 \begin{figure}[ht!]
     \centering
     \includegraphics[width=1.0\linewidth]{skiplist_data.eps} % second figure itself
-    \caption{Experimental results of skip-lists}
+    \caption{Experimental results of skip-lists. We evaluated the lock-free skip-list and 
+    the flat-combining skip-list (FC) with different numbers (1, 4, 8, 16) of partitions.}
     \label{figure:skiplist_data}
 \end{figure}
 
