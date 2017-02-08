@@ -1,5 +1,6 @@
 
-\section{Pointer-Chasing Data Structure}
+%\section{Pointer-Chasing Data Structures}
+\section{Data Structures with Low Contention}
 \label{section:pointer_chasing}
 Now we discuss how we design efficient PIM-managed pointer-chasing data structures.
 In a pointer-chasing data structure, an operation (e.g., an insertion) has to traverse over 
@@ -14,7 +15,8 @@ such that a large portion of a data structure has to reside in memory at any tim
 Thus, the performance bottleneck becomes the memory accesses incurred during pointer chasing.
 
 
-\subsection{PIM-managed linked-list}
+%\subsection{PIM-managed linked-list}
+\subsection{Linked-lists}
 \label{section:linked_list}
 The naive PIM-managed linked-list is simple:
 the linked-list is stored in a vault, maintained by the local PIM core.
@@ -145,10 +147,11 @@ linked-list with combining optimization now beats all others'.
 \end{figure}
 
 
-\subsection{PIM-managed skip-list}
+\subsection{Skip-lists}
 \label{section:skip_list}
 
-\subsubsection{Base algorithm}
+%\subsubsection{Base algorithm}
+
 Like the naive PIM-managed linked-list,
 the naive PIM-managed skip-list keeps the skip-list in a single vault and
 CPUs send operation requests to the local PIM core that executes those operations.
@@ -272,7 +275,8 @@ it is expected to outperform the lock-free skip-list with up to 28 hardware thre
 \end{figure}
 
 
-\subsubsection{Rebalancing skip-list}
+%\subsubsection{Rebalancing skip-list}
+\subsection{Skip-list Rebalancing}
 We have shown that our PIM-managed skip-list performs well with uniform distribution of requests. 
 With non-uniform distribution of requests, we may need to periodically rebalance the skip-list 
 in order to maintain good performance. 
