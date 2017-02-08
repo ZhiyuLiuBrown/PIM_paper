@@ -27,7 +27,7 @@ A queue consists of a sequence of segments, each containing consecutive nodes of
 A segment is allocated in a PIM vault, with a head node and a tail node pointing to the first 
 and the last nodes of the segment, respectively.
 A vault can contain multiple (mostly likely non-consecutive) segments. 
-There are two special segments---the \emph{enqueue segment} and the \emph{dequeue segment}.
+There are two special segments---the \textit{enqueue segment} and the \textit{dequeue segment}.
 To enqueue a node, a CPU sends an enqueue request to the PIM core of the vault 
 containing the enqueue segment.
 The PIM core will then insert the node to the head of the segment.
@@ -62,14 +62,14 @@ held in a single vault.
 %\\
 %\\
 \centering
-\includegraphics[width=.6\linewidth]{queue_structure.eps}
+\includegraphics[width=1.0\linewidth]{queue_structure.eps}
 %$\hrulefill$
 \caption{A PIM-managed FIFO queue with three segments}
 \label{figure:queue_structure}
 \end{figure}
 
 
-
+\begin{comment}
 \begin{figure}
 \begin{algorithm}[H]
 \SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
@@ -166,6 +166,7 @@ held in a single vault.
 \caption{Functions to create and retrieve new segments.}
 \label{figure:newSegment}
 \end{figure}
+\end{comment}
 
 The pseudocode of the algorithm is presented in 
 Figures \ref{figure:enq}-\ref{figure:newSegment}. 
@@ -293,8 +294,9 @@ because contended F\&A operations may perform worse in practice.
 %\\
 %\\
 \centering
-\subfigure[]{\includegraphics[width=.45\linewidth]{queue_pipeline.eps}}
-\subfigure[]{\includegraphics[width=.45\linewidth]{queue_pipeline_timeline.eps}}
+\subfigure[]{\includegraphics[width=.8\linewidth]{queue_pipeline.eps}}
+\\
+\subfigure[]{\includegraphics[width=1.0\linewidth]{queue_pipeline_timeline.eps}}
 
 %$\hrulefill$
 \caption{(a) illustrates the pipelining optimization, where a PIM core can start executing 
@@ -395,13 +397,12 @@ the PIM-managed queue's expected performance.
 %\\
 %\\
 \centering
-\subfigure[]{\includegraphics[width=.425\linewidth]{queue_FC.eps}}
-\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FC_hyperthreads.eps}}
-\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FandA.eps}}
-\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FandA_hyperthreads.eps}}
+\subfigure[]{\includegraphics[width=.9\linewidth]{queue_FC.eps}}
+%\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FC_hyperthreads.eps}}
+\subfigure[]{\includegraphics[width=.9\linewidth]{queue_FandA.eps}}
+%\subfigure[]{\includegraphics[width=.45\linewidth]{queue_FandA_hyperthreads.eps}}
 
 %$\hrulefill$
-\caption{(a) Flat-combining queue without hyperthreading. (b) Flat-combining queue with hyperthreading. 
-(c) F\&A-based queue without hyperthreading. (d) F\&A-based queue with hyperthreading. }
+\caption{(a) Flat-combining queue. (b) F\&A-based queue without hyperthreading.}
 \label{figure:FC_FandA_queues}
 \end{figure}
