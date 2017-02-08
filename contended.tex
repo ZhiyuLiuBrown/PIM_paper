@@ -1,5 +1,6 @@
 
-\section{Contended Data Structure}
+%\section{Contended Data Structures}
+\section{Data Structures with High Contention}
 \label{section:contended}
 In this section, we will discuss techniques of designing efficient contented data structures 
 with the PIM memory.
@@ -20,7 +21,7 @@ lose the performance boosting provided by CPUs' cache.
 However, we are going to show a somewhat counterintuitive result that we can still design
 a PIM-managed FIFO queue that outperforms other existing algorithms.
 
-\subsection{PIM-managed FIFO queue}
+\subsection{FIFO queues}
 The structure of our PIM-managed FIFO queue is shown in Figure \ref{figure:queue_structure}.
 A queue consists of a sequence of segments, each containing consecutive nodes of the queue.
 A segment is allocated in a PIM vault, with a head node and a tail node pointing to the first 
