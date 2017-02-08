@@ -1,31 +1,43 @@
 
 %\section{Pointer-Chasing Data Structures}
-\section{Data Structures with Low Contention}
+\section{Low Contention Data Structures}
 \label{section:pointer_chasing}
-Now we discuss how we design efficient PIM-managed pointer-chasing data structures.
-In a pointer-chasing data structure, an operation (e.g., an insertion) has to traverse over 
-items of the data structure by following a sequence of pointers, 
-until it finds the right place to apply itself.
-The examples we consider are linked-list and skip-list,
-where add($x$), delete($x$) and contains($x$) operations have to go through
-a sequence of ``next node" pointers until reaching the position of node $x$.
-The performance bottleneck of such an operation is usually the pointer chasing procedure.
-Here we focus on data structures much larger than the size of cache of CPUs
-such that a large portion of a data structure has to reside in memory at any time.
-Thus, the performance bottleneck becomes the memory accesses incurred during pointer chasing.
 
+In this section we consider data structures with low contention; pointer chasing data structures, 
+such as linked-lists and skip-lists, fall in this category.  
+These are data structures whose operations  
+need to de-reference a non-constant sequence of pointers before completing. We assume they support operations 
+such as add($x$), delete($x$) and contains($x$), which follow ``next node" pointers until 
+reaching the position of node $x$.
+When these data structures access uniformly random keys and when they are too large to fit in CPU caches, 
+they incur expensive memory accesses, which cannot
+be easily predicted, making the pointer chasing the dominating overhead of these data structures.
+Naturally, these data structures have been early examples of the benefit of near-memory 
+computing~\cite{}, as the entire pointer chase could be performed by the PIM core, and only the final result returned to 
+the application. 
+
+However, under the same conditions, these data structures have inherently low contetion. Lock-free algorithms~\cite{}
+have shown that these data structures can scale to hundreds of cores under low contention. Unfortunately, each vault in 
+PIM memory has a single core; as a consequence, prior work 
+has only compared PIM data structures with sequential data structures, 
+not with carefully crafted concurrent data structures.
+
+We analyze linked-lists and skip-lists, and show that the naive PIM data structure in each case cannot 
+outperform the equivalent CPU managed concurrent data structure even for a small number of cores. Next, 
+we show how to use state-of-the art techniques from concurrent computing literature to 
+optimize algorithms for near-memory computing to outperform well known concurrent data 
+structures. 
 
 %\subsection{PIM-managed linked-list}
 \subsection{Linked-lists}
 \label{section:linked_list}
-The naive PIM-managed linked-list is simple:
-the linked-list is stored in a vault, maintained by the local PIM core.
-Whenever a CPU\footnote{From now on, we use threads and CPUs interchangeably.} 
-wants to make an operation to the linked-list,
-it sends the PIM core a message containing a request of the operation. 
-The PIM core will retrieve the message, execute the operation, and send the result back to CPU.
-The concurrent linked-list can actually be implemented
-as a sequential one, since it is accessible directly only by the PIM core.
+We now describe a naive PIM linked-list.
+The linked-list is stored in a vault, maintained by the local PIM core.
+Whenever a CPU\footnote{To avoid confusion, we use the term CPU to refer to CPU cores, as oposed to PIM cores.} 
+wants to perform an operation on the linked-list,
+it sends a request to the PIM core.
+The PIM core will retrieve the message, execute the operation, and send the result back to the CPU.
+The PIM linked-list is sequential, as it can only be accessed by one PIM core. 
 
 Doing pointer chasing on sequential data structures by PIM cores is not a new idea
 (e.g., \cite{hsieh2016accelerating, Ahn2015:2}).
@@ -276,31 +288,33 @@ it is expected to outperform the lock-free skip-list with up to 28 hardware thre
 
 
 %\subsubsection{Rebalancing skip-list}
-\subsection{Skip-list Rebalancing}
-We have shown that our PIM-managed skip-list performs well with uniform distribution of requests. 
-With non-uniform distribution of requests, we may need to periodically rebalance the skip-list 
-in order to maintain good performance. 
-To do so, we can migrate consecutive nodes from one vault to another without blocking requests.  
+\subsubsection{Skip-list Rebalancing}
+The PIM-managed skip-list performs well with a uniform distribution of requests.
+However, if the distribution of requests is not uniform, a static partitioning scheme 
+will result in unbalanced partitions, with some PIM cores being idle, while others having to 
+serve a majority of requests. To address this problem, we introduce a non-blocking protocol for 
+migrating consecutive nodes from one vault to another. 
 
-To move consecutive nodes from its local vault to another vault $v$, a PIM core $p$ 
-can send messages requesting those nodes to be added to the local PIM core $q$ of $v$ as follows. 
+The protocol works as follows. 
+A PIM core $p$ that manages a vault $v'$ can send a message to another PIM core $q$, managing vault 
+$v$, to request that some nodes are moved from $v'$ to $v$. 
 First, $p$ sends a message notifying $q$ of the start of the migration. 
 Then $p$ sends messages of adding those nodes to $q$ one by one in an ascending order 
 according to the keys of the nodes. 
-After all those nodes have been migrated, $p$ sends notification messages to CPUs so that 
-CPUs can update their copies of sentinel nodes accordingly.
-Once $p$ receives acknowledgement messages from all CPUs, it notifies $q$ of the end of migration.
+After all the nodes have been migrated, $p$ sends notification messages to CPUs so that 
+they can update their copies of sentinel nodes accordingly.
+After $p$ receives acknowledgement messages from all CPUs, it notifies $q$ of the end of migration.
 To keep the node migration protocol simple, we don't allow $q$ to move those nodes 
 to another vault again until $p$ finishes its node migration. 
 
-During this node migration, $p$ can still periodically check its message buffer for requests from CPUs.
+During the node migration, $p$ can still serve requests from CPUs.
 Assume that a request with key $k_1$ is sent to $p$ when $p$ is migrating nodes 
 in a key range containing $k_1$.  
-If $p$ is about to migrate a node with $k_2$ at the moment and $k_1 \ge k_2$, 
+If $p$ is about to migrate a node with key $k_2$ at the moment and $k_1 \ge k_2$, 
 $p$ serves the request itself. 
 Otherwise $p$ forwards the request to $q$. 
-In either case, $p$ can then continue its node migration without blocking concurrent requests. 
-This algorithm is correct in the presence of requests, because 
+
+The algorithm is correct, because 
 a request will eventually reach the vault that 
 currently contains nodes in the key range that the request belongs to: 
 If a request arrives to $p$ which no longer holds the partition the request belongs to, 
@@ -308,10 +322,14 @@ $p$ can simply reply with a rejection to the CPU and the CPU will resend its req
 the correct PIM core, 
 because it has already updated its sentinels and knows which PIM core it should contact now. 
 
-Using this node migration protocol, our FIFO queue can support two rebalancing schemes:
-1) If a partition has too many nodes, the local PIM core can divide it into two smaller  
-partitions and migrate one of them to another PIM vault; 
+Using this node migration protocol, the PIM-managed FIFO queue can support two rebalancing schemes:
+1) If a partition has too many nodes, the local PIM core can send some of them to a vault that has 
+fewer nodes;
 2) If two consecutive partitions are both small, 
 we can merge then by moving one to the vault containing the other. 
-If rebalancing happens infrequently, its overhead is affordable. 
+%TODO
+[HOW DOES THE PROTOCOL COMMENCE MERGING? WHY CONSECUTIVE?]
+
+In practice, we expect that rebalancing will not happen very frequently, so its overhead can be 
+ameliorated by the improved efficiency resulting from a rebalance. 
 
