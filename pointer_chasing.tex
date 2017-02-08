@@ -67,7 +67,7 @@ are listed below, given $n \gg p$ and $N \gg p$:
 \item Concurrent linked-list with fine-grained locks:
 	${2p \over (n+1)\latcpu}$
 
-\item Flat-combining linked-list without combining optimization:
+\item Flat-combining linked-list without combining optimization: 
 	${2 \over (n+1)\latcpu}$
 
 \item PIM-managed linked-list without combining optimization:
@@ -95,10 +95,18 @@ the throughput of the PIM-managed linked-list with combining should be at least
 Without combining, however, the PIM-managed linked-list cannot
 beat the linked-list with fine-grained locks when $p > 6$.
 
-We implemented the linked-list with fine-grained locks
-and the flat-combining link-list with and without the combining optimization.
-We ran them on a machine of 28 hardware threads
-and their throughputs are presented in Figure \ref{figure:linkedlist_data}.
+
+We implemented the linked-list with fine-grained locks and the flat-combining link-list 
+with and without the combining optimization.
+We tested them on a Dell server with 512 GB RAM and 
+56 cores on four Intel Xeon E7-4850v3 processors at 2.2 GHz.
+To get rid of NUMA access effects, we ran experiments with only one processor, 
+which is a NUMA node with 14 cores, a 35 MB shared L3 cache, 
+and a private L2/L1 cache of size 256 KB/64 KB per core. 
+Each core has 2 hyperthreads, for a total of 28 hyperthreads. 
+Cache lines have 64 bytes.
+
+The throughputs of the algorithms are presented in Figure \ref{figure:linkedlist_data}.
 The results confirmed the validity of our analysis above.
 The throughput of the flat-combining algorithm without combining optimization
 is much worse than the algorithm with fine-grained locks.
@@ -111,24 +119,30 @@ However, with the combining optimization, the performance of the flat-combining
 algorithm improves significantly and the estimated throughput of our PIM-managed
 linked-list with combining optimization now beats all others'.
 
-
-
-\begin{figure}
+\begin{comment}
+\begin{figure}[ht!]
     \centering
-    \begin{minipage}{0.45\textwidth}
+    \begin{minipage}{0.45\linewidth}
         \centering
-        \includegraphics[width=.9\textwidth]{linkedlist_data.eps} % first figure itself
+        \includegraphics[width=.9\linewidth]{linkedlist_data.eps} % first figure itself
         \caption{Experimental results of linked-lists}
         \label{figure:linkedlist_data}
     \end{minipage}\hfill
-    \begin{minipage}{0.45\textwidth}
+    \begin{minipage}{0.45\linewidth}
         \centering
-        \includegraphics[width=.98\textwidth]{skiplist_data.eps} % second figure itself
+        \includegraphics[width=.98\linewidth]{skiplist_data.eps} % second figure itself
         \caption{Experimental results of skip-lists}
         \label{figure:skiplist_data}
     \end{minipage}
 \end{figure}
+\end{comment}
 
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{linkedlist_data.eps} % first figure itself
+    \caption{Experimental results of linked-lists}
+   \label{figure:linkedlist_data}
+\end{figure}
 
 
 \subsection{PIM-managed skip-list}
@@ -177,7 +191,7 @@ and finally sends the result back to the CPU.
 %\\
 %\\
 \centering
-\includegraphics[width=.6\linewidth]{skiplist_structure.eps}
+\includegraphics[width=1.0\linewidth]{skiplist_structure.eps}
 %$\hrulefill$
 \caption{A PIM-managed FIFO queue with three partitions}
 \label{figure:skiplist_structure}
@@ -187,7 +201,7 @@ Now let us discuss how we implement the PIM-managed skip-list
 when the key of each operation is an integer generated uniformly at random
 from range $[0, n]$ and the PIM memory has $k$ vaults available.
 Initially we can create $k$ partitions starting with fake sentinel nodes
-with keys $0, 1/k, 2/k,..., (n-1)/k$, respectively, 
+with keys $0$, $1/k$, $2/k$,..., $(n-1)/k$, respectively, 
 and allocate each partition in a different vault. 
 The sentinel nodes will never be deleted.
 If a new node to be added has the same key as a sentinel node,
@@ -213,12 +227,14 @@ Their approximate expected throughputs are as follows:
 	${1 \over \beta\latcpu}$
 
 \item PIM-managed skip-list without partitioning:
+
 	${1 \over (\beta\latpim + \latmes)}$
 
 \item Flat-combining skip-list with $k$ partitions:
     ${k \over \beta\latcpu}$
 
 \item PIM-managed linked-list with $k$ partitions:
+
     ${k \over (\beta\latpim + \latmes)}$
 \end{itemize}
 where $\beta$ is the average number of nodes an operation has to go through
@@ -247,6 +263,13 @@ Therefore, according to the analytical results we have shown, we can triple the 
 of a flat-combining skip-list to get the expected performance of a PIM-managed skip-list.
 As the figure illustrates, when the PIM-managed skip-list has $8$ or $16$ partitions,
 it is expected to outperform the lock-free skip-list with up to 28 hardware threads.
+
+\begin{figure}[ht!]
+    \centering
+    \includegraphics[width=1.0\linewidth]{skiplist_data.eps} % second figure itself
+    \caption{Experimental results of skip-lists}
+    \label{figure:skiplist_data}
+\end{figure}
 
 
 \subsubsection{Rebalancing skip-list}
