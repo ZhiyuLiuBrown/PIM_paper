@@ -248,7 +248,7 @@ Let us first assume that a queue is long enough such that the PIM-managed FIFO q
 has more than one segment, and enqueue and dequeue requests can be executed separately. 
 Since changes of enqueue and dequeue segments happen very infrequently, 
 its overhead is negligible and therefore ignored to simplify our analysis.
-(If the threshold of segment length at line 14 in Figure \ref{figure:enq} is a large integer $n$, 
+(If the threshold of segment length at line 12 in Figure \ref{alg:enq} is a large integer $n$, 
 then, in the worst case, changing an enqueue or dequeue segment happens only once every $n$ requests, 
 and the cost is only the latency of sending one message and a few steps of local computation.)
 Since enqueues and dequeues are isolated in all the three algorithms when queues are long enough, 
