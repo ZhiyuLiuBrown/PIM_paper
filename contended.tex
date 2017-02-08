@@ -36,6 +36,17 @@ holding the dequeue segment.
 The PIM core will then pop out the node at the tail of the dequeue segment and 
 send the node back to the CPU.
 
+\begin{figure}[ht!]
+%$\hrulefill$
+%\\
+%\\
+\centering
+\includegraphics[width=1.0\linewidth]{queue_structure.eps}
+%$\hrulefill$
+\caption{A PIM-managed FIFO queue with three segments}
+\label{figure:queue_structure}
+\end{figure}
+
 Initially the queue consists of an empty segment which acts as both the enqueue segment and 
 the dequeue segment. 
 When the length of enqueue segment exceeds some threshold, the PIM core maintaining it
@@ -57,119 +68,101 @@ enqueue and dequeue operations can be executed by two different PIM cores
 in parallel, which doubles the throughput compared to a straightforward queue implementation 
 held in a single vault.  
 
-\begin{figure}[ht!]
-%$\hrulefill$
-%\\
-%\\
-\centering
-\includegraphics[width=1.0\linewidth]{queue_structure.eps}
-%$\hrulefill$
-\caption{A PIM-managed FIFO queue with three segments}
-\label{figure:queue_structure}
-\end{figure}
 
 
-\begin{comment}
-\begin{figure}
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-\Input{\textbf{enq(cid, \textit{u})}}
-\Begin
-{
-	\eIf{enqSeg == null}
-    {
-        send message(cid, false)\;
-    }
-    {
-        \eIf{enqSeg.head $\ne$ null}
-        {
-            enqSeg.head.next = $u$\;
-            enqSeg.head = $u$\;
-        }
-        {
-            enqSeg.head = $u$\;
-            enqSeg.tail = $u$\;
-        }
+\begin{algorithm}[ht!]
+{\footnotesize
+%scriptsize
+\caption{PIM core's execution upon receiving an enqueue request enq(cid, \textit{u})}
+\label{alg:enq}
+%\begin{multicols}{2}
+\begin{algorithmic}[1]
+	\If{enqSeg == null}
+        \State send message(cid, false);
+    \Else
+        \If{enqSeg.head $\ne$ null}
+            \State enqSeg.head.next = $u$;
+            \State enqSeg.head = $u$;
+        \Else
+            \State enqSeg.head = $u$;
+            \State enqSeg.tail = $u$;
+        \EndIf
 
-        enqSeg.count = enqSeg.count + 1\;
-        send message(cid, true)\;
+        \State enqSeg.count = enqSeg.count + 1;
+        \State send message(cid, true);
 
         \If{enqSeg.count $>$ threshold}
-        {
-            cid$'$ = the CID of the PIM core chosen to maintain the new segment\;
-            send message(cid$'$, newEnqSeg())\;
-            enqSeg.nextSegCid = cid$'$\;
-            enqSeg = null;
-        }
-    }
-}
-\end{algorithm}
-\caption{PIM core's execution upon receiving an enqueue request.}
-\label{figure:enq}
-\end{figure}
-
-\begin{figure}
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-\Input{\textbf{deq(cid)}}
-\Begin
-{
-    \eIf{deqSeg == null}
-    {
-        send message(cid, false)\;
-    }
-    {
-        \eIf {deqSeg.tail $\ne$ null}
-        {
-			send message(cid, deqSeg.tail)\;
-            deqSeg.tail = deqSeg.tail.next\;   
-        }
-        {
-			\eIf {deqSeg == enqSeg}
-			{
-				send message(cid, null)\;
-			}
-            {
-                send message(deqSeg.nextSegCid, newDeqSeg())\;
-                deqSeg = null\;
-                send message(cid, false)\;
-            }            
-        }
-    }
-}
-\end{algorithm}
-\caption{PIM core's execution upon receiving a dequeue request.}
-\label{figure:deq}
-\end{figure}
-
-\begin{figure}
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-\Input{\textbf{newEnqSeg()}}
-\Begin
-{
-    enqSeg = new Segment() \;
-    segQueue.enq(engSeg) \;
-    notify CPUs of the new enqueue segment\;
+            \State cid$'$ = the CID of the PIM core chosen to maintain the new segment;
+            \State send message(cid$'$, newEnqSeg());
+            \State enqSeg.nextSegCid = cid$'$;
+            \State enqSeg = null;
+        \EndIf
+    \EndIf
+\end{algorithmic}
+%\end{multicols}
 }
 \end{algorithm}
 
-\begin{algorithm}[H]
-\SetKwInOut{Input}{input}\SetKwInOut{Output}{output}
-\Input{\textbf{newDeqSeg()}}
-\Begin
-{
-    deqSeg = segQueue.deq() \;
-    notify CPUs of the new dequeue segment\;
+
+\begin{algorithm}[ht!]
+{\footnotesize
+%scriptsize
+\caption{PIM core's execution upon receiving a dequeue request deq(cid)}
+\label{alg:deq}
+%\begin{multicols}{2}
+\begin{algorithmic}[1]
+	\If{deqSeg == null}
+        \State send message(cid, false);
+    \Else
+        \If {deqSeg.tail $\ne$ null}
+			\State send message(cid, deqSeg.tail);
+            \State deqSeg.tail = deqSeg.tail.next;   
+        \Else
+			\If {deqSeg == enqSeg}
+				\State send message(cid, null);
+			\Else
+                \State send message(deqSeg.nextSegCid, newDeqSeg());
+                \State deqSeg = null;
+                \State send message(cid, false);
+            \EndIf            
+        \EndIf 
+    \EndIf 
+\end{algorithmic}
+%\end{multicols}
 }
-\end{algorithm}	
-\caption{Functions to create and retrieve new segments.}
-\label{figure:newSegment}
-\end{figure}
-\end{comment}
+\end{algorithm}
+
+\begin{algorithm}[ht!]
+{\footnotesize
+%scriptsize
+\caption{PIM core's execution upon receiving a newEnqSeg() request }
+\label{alg:new_enq_seg}
+%\begin{multicols}{2}
+\begin{algorithmic}[1]
+	\State enqSeg = new Segment();
+	\State segQueue.enq(engSeg) ;
+	\State notify CPUs of the new enqueue segment;
+\end{algorithmic}
+%\end{multicols}
+}
+\end{algorithm}
+
+\begin{algorithm}[ht!]
+{\footnotesize
+%scriptsize
+\caption{PIM core's execution upon receiving a newDeqSeg() request}
+\label{alg:new_deq_seg}
+%\begin{multicols}{2}
+\begin{algorithmic}[1]
+	\State deqSeg = segQueue.deq();
+	\State notify CPUs of the new dequeue segment; 
+\end{algorithmic}
+%\end{multicols}
+}
+\end{algorithm}
 
 The pseudocode of the algorithm is presented in 
-Figures \ref{figure:enq}-\ref{figure:newSegment}. 
+Algorithms \ref{alg:enq}-\ref{alg:new_deq_seg}. 
 Each PIM core has local variables enqSeg and deqSeg that are references to 
 local enqueue and dequeue segments.
 When enqSeg (respectively deqSeq) is not null, it indicates that the PIM core is currently 
@@ -179,37 +172,37 @@ CPUs and PIM cores communicate via message(cid, content) calls, where cid is the
 of the receiver and the content is either a request or a response to a request.
 
 Once a PIM core receives an enqueue request enq(cid, $u$) of node $u$ from a CPU whose CID is cid,
-it first checks if it is holding the enqueue segment (line 2 in Figure \ref{figure:enq}).
-If so, the PIM core enqueues $u$ (lines 5-13), and otherwise sends back a message
-informing the CPU that the request is rejected (line 3) so that
+it first checks if it is holding the enqueue segment (line 1 in Algorithm \ref{alg:enq}).
+If so, the PIM core enqueues $u$ (lines 4-11), and otherwise sends back a message
+informing the CPU that the request is rejected (line 2) so that
 the CPU can resend its request to the right PIM core holding the enqueue segment
 (we will explain later how the CPU can find the right PIM core).
-After enqueuing $u$, the PIM core may find the enqueue segment is longer than the threshold (line 14).
+After enqueuing $u$, the PIM core may find the enqueue segment is longer than the threshold (line 12).
 If so, it sends a message with a newEnqSeg() request to the PIM core of another vault that is chosen 
 to create a new enqueue segment.
 Finally the PIM core sets its enqSeq to null indicating it no longer deals with enqueue operations.
 Note that the CID cid' of the PIM core chosen for creating the new segment is recorded in 
 enqSeg.nextSegCid for future use in dequeue requests.
-As Figure \ref{figure:newSegment} shows,
+As Algorithm \ref{alg:new_enq_seg} shows,
 The PIM core receiving this newEnqSeg() request creates a new enqueue segment and enqueues 
-the segment into its segQueue (line 3). 
+the segment into its segQueue (line 2). 
 Finally it notifies CPUs of the new enqueue segment (we will get to it in more detail later).
 
 Similarly, when a PIM core receives a dequeue request deq(cid) from a CPU with CID cid,
-it first checks whether it still holds the dequeue segment (line 2 of Figure \ref{figure:deq}).
-If so, the PIM core dequeues a node and sends it back to the CPU (lines 5-7).
-Otherwise, it informs the CPU that this request has failed (line 3) and
+it first checks whether it still holds the dequeue segment (line 1 of Algorithm \ref{alg:deq}).
+If so, the PIM core dequeues a node and sends it back to the CPU (lines 4-6).
+Otherwise, it informs the CPU that this request has failed (line 2) and
 the CPU will have to resend its request to the right PIM core.
-If the dequeue segment is empty (line 8) and the dequeue segment is not the same as 
-the enqueue segment (line 11), which indicates that the FIFO queue is not empty 
+If the dequeue segment is empty (line 7) and the dequeue segment is not the same as 
+the enqueue segment (line 10), which indicates that the FIFO queue is not empty 
 and there exists another segment, the PIM core sends a message with a newDeqSeg() request 
 to the PIM core with CID deqSeg.nextSegCid. 
 (We know that this PIM core must hold the next segment, 
 according to how we create new segments in enqueue operations, 
-as shown at lines 15-17 in Figure \ref{figure:enq}.) 
-Upon receiving the newDeqSeg() request, as illustrated in Figure \ref{figure:newSegment}, 
+as shown at lines 13-15 in Algorithm \ref{alg:enq}.) 
+Upon receiving the newDeqSeg() request, as illustrated in Algorithm \ref{alg:new_deq_seg}, 
 the PIM core retrieves from its segQueue the oldest segment it has created and 
-makes it the new dequeue segment. 
+makes it the new dequeue segment (line 1). 
 Finally the PIM core notifies CPU that it is holding the new dequeue segment now.
 
 Now we explain how CPUs and PIM cores coordinate to make sure that CPUs can find the right enqueue 
@@ -217,7 +210,7 @@ and dequeue segments, when their previous attempts have failed due to changes of
 We will only discuss how to deal with enqueue segments here, 
 since the same methods can be applied to dequeue segments. 
 A straightforward way to inform CPUs is to have the owner PIM core of the new enqueue segment 
-send notification messages to them (line 4 of newEngSeg() in Figure \ref{figure:newSegment}) 
+send notification messages to them (line 3 of newEngSeg() in Algorithm \ref{alg:new_enq_seg}) 
 and wait until CPUs all send back acknowledgement messages. 
 However, if there is a slow CPU that doesn't reply in time, 
 the PIM core has to wait for it and therefore other CPUs cannot have their requests executed. 
@@ -255,7 +248,7 @@ Let us first assume that a queue is long enough such that the PIM-managed FIFO q
 has more than one segment, and enqueue and dequeue requests can be executed separately. 
 Since changes of enqueue and dequeue segments happen very infrequently, 
 its overhead is negligible and therefore ignored to simplify our analysis.
-(If the threshold of segment length at line 14 in Figure \ref{figure:enq} is a large integer $n$, 
+(If the threshold of segment length at line 12 in Figure \ref{alg:enq} is a large integer $n$, 
 then, in the worst case, changing an enqueue or dequeue segment happens only once every $n$ requests, 
 and the cost is only the latency of sending one message and a few steps of local computation.)
 Since enqueues and dequeues are isolated in all the three algorithms when queues are long enough, 
