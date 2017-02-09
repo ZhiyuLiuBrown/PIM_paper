@@ -10,3 +10,72 @@ Prior work has focused on using the increased bandwidth; the work that focused o
 
 %TODO
 %Closing 
+
+
+
+\begin{comment}
+Hardware architects have proposed 
+near-memory computing (also called processing-in-memory, or PIM), 
+where a lightweight processor (called a PIM core) is located close to 
+memory. 
+Due to its proximity, a memory access from this core is much faster than from a CPU core.
+New advances in 3D 
+integration and in die stacked memory make PIM viable in the 
+near future. Prior work has shown significant performance improvements from using PIM for 
+embarrassingly parallel and data-intensive applications, as well as 
+pointer-chasing traversals in \emph{sequential} data structures. 
+
+In this paper, we show that
+  naive PIM data structures cannot outperform 
+ state-of-the-art \emph{concurrent} data structures. In particular, 
+the lower latency access to memory cannot compensate for the loss of 
+parallelism. Server machines nowadays have hundreds of cores; algorithms for 
+concurrent data structures exploit these cores to achieve high throughput and 
+scalability. 
+Therefore, to be competitive with traditional concurrent data 
+structures, PIM data structures need new approaches to leverage parallelism. We 
+investigate designing PIM algorithms that can outperform concurrent data structures for
+two classes of data structures: pointer chasing data 
+structures, which have a high degree of inherent parallelism and low contention, but incur significant 
+overhead due to unpredictable memory accesses; and 
+FIFO queues, which can exploit high locality leveraging CPU caches, but have a high degree of contention. 
+We propose new designs for PIM 
+data structures using 
+techniques such as combining, partitioning and pipelining, that can outperform traditional 
+concurrent data structures, with a significantly simpler design.  
+
+
+===================
+
+Hardware architects have proposed 
+near-memory computing (also called processing-in-memory, or PIM), 
+where a lightweight processor (called a PIM core) is located close to 
+memory. 
+Due to its proximity, a memory access from this core is much faster than from a CPU core.
+New advances in 3D 
+integration and in die stacked memory make PIM viable in the 
+near future. Prior work has shown significant performance improvements from using PIM for 
+embarrassingly parallel and data-intensive applications, as well as 
+pointer-chasing traversals in \emph{sequential} data structures. 
+
+However, server machines nowadays have hundreds of cores; algorithms for 
+concurrent data structures exploit these cores to achieve high throughput and 
+scalability. In this paper, we show that
+  naive PIM data structures cannot outperform 
+ state-of-the-art \emph{concurrent} data structures. In particular, 
+the lower latency access to memory cannot compensate for the loss of 
+parallelism. 
+We propose new designs for PIM 
+data structures using 
+techniques such as combining, partitioning and pipelining, that can outperform traditional 
+concurrent data structures, with a significantly simpler design.  
+We 
+investigate two classes of data structures. First, we analyze pointer chasing data 
+structures, which have a high degree of inherent parallelism and low contention, but incur significant 
+overhead due to unpredictable memory accesses. Second, we explore
+FIFO queues, which can leverage CPU caches to exploit their inherent high locality, but have a high degree of contention. 
+
+\end{comment}
+
+
+
