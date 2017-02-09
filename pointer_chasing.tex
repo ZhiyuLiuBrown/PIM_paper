@@ -292,7 +292,7 @@ it is expected to outperform the lock-free skip-list with up to 28 hardware thre
 The PIM-managed skip-list performs well with a uniform distribution of requests.
 However, if the distribution of requests is not uniform, a static partitioning scheme 
 will result in unbalanced partitions, with some PIM cores being idle, while others having to 
-serve a majority of requests. To address this problem, we introduce a non-blocking protocol for 
+serve a majority of requests. To address this problem, we introduce a protocol for 
 migrating consecutive nodes from one vault to another. 
 
 The protocol works as follows. 
