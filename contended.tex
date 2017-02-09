@@ -2,21 +2,19 @@
 %\section{Contended Data Structures}
 \section{High Contention Data Structures}
 \label{section:contended}
-In this section, we will discuss techniques of designing efficient contented data structures 
-with the PIM memory.
-In a contended concurrent data structure, operations have to compete for accessing some 
-contended spots and such contention is the performance bottleneck of the data structure.
-Examples are stack and different kinds of queues.
-
-The contended data structure we focus on is FIFO queue, where concurrent enqueue
+In this section, we discuss techniques for designing efficient contented data structures 
+for near-memory computing.
+In a contended data structure, operations compete for accessing some 
+contended locations and such contention is the performance bottleneck of the data structure.
+Examples include stacks and queues. We focus on a FIFO queue data structure,
+where concurrent enqueue
 and dequeue operations compete for the head and tail of the queue, respectively.
-A contended data structure like a FIFO queue usually has good cache locality
-and doesn't need long pointer chasing to complete an operation.
-In a concurrent FIFO queue, for instance, the head and tail pointers can stay in
-cache if they are accessed frequently by CPUs, and each enqueue or dequeue
-operation only needs to access and update one or two pointers before completing its operation.
-One may think that the PIM memory is therefore not a suitable platform for such a data structure,
-since now we cannot make good use of the fast memory access of PIM cores, but also
+Such a data structure has good cache locality
+as the head and tail pointers can stay in
+cache if they are accessed frequently by CPUs. Each enqueue and dequeue
+operation only needs to access and update one or two pointers before completing.
+Therefore, one may think that PIM is not a suitable platform for such a data structure,
+because now we cannot make good use of the fast memory access of PIM cores, but also
 lose the performance boosting provided by CPUs' cache.
 However, we are going to show a somewhat counterintuitive result that we can still design
 a PIM-managed FIFO queue that outperforms other existing algorithms.

@@ -9,7 +9,8 @@ These are data structures whose operations
 need to de-reference a non-constant sequence of pointers before completing. We assume they support operations 
 such as add($x$), delete($x$) and contains($x$), which follow ``next node" pointers until 
 reaching the position of node $x$.
-When these data structures access uniformly random keys and when they are too large to fit in CPU caches, 
+When these data structures are too large to fit in CPU caches 
+and access uniformly random keys,
 they incur expensive memory accesses, which cannot
 be easily predicted, making the pointer chasing the dominating overhead of these data structures.
 Naturally, these data structures have been early examples of the benefit of near-memory 
