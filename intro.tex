@@ -1,81 +1,84 @@
 %\section{Introduction}
 \section{Near-memory Computing}
 
-The performance gap between memory and CPU has grown exponentially. Memory vendors have focused mostly on improving memory capacity and bandwidth, sometimes even at the cost of increased memory access latencies. To provide higher bandwidth with lower access latencies, hardware architects have proposed near-memory computing (NMC), where a lightweight processor is located close to memory. [details?] This is an old idea, that has been intensely studied in the past~\cite{}, but so far has not materialized. However, new advances in 3D integration and in die stacked memory make near-memory computing viable in the near future. [details?] This new technology promises to revolutionize the interaction between compute and data, as memory becomes an active component in managing the data. Therefore, it invites a fundamental rethinking of basic data structures and promotes a tighter dependency between algorithmic design and hardware characteristics. 
+The performance gap between memory and CPU has grown exponentially. Memory vendors have focused mostly on improving memory capacity and bandwidth, sometimes even at the cost of increased memory access latencies. To provide higher bandwidth with lower access latencies, hardware architects have proposed near-memory computing (also called processing-in-memory, or PIM), where a lightweight processor (called a PIM core) is located close to memory. A memory access from a PIM core is much faster than from a CPU core. 
+Near-memory computing is an old idea, that has been intensely studied in the past~\cite{}, but so far has not yet materialized. However, new advances in 3D integration and in die stacked memory make near-memory computing viable in the near future. 
+%TODO
+[details - one or two sentences describing HMC] 
+This new technology promises to revolutionize the interaction between compute and data, as memory becomes an active component in managing the data. Therefore, it invites a fundamental rethinking of basic data structures and promotes a tighter dependency between algorithmic design and hardware characteristics. 
 
-But how do we design and optimize data structures for near-memory computing? And how do these algorithms compare to traditional CPU-managed concurrent data structures? To answer these questions, we develop a simplified model of the expected performance of NMC using the flat combining technique~\cite{}. Using this model, we show that a naive NMC-managed data structure cannot outperform a carefully crafted CPU-managed \emph{concurrent} data structure. In particular, the lower latency access to memory cannot compensate for the loss of parallelism. Server machines nowadays have hundreds of cores; algorithms for concurrent data structures exploit these cores to achieve high throughput and scalability. Therefore, to be competitive with traditional concurrent data structures, NMC data structures need new approaches to leverage parallelism. We investigate two classes of data structures. First, pointer chasing data structures, which have a high degree of inherent parallelism. We propose using techniques such as combining~\cite{} and partitioning the data across vaults to reintroduce parallelism for these data structures. Secondly, we evaluate contended data structures, such as FIFO queues, which are more likely to have the data in hardware caches, therefore not benefiting that much from NMC. We design a new NMC FIFO queue that exploits pipelining to outperform prior concurrent FIFO queues, despite their high locality benefit from caches. 
+Prior work has already shown significant performance improvements by using PIM for 
+embarrassingly parallel and data-intensive applications, as well as for
+pointer-chasing traversals in \emph{sequential} data structures. 
+However, current server machines have hundreds of cores; algorithms for 
+concurrent data structures exploit these cores to achieve high throughput and 
+scalability, with significant benefits over sequential data structures. 
+
+In this paper, we show that
+  naive PIM data structures cannot outperform 
+ state-of-the-art \emph{concurrent} data structures. In particular, 
+the lower latency access to memory cannot compensate for the loss of 
+parallelism.  
+
+
+
+
+
+
+
+
+
+
+
+But how do we design and optimize data structures for near-memory computing? And how do these algorithms compare to traditional CPU-managed concurrent data structures? To answer these questions, even before the hardware becomes available, we develop a simplified model of the expected performance of PIM. Using this model, we show that a naive PIM-managed data structure cannot outperform a carefully crafted CPU-managed \emph{concurrent} data structure. In particular, the lower latency access to memory cannot compensate for the loss of parallelism. 
+ 
+
+Therefore, to be competitive with traditional concurrent data structures, PIM data structures need new approaches to leverage parallelism. 
+
+
+
+
+
+
+ 
+
+
+
+
+We 
+investigate two classes of data structures. First, we analyze pointer chasing data 
+structures, which have a high degree of inherent parallelism and low contention, but incur significant 
+overhead due to unpredictable memory accesses. 
+We propose using techniques such as combining~\cite{} and partitioning 
+the data across vaults to reintroduce parallelism for these data structures.
+
+
+
+Second, we explore contended data structures, such as FIFO queues,
+ which can leverage CPU caches to exploit their inherent high locality. 
+Therefore, FIFO queues might not seem to be able to leverage PIM's faster memory accesses. 
+
+but have a high degree of contention. 
+
+Nevertheless, we use pipelining of requests, which can be done very efficiently in PIM, to design a new FIFO queue suitable for PIM that can outperform state-of-the-art concurrent FIFO queues~\cite{}.
+
+
+ We design a new PIM FIFO queue that exploits pipelining of requests from CPUs to outperform prior concurrent FIFO queues, despite their high locality benefit from caches and innovative techniques to reduce contention, such as using flat combining~\cite{} or fetch and add instructions~\cite{}. 
+
+====================================
+
+We propose new designs for PIM 
+data structures using 
+techniques such as combining, partitioning and pipelining, that can outperform traditional 
+concurrent data structures, with a significantly simpler design. 
+
+
+
 
 %TODO
 Prior work has focused on using the increased bandwidth; the work that focused on the reduced latency ignored parallelism. For example, cite [] has shown that pointer chasing data structures can benefit from the shorter latency access, but did not evaluate the performance loss from the loss of parallelism. 
 
 %TODO
 %Closing 
-
-
-
-\begin{comment}
-Hardware architects have proposed 
-near-memory computing (also called processing-in-memory, or PIM), 
-where a lightweight processor (called a PIM core) is located close to 
-memory. 
-Due to its proximity, a memory access from this core is much faster than from a CPU core.
-New advances in 3D 
-integration and in die stacked memory make PIM viable in the 
-near future. Prior work has shown significant performance improvements from using PIM for 
-embarrassingly parallel and data-intensive applications, as well as 
-pointer-chasing traversals in \emph{sequential} data structures. 
-
-In this paper, we show that
-  naive PIM data structures cannot outperform 
- state-of-the-art \emph{concurrent} data structures. In particular, 
-the lower latency access to memory cannot compensate for the loss of 
-parallelism. Server machines nowadays have hundreds of cores; algorithms for 
-concurrent data structures exploit these cores to achieve high throughput and 
-scalability. 
-Therefore, to be competitive with traditional concurrent data 
-structures, PIM data structures need new approaches to leverage parallelism. We 
-investigate designing PIM algorithms that can outperform concurrent data structures for
-two classes of data structures: pointer chasing data 
-structures, which have a high degree of inherent parallelism and low contention, but incur significant 
-overhead due to unpredictable memory accesses; and 
-FIFO queues, which can exploit high locality leveraging CPU caches, but have a high degree of contention. 
-We propose new designs for PIM 
-data structures using 
-techniques such as combining, partitioning and pipelining, that can outperform traditional 
-concurrent data structures, with a significantly simpler design.  
-
-
-===================
-
-Hardware architects have proposed 
-near-memory computing (also called processing-in-memory, or PIM), 
-where a lightweight processor (called a PIM core) is located close to 
-memory. 
-Due to its proximity, a memory access from this core is much faster than from a CPU core.
-New advances in 3D 
-integration and in die stacked memory make PIM viable in the 
-near future. Prior work has shown significant performance improvements from using PIM for 
-embarrassingly parallel and data-intensive applications, as well as 
-pointer-chasing traversals in \emph{sequential} data structures. 
-
-However, server machines nowadays have hundreds of cores; algorithms for 
-concurrent data structures exploit these cores to achieve high throughput and 
-scalability. In this paper, we show that
-  naive PIM data structures cannot outperform 
- state-of-the-art \emph{concurrent} data structures. In particular, 
-the lower latency access to memory cannot compensate for the loss of 
-parallelism. 
-We propose new designs for PIM 
-data structures using 
-techniques such as combining, partitioning and pipelining, that can outperform traditional 
-concurrent data structures, with a significantly simpler design.  
-We 
-investigate two classes of data structures. First, we analyze pointer chasing data 
-structures, which have a high degree of inherent parallelism and low contention, but incur significant 
-overhead due to unpredictable memory accesses. Second, we explore
-FIFO queues, which can leverage CPU caches to exploit their inherent high locality, but have a high degree of contention. 
-
-\end{comment}
-
 
 

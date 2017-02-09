@@ -1,16 +1,17 @@
 \begin{abstract}
 
-Hardware architects have proposed 
+The performance gap between memory and CPU has grown exponentially. 
+To bridge this gap, hardware architects have proposed 
 near-memory computing (also called processing-in-memory, or PIM), 
 where a lightweight processor (called a PIM core) is located close to 
 memory. 
-Due to its proximity, a memory access from this core is much faster than from a CPU core.
+Due to its proximity, a memory access from a PIM core is much faster than from a CPU core.
 New advances in 3D 
 integration and in die stacked memory make PIM viable in the 
-near future. Prior work has shown significant performance improvements from using PIM for 
+near future. Prior work has shown significant performance improvements by using PIM for 
 embarrassingly parallel and data-intensive applications, as well as for
 pointer-chasing traversals in \emph{sequential} data structures. 
-However, server machines nowadays have hundreds of cores; algorithms for 
+However, current server machines have hundreds of cores; algorithms for 
 concurrent data structures exploit these cores to achieve high throughput and 
 scalability, with significant benefits over sequential data structures. 
 
