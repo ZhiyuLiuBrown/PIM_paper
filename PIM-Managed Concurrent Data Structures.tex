@@ -20,6 +20,7 @@
 \usepackage{epstopdf}
 
 \usepackage{multicol}
+\usepackage{balance}
 
 \newtheorem{theorem}{Theorem}%[section]
 \newtheorem{lemma}[theorem]{Lemma}
@@ -41,7 +42,7 @@
 \newcommand{\latmes} {\mathcal{L}_{message}}
 \newcommand{\Sp}{\mathcal{S}_{p}}
 
-\begin{document}
+\begin{document}\sloppy
 
 \title{Concurrent Data Structures \\ for Near-Memory Computing}
 
@@ -84,6 +85,7 @@ ETH Zurich\\
 \input{related}
 \input{conclusion}
 
+\balance
 
 \bibliographystyle{abbrv}
 \bibliography{refs_pim}
