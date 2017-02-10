@@ -22,7 +22,8 @@ memory, via a shared crossbar network, as illustrated in Figure \ref{figure:mode
 The main memory consists of two parts---one is a normal DRAM accessible by CPUs 
 and the other, called the \textit{PIM memory}, is divided into multiple partitions, 
 called \textit{PIM vaults} or simply vaults.  
-According to the Hybrid Memory Cube specification 1.0 \cite{website:HMC}, each HMC consists of 16 or 
+According to the \textit{Hybrid Memory Cube} specification 1.0 \cite{website:HMC}, 
+each HMC consists of 16 or 
 32 vaults and has total size 2GB or 4 GB (so each vault has size roughly 100MB). 
 We assume the same specifications in our PIM model, although the size of a PIM memory and 
 the number of its vaults can be greater. 
@@ -39,7 +40,8 @@ A vault can be accessed only by its local PIM core.\footnote{
 We may alternatively assume that a PIM core has direct access to remote vaults, at a larger cost. 
 We may also assume that vaults are accessible by CPUs as well, 
 but at the cost of dealing with cache coherence between CPUs and PIM cores. 
-Some cache coherence mechanisms for PIM memory claim to be not costly (e.g., \cite{boroumand2016}). 
+Some cache coherence mechanisms for PIM memory claim to be not costly 
+(e.g., \cite{boroumand2016, Ahn2015:1}). 
 However, we prefer to keep the hardware model simple and we will show that we are still able to 
 design efficient concurrent data structure algorithms with this simple, less powerful PIM memory.}
 Although a PIM core is relatively slow computationally, it has fast access to its local vault.
@@ -54,4 +56,4 @@ However, messages from different senders or to different receivers can arrive in
 To keep the PIM memory simple, we assume that a PIM core can only make read and write operations 
 to its local vault, while a CPU also supports more powerful atomic operations, such as CAS and F\&A.
 Virtual memory is cheap to be achieved in this model, 
-by having each PIM core maintain its own page table for its local vault~\cite{}.
+by having each PIM core maintain its own page table for its local vault~\cite{hsieh2016accelerating}.

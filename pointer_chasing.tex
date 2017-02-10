@@ -17,7 +17,8 @@ Naturally, these data structures have been early examples of the benefit of near
 computing~\cite{hsieh2016accelerating}, as the entire pointer chase could be performed by the PIM core, and only the final result returned to 
 the application. 
 
-However, under the same conditions, these data structures have inherently low contetion. Lock-free algorithms~\cite{}
+However, under the same conditions, these data structures have inherently low contention. 
+Lock-free algorithms~\cite{practicallf, skiplists-concpugh, valois, Herlihy:2008:AMP:1734069}
 have shown that these data structures can scale to hundreds of cores under low contention. Unfortunately, each vault in 
 PIM memory has a single core; as a consequence, prior work 
 has only compared PIM data structures with sequential data structures, 
@@ -34,7 +35,7 @@ structures.
 \label{section:linked_list}
 We now describe a naive PIM linked-list.
 The linked-list is stored in a vault, maintained by the local PIM core.
-Whenever a CPU\footnote{We use the term CPU to refer to CPU cores, as oposed to PIM cores.} 
+Whenever a CPU\footnote{We use the term CPU to refer to CPU cores, as opposed to PIM cores.} 
 wants to perform an operation on the linked-list,
 it sends a request to the PIM core.
 The PIM core will retrieve the message, execute the operation, and send the result back to the CPU.
@@ -88,7 +89,8 @@ has to go through during one pointer chasing procedure.}
 
 \begin{table}[ht!]
 \begin{center}
-    \begin{tabular}{| >{\small}l | l |}
+    %\begin{tabular}{| >{\small}l l |}
+	\begin{tabular}{| m{0.68\linewidth}  | l |}    
     \hline
     Algorithm & Throughput\\ \hline
     Linked-list with fine-grained locks & ${2p \over (n+1)\latcpu}$ \\ \hline
@@ -253,8 +255,8 @@ Given that $\latmes = \latcpu = 3\latpim$, $k > p/3$ should suffice.
 
 \begin{table}[ht!]
 \begin{center}
-	\begin{tabular}{| >{\small}l | l |}
-    %\begin{tabular}{| m{0.68\linewidth}  | l |}
+	%\begin{tabular}{| >{\small}l | l |}
+    \begin{tabular}{| m{0.55\linewidth}  | l |}
     \hline
     Algorithm & Throughput\\ \hline
     Look-free skip-list & ${p \over \beta\latcpu}$ \\ \hline
