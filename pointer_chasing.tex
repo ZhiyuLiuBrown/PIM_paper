@@ -1,6 +1,6 @@
 
 %\section{Pointer-Chasing Data Structures}
-\section{Low Contention Data \\ Structures}
+\section{Low Contention Data Structures}
 \label{section:pointer_chasing}
 
 In this section we consider data structures with low contention; pointer chasing data structures, 
@@ -14,7 +14,7 @@ and access uniformly random keys,
 they incur expensive memory accesses, which cannot
 be easily predicted, making the pointer chasing the dominating overhead of these data structures.
 Naturally, these data structures have been early examples of the benefit of near-memory 
-computing~\cite{}, as the entire pointer chase could be performed by the PIM core, and only the final result returned to 
+computing~\cite{hsieh2016accelerating}, as the entire pointer chase could be performed by the PIM core, and only the final result returned to 
 the application. 
 
 However, under the same conditions, these data structures have inherently low contetion. Lock-free algorithms~\cite{}
@@ -61,8 +61,8 @@ is very similar to that of the combiner in a concurrent linked-list implemented
 using \textit{flat combining} \cite{Hendler10}, where, roughly speaking,
 threads compete for a ``combiner lock" to become the combiner, and
 the combiner will take over all operation requests from other threads and execute them.
-Therefore, we think the performance of the flat-combining linked-list is a good indicator to
-the performance of our PIM-managed linked-list.
+Therefore, we think the performance of the flat-combining linked-list is a good indicator 
+of the performance of our PIM-managed linked-list.
 
 Based on our performance model, we can calculate the approximate expected
 throughputs of the linked-list algorithms mentioned above, 

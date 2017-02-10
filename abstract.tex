@@ -16,18 +16,13 @@ However, current server machines have hundreds of cores; algorithms for
 concurrent data structures exploit these cores to achieve high throughput and 
 scalability, with significant benefits over sequential data structures. 
 
-In this paper, we show that
-  naive PIM data structures cannot outperform 
- state-of-the-art \emph{concurrent} data structures. 
-We 
-investigate two classes of data structures. First, we analyze pointer chasing data 
-structures, which have a high degree of inherent parallelism and low contention, but incur significant 
-overhead due to unpredictable memory accesses. Second, we explore
-FIFO queues, which can leverage CPU caches to exploit their inherent high locality, but have a high degree of contention. 
-We propose new designs for PIM 
-data structures using 
-techniques such as combining, partitioning and pipelining, that can outperform traditional 
-concurrent data structures, with a significantly simpler design. 
+In this paper, we show two results:
+(1) naive PIM data structures cannot outperform state-of-the-art concurrent data structures
+such as pointer-chasing data strctures and FIFO queue,
+(2) novel designs for PIM data structures,
+using techniques such as combining, partitioning and pipelining,
+can outperform traditional concurrent data structures,
+with a significantly simpler design.
 
 
 \end{abstract}

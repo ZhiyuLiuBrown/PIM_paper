@@ -22,8 +22,7 @@ and dequeue operations compete for the head and tail of the queue, respectively.
 Although a naive PIM FIFO queue is not a good replacement for a well crafted concurrent FIFO queue, 
 we show that, counterintuitively, PIM can still have benefits over a traditional concurrent FIFO 
 queue. In particular, we exploit the pipelining of requests from CPUs, which can be done very efficiently in PIM, to 
-design a PIM FIFO queue that can outperform state-of-the-art concurrent FIFO queues, such as the one using flat combining~\cite{}
- and the one using Fetch And Add~\cite{}.
+design a PIM FIFO queue that can outperform state-of-the-art concurrent FIFO queues, such as the one using flat combining~\cite{Hendler10} and the one using Fetch And Add~\cite{Morrison13}.
 
 \subsection{FIFO queues}
 The structure of our PIM-managed FIFO queue is shown in Figure \ref{figure:queue_structure}.
@@ -63,7 +62,7 @@ based on more complex criteria
 the new segment so as to avoid the situation where it deals with both enqueue and dequeue requests).
 To simplify the description of our algorithm, we omit those variants.}
 When the dequeue segment becomes empty and the queue has other segments, 
-the dequeue segment is deleted and the segment that were created first 
+the dequeue segment is deleted and the segment that was created first 
 among all the remaining segments is designated as the new dequeue segment. 
 (It is not hard to see that the new dequeue segment were created when the old dequeue segment 
 acted as the enqueue segment and exceeded the length threshold.)

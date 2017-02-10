@@ -39,8 +39,7 @@ A vault can be accessed only by its local PIM core.\footnote{
 We may alternatively assume that a PIM core has direct access to remote vaults, at a larger cost. 
 We may also assume that vaults are accessible by CPUs as well, 
 but at the cost of dealing with cache coherence between CPUs and PIM cores. 
-Some cache coherence mechanisms for PIM memory have be proposed 
-and claimed to be not costly (e.g., \cite{boroumand2016}). 
+Some cache coherence mechanisms for PIM memory claim to be not costly (e.g., \cite{boroumand2016}). 
 However, we prefer to keep the hardware model simple and we will show that we are still able to 
 design efficient concurrent data structure algorithms with this simple, less powerful PIM memory.}
 Although a PIM core is relatively slow computationally, it has fast access to its local vault.
@@ -56,6 +55,3 @@ To keep the PIM memory simple, we assume that a PIM core can only make read and 
 to its local vault, while a CPU also supports more powerful atomic operations, such as CAS and F\&A.
 Virtual memory is cheap to be achieved in this model, 
 by having each PIM core maintain its own page table for its local vault~\cite{}.
-
-%TODO
-[DISCUSS CACHE COHERENCE]
