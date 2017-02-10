@@ -25,9 +25,9 @@ called \textit{PIM vaults} or simply vaults.
 According to the Hybrid Memory Cube specification 1.0 \cite{website:HMC}, each HMC consists of 16 or 
 32 vaults and has total size 2GB or 4 GB (so each vault has size roughly 100MB). 
 We assume the same specifications in our PIM model, although the size of a PIM memory and 
-the number of its vaults can be greater in theory. 
-Each CPU also has access to a hierarchy of cache, coherent to the normal DRAM, 
-and the last-level cache is shared among CPUs. 
+the number of its vaults can be greater. 
+Each CPU also has access to a hierarchy of caches backed by DRAM,
+and there can be last-level caches shared among multiple CPUs. 
 
 Each vault has a \textit{PIM core} directly attached to it.
 we say a vault is \textit{local} to the PIM core attached to it, and vice versa.
@@ -55,4 +55,7 @@ However, messages from different senders or to different receivers can arrive in
 To keep the PIM memory simple, we assume that a PIM core can only make read and write operations 
 to its local vault, while a CPU also supports more powerful atomic operations, such as CAS and F\&A.
 Virtual memory is cheap to be achieved in this model, 
-by having each PIM core maintain its own page table for its local vault.
+by having each PIM core maintain its own page table for its local vault~\cite{}.
+
+%TODO
+[DISCUSS CACHE COHERENCE]
