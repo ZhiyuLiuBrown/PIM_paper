@@ -1,6 +1,6 @@
 %\section{Processing in Memory}
 %\label{section:model}
-\section{Hardware Architecture and Model}
+\section{Hardware Architecture}
 
 
 %\subsection{Hardware model}
@@ -13,29 +13,30 @@
 \centering
 \includegraphics[width=.9\linewidth]{model.eps}
 %$\hrulefill$
-\caption{The PIM model}
+\caption{The PIM Architecture}
 \label{figure:model}
 \end{figure}
 
-In the PIM hardware model, multiple CPUs are connected to the main
+In an architecture utilizing PIM memory, multiple CPUs are connected to the main
 memory, via a shared crossbar network, as illustrated in Figure \ref{figure:model}.
 The main memory consists of two parts---one is a normal DRAM accessible by CPUs 
 and the other, called the \textit{PIM memory}, is divided into multiple partitions, 
 called \textit{PIM vaults} or simply vaults.  
 According to the \textit{Hybrid Memory Cube} specification 1.0 \cite{website:HMC}, 
 each HMC consists of 16 or 
-32 vaults and has total size 2GB or 4 GB (so each vault has size roughly 100MB). 
+32 vaults and has total size 2GB or 4 GB (so each vault has size roughly 100MB) 
+\footnote{These small sizes are preliminary, and it is expected that each vault will be bigger when the 
+PIM memory will be commercialized}. 
 We assume the same specifications in our PIM model, although the size of a PIM memory and 
-the number of its vaults can be greater. 
-Each CPU also has access to a hierarchy of caches backed by DRAM,
-and there can be last-level caches shared among multiple CPUs. 
+the number of its vaults can be bigger. 
+Each CPU core also has access to a hierarchy of L1 and L2 caches backed by DRAM,
+and a last level cache shared among multiple cores. 
 
 Each vault has a \textit{PIM core} directly attached to it.
-we say a vault is \textit{local} to the PIM core attached to it, and vice versa.
+We say a vault is \textit{local} to the PIM core attached to it, and vice versa.
 A PIM core is a lightweight CPU that may be slower than a full-fledged CPU
-with respect to computation speed.\footnote{
-A PIM core can be thought of as an in-order CPU with only small private L1 cache and 
-without some optimizations that full-fledged CPUs usually have.}
+with respect to computation speed. 
+A PIM core can be thought of as an in-order CPU with a small private L1 cache.
 A vault can be accessed only by its local PIM core.\footnote{
 We may alternatively assume that a PIM core has direct access to remote vaults, at a larger cost. 
 We may also assume that vaults are accessible by CPUs as well, 
@@ -43,7 +44,7 @@ but at the cost of dealing with cache coherence between CPUs and PIM cores.
 Some cache coherence mechanisms for PIM memory claim to be not costly 
 (e.g., \cite{boroumand2016, Ahn2015:1}). 
 However, we prefer to keep the hardware model simple and we will show that we are still able to 
-design efficient concurrent data structure algorithms with this simple, less powerful PIM memory.}
+design efficient concurrent data structures with this simple, less powerful PIM memory.}
 Although a PIM core is relatively slow computationally, it has fast access to its local vault.
 
 A PIM core communicates with other PIM cores and CPUs via messages.
@@ -53,7 +54,8 @@ Messages from the same sender to the same receiver are delivered in FIFO order:
 the message sent first arrives at the receiver first. 
 However, messages from different senders or to different receivers can arrive in an arbitrary order. 
 
-To keep the PIM memory simple, we assume that a PIM core can only make read and write operations 
-to its local vault, while a CPU also supports more powerful atomic operations, such as CAS and F\&A.
-Virtual memory is cheap to be achieved in this model, 
-by having each PIM core maintain its own page table for its local vault~\cite{hsieh2016accelerating}.
+We assume that a PIM core can only make read and write operations 
+to its local vault, while a CPU also supports more powerful atomic operations, such as \emph{Compare-And-Swap (CAS)} 
+and \emph{Fetch-And-Increment (F$\&$A)}.
+Virtual memory can be realized efficiently if  
+each PIM core maintains its own page table for the local vault~\cite{hsieh2016accelerating}.
