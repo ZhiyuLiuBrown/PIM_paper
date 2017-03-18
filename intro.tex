@@ -12,10 +12,11 @@ This new technology promises to revolutionize the interaction between computatio
 
 Prior work has already shown significant performance improvements by using PIM for embarrassingly parallel 
 and data-intensive applications~\cite{Zhang2014:TTP, Ahn2015:2, ZhuASSHPF13, Akin2015:DRM}, 
-as well as for pointer-chasing traversals in \emph{sequential} data structures~\cite{hsieh2016accelerating}. 
-However, current server machines have hundreds of cores; algorithms for 
-concurrent data structures exploit these cores to achieve high throughput and 
-scalability, with significant benefits over sequential data structures. 
+as well as for pointer-chasing traversals~\cite{hsieh2016accelerating} in \emph{sequential} data structures. 
+However, current server machines have hundreds of cores; 
+algorithms for concurrent data structures exploit these cores to achieve high throughput and scalability, 
+with significant benefits over sequential data structures 
+(e.g., \cite{practicallf, skiplists-concpugh, valois, Herlihy08}). 
 
 In this paper, we show that
   naive PIM data structures cannot outperform 
@@ -37,7 +38,7 @@ Second, we explore contended data structures, such as FIFO queues (Section~\ref{
 which can leverage CPU caches to exploit their inherent high locality. 
 Therefore, FIFO queues might not seem to be able to leverage PIM's faster memory accesses. 
 Nevertheless, these data structures exhibit a high degree of contention, which makes it difficult even for 
-the most advanced algorithms to obtain good performance for many threads accessing the data concurrently. 
+the most advanced algorithms to obtain good performance for many threads accessing the data oncurrently. 
 We use pipelining of requests, which can be done very efficiently in PIM, to design a new FIFO queue 
 suitable for PIM that can outperform state-of-the-art concurrent FIFO queues~\cite{Morrison13, Hendler10}.
 
