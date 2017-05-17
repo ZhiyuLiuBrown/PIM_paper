@@ -276,7 +276,7 @@ by counting only the costs in part of their executions.
 The latency of accessing and modifying queue nodes in the two algorithms is ignored here. 
 For dequeues, this latency can be high: since nodes to be dequeued in a long queue is unlikely 
 to be cached, the combiner has to make a sequence of memory accesses to dequeue them one by one.  
-Moreover, the F\&A-based algorithm may suffer performance degradation under heavy contention, 
+Moreover, the F\&A-based algorithm may also suffer performance degradation under heavy contention, 
 because contended F\&A operations may perform worse in practice.
 
 \begin{figure}[ht!]
@@ -301,26 +301,45 @@ the queue efficiently, it takes a lot of time for the PIM core to send results b
 To improve its performance, the PIM core can \textit{pipeline} the executions of requests, 
 as illustrated in Figure \ref{figure:queue_pipeline}(a). 
 Suppose $p$ CPUs send $p$ dequeue requests concurrently to the PIM core, which takes time $\latmes$. 
-The PIM core fist retrieves a request from its message buffer (step 1 in the figure), 
+The PIM core then retrieves a request from its message buffer (step 1 in the figure), 
 dequeues a node (step 2) for the request, and sends the node back to the CPU (step 3). 
-After the PIM core sends off the message containing the node, it immediately retrieves the next 
-request, without waiting for the message to arrive at its receiver. 
-This way, the PIM core can pipeline requests by overlapping the latency of message transfer (step 3) 
-and the latency of memory accesses and local computations (steps 1 and 2) in multiple requests 
+Here is how we hide the message latency in step 3: 
+after sending off the message containing the node in step 3, the PIM core immediately retrieves the next 
+request to execute, without blocking to wait for that message to arrive at its receiver. 
+This way, the PIM core pipelines requests by overlapping the latency of message transfer in step 3  
+and the latency of memory accesses and local computations in steps 1 and 2 in multiple requests 
 (see Figure \ref{figure:queue_pipeline}(b)). 
-During the execution of a dequeue, the PIM core only makes one memory access to read the node 
-to be dequeued, and two L1 cache accesses to read and modify the tail node of the dequeue segment.  
-It is easy to prove that the execution time of $p$ requests, including the time CPUs send 
-their requests to the PIM core, is only $\latmes + p(\latpim + \epsilon) + \latmes$, where $\epsilon$ 
-is the total latency of the PIM core making L1 cache accesses and sending off one message, 
+Note that the PIM core still executes everything sequentially, 
+as it always first sends off the message for the current request before serving the next.
+ 
+The throughput of the PIM core is eventually decided by the costs of its memory accesses and local operations, 
+as long as it has enough bandwidth to keep sending off messages,  
+which is the case for this algorithm, because only one message is sent per request.
+More specifically, as Figure \ref{figure:queue_pipeline}(b) illustrates, 
+the total execution time of $p$ requests is the sum of the execution times of the first two steps 
+for the $p$ requests, plus the message transfer time of step 3 for the last request.   
+Since the PIM core in the execution of a dequeue only makes one memory access to read the node 
+to be dequeued, and two L1 cache accesses to read and modify the tail node of the dequeue segment,   
+the execution time of $p$ requests, including the time CPUs send their requests to the PIM core, 
+is only $\latmes + p(\latpim + \epsilon) + \latmes$, where $\epsilon$ 
+is the total latency of the PIM core making two L1 cache accesses and sending off one message, 
 which is negligible in our performance model. 
-If each CPU makes another request immediately after it receives the result of its previous request, 
-we can prove that the throughput of the PIM-managed FIFO queue is 
+
+Assume that each CPU makes another request immediately after it receives the result of its previous request 
+and that there are enough (at least $2\latmes / \latpim$) CPUs sending requests.
+We can prove that the PIM core can always find another request in its buffer after it executes one. 
+Thus by the same analysis as above, we have $\latmes + x(\latpim + \epsilon) + \latmes = 1$, 
+where $x$ is the throughput of the PIM core in one second. 
+Therefore, the throughput of the PIM-managed FIFO queue is approximately 
 $${1 - 2\latmes \over \latpim + \epsilon} \approx {1 - 2\latmes \over \latpim} 
 \approx {1 \over \latpim},$$
-which is expected twice the throughput of the flat-combining queue and 
-three times that of the F\&A queue, in our performance model 
-assuming $\latato = 3\latllc = 3\latpim$. 
+since $\latmes$ is usually only hundreds of nanoseconds. 
+
+Comparing the throughputs of the three FIFO queue algorithms, 
+we can conclude that the PIM-managed FIFO queue with pipelining outperforms the other two algorithms 
+when $2r_1 / r_2$ and $r_1 r_3$. 
+If we assume $r_1 = r_2 = 3$ and $r_3 = 1$, then the throughput of our FIFO queue is expected 
+twice the throughput of the flat-combining queue and three times that of the F\&A queue. 
 
 When the PIM-managed FIFO queue is short, it may contain only one segment 
 which deals with both enqueue and dequeue requests. 
