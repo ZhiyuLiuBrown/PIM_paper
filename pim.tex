@@ -38,13 +38,13 @@ A PIM core is a lightweight CPU that may be slower than a full-fledged CPU
 with respect to computation speed. 
 A PIM core can be thought of as an in-order CPU with a small private L1 cache.
 A vault can be accessed only by its local PIM core.\footnote{
-We may alternatively assume that a PIM core has direct access to remote vaults, at a larger cost. 
-We may also assume that vaults are accessible by CPUs as well, 
-but at the cost of dealing with cache coherence between CPUs and PIM cores. 
-Some cache coherence mechanisms for PIM memory claim to be not costly 
-(e.g., \cite{boroumand2016, Ahn2015:1}). 
-However, we prefer to keep the hardware model simple and we will show that we are still able to 
-design efficient concurrent data structures with this simple, less powerful PIM memory.}
+Alternatively, we could assume that a PIM core has direct access to remote vaults, at a larger cost. }
+Recent work has proposed efficient cache coherence mechanisms between PIM cores and 
+CPUs  
+(e.g., \cite{boroumand2016, Ahn2015:1}), but this introduces additional complexity. 
+We show that we 
+we can  
+design efficient concurrent data structures even if there is no coherence.
 Although a PIM core is relatively slow computationally, it has fast access to its local vault.
 
 A PIM core communicates with other PIM cores and CPUs via messages.

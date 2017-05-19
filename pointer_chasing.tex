@@ -20,7 +20,7 @@ the application.
 However, under the same conditions, these data structures have inherently low contention. 
 Lock-free algorithms
 ~\cite{practicallf, skiplists-concpugh, valois, Herlihy08}
-have shown that these data structures can scale to hundreds of cores under low contention. Unfortunately, each vault in 
+have shown that these data structures can scale to hundreds of cores under low contention~\cite{nodereplication}. Unfortunately, each vault in 
 PIM memory has a single core; as a consequence, prior work 
 has only compared PIM data structures with sequential data structures, 
 not with carefully crafted concurrent data structures.

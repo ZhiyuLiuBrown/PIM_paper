@@ -1,12 +1,20 @@
 \section{Conclusion}
 \label{section:conclusion}
-In this paper, we study the problem of exploiting the low memory access latency of PIM memory to design efficient concurrent data structures with the PIM memory. 
-To analyze and compare performance of our PIM-managed data structures and concurrent data structures in the literature, we propose a simplified performance model based on the latency numbers in prior work on PIM
-memory and on evaluations of operations in multiprocessor architectures. 
-We show that certain naive PIM data structures cannot outperform traditional concurrent data structures, 
-due to lack of parallelism, or high communication costs between CPUs and PIM cores.  
-To improve performance of PIM data structures, we propose novel designs for different types of data structures with different optimization techniques.   
-More specifically, we present a PIM-managed linked-list with combining optimization and a skip-list with partitioning optimization, as representatives of pointer-chasing data structures, 
-and a PIM-managed FIFO queue with pipelining optimization, as a representative of high-contention data structures. 
-We prove that those simple PIM algorithms can beat state-of-the-art concurrent data structures, making PIM memory a promising platform for designing concurrent data structures.
+In this paper, we study how to exploit the low access latency 
+of PIM memory to design efficient concurrent data structures for the PIM memory.
+To analyze and compare the performance of our PIM-managed data structures with 
+concurrent data structures in the literature, we propose a simplified 
+performance model based on the latencies assumed by prior work on PIM
+memory and on current multiprocessor architectures. 
+We show that sequential PIM data structures cannot outperform traditional 
+concurrent data structures, 
+due to the lack of parallelism and the high communication cost between the CPUs and the PIM 
+cores.  
+To improve the performance of PIM data structures, we propose novel designs for    
+low contention 
+pointer-chasing data structures, such as linked-lists and skip-lists, and for high-contention  
+data structures, such as FIFO queues. 
+We show that our PIM algorithms can outperform state-of-the-art concurrent 
+data structures, making PIM memory a promising platform for managing data structures.
+
  
