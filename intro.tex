@@ -38,7 +38,7 @@ Second, we explore contended data structures, such as FIFO queues (Section~\ref{
 which can leverage CPU caches to exploit their inherent high locality. 
 Therefore, FIFO queues might not seem to be able to leverage PIM's faster memory accesses. 
 Nevertheless, these data structures exhibit a high degree of contention, which makes it difficult even for 
-the most advanced algorithms to obtain good performance for many threads accessing the data oncurrently. 
+the most advanced algorithms to obtain good performance when many threads access the data concurrently. 
 We use pipelining of requests, which can be done very efficiently in PIM, to design a new FIFO queue 
 suitable for PIM that can outperform state-of-the-art concurrent FIFO queues~\cite{Morrison13, Hendler10}.
 
@@ -48,7 +48,8 @@ The contributions of this paper are summarized below.
 concurrent data structures based on the latency of a memory access and an estimated number of 
 accesses served from the cache, as well as the number of atomic operations used. 
 \item Using this model, we show that the lower latencies are not sufficient for PIM data structures
-to outperform efficient concurrent algorithms. 
+to outperform efficient concurrent algorithms\footnote{
+We will use algorithms and data structures interchangeably in the rest of the paper.}. 
  \item We propose new designs for PIM 
 data structures using 
 techniques such as combining, partitioning and pipelining, that can outperform traditional 
