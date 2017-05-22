@@ -22,7 +22,8 @@ and dequeue operations compete for the head and tail of the queue, respectively.
 Although a naive PIM FIFO queue is not a good replacement for a well crafted concurrent FIFO queue, 
 we show that, counterintuitively, PIM can still have benefits over a traditional concurrent FIFO 
 queue. In particular, we exploit the pipelining of requests from CPUs, which can be done very efficiently in PIM, to 
-design a PIM FIFO queue that can outperform state-of-the-art concurrent FIFO queues, such as the one using flat combining~\cite{Hendler10} and the one using Fetch And Add~\cite{Morrison13}.
+design a PIM FIFO queue that can outperform state-of-the-art concurrent FIFO queues, such as the one using flat combining~\cite{Hendler10} 
+and the one using fetch and add~\cite{Morrison13}.
 
 \subsection{FIFO queues}
 The structure of our PIM-managed FIFO queue is shown in Figure \ref{figure:queue_structure}.
@@ -54,31 +55,25 @@ Initially the queue consists of an empty segment which acts as both the enqueue 
 the dequeue segment. 
 When the length of enqueue segment exceeds some threshold, the PIM core maintaining it
 notifies another PIM core to create a new segment as the new enqueue segment.\footnote{
-When and how to create a new segment can be decided in other ways.
-For example, CPUs, instead of the PIM core holding the enqueue segment, 
-can decide when to create the new segment and which vault to hold the new segment, 
-based on more complex criteria 
-(e.g., if a PIM core is currently holding the dequeue segment, it will not be chosen for 
-the new segment so as to avoid the situation where it deals with both enqueue and dequeue requests).
-To simplify the description of our algorithm, we omit those variants.}
+Alternative designs are also possible and the decision can also be made by CPUs,
+based on more complex criteria. We omit these alternatives for briefness.}
 When the dequeue segment becomes empty and the queue has other segments, 
 the dequeue segment is deleted and the segment that was created first 
 among all the remaining segments is designated as the new dequeue segment. 
-(It is not hard to see that the new dequeue segment were created when the old dequeue segment 
-acted as the enqueue segment and exceeded the length threshold.)
+This segment was created when the old dequeue segment 
+acted as the enqueue segment and exceeded the length threshold.
 If the enqueue segment is different from the dequeue segment, 
 enqueue and dequeue operations can be executed by two different PIM cores 
 in parallel, which doubles the throughput compared to a straightforward queue implementation 
 held in a single vault.  
 
 
-
 \begin{algorithm*}[ht!]
 {\footnotesize
 %scriptsize
-\caption{PIM-managed FIFO queue: PIM core's procedures upon receiving requests 
-enq(cid, $u$), deq(cid), newEnqSeg(), and newEnqDeq()}
+\caption{PIM-managed FIFO queue}
 \label{alg:queue}
+\vspace{-2.5ex}
 \begin{multicols}{2}
 \begin{algorithmic}[1]
 \Procedure{enq}{cid, $u$}
@@ -115,8 +110,6 @@ enq(cid, $u$), deq(cid), newEnqSeg(), and newEnqDeq()}
 \EndProcedure
 \end{algorithmic}
 
-
-
 \columnbreak
 
 \begin{algorithmic}[1]
@@ -136,13 +129,12 @@ enq(cid, $u$), deq(cid), newEnqSeg(), and newEnqDeq()}
                 \State send message(cid, false);
             \EndIf            
         \EndIf 
-    \EndIf 
-    
+    \EndIf     
 \item[]
-\item[]
-\item[]
-\item[]
-\item[]
+%\item[]
+%\item[]
+%\item[]
+%\item[]
 \EndProcedure
 \end{algorithmic}
 
@@ -156,6 +148,7 @@ enq(cid, $u$), deq(cid), newEnqSeg(), and newEnqDeq()}
 
 \end{multicols}
 }
+\vspace{-2ex}
 \end{algorithm*}
 
 
@@ -178,14 +171,14 @@ After enqueuing $u$, the PIM core may find the enqueue segment is longer than th
 If so, it sends a message with a newEnqSeg() request to the PIM core of another vault that is chosen 
 to create a new enqueue segment.
 Finally the PIM core sets its enqSeq to null indicating it no longer deals with enqueue operations.
-Note that the CID cid' of the PIM core chosen for creating the new segment is recorded in 
+Note that the CID \emph{cid} of the PIM core chosen for creating the new segment is recorded in 
 enqSeg.nextSegCid for future use in dequeue requests.
 As Procedure newEnqSeg() in Algorithm \ref{alg:queue} shows,
 The PIM core receiving this newEnqSeg() request creates a new enqueue segment and enqueues 
 the segment into its segQueue (line 3). 
 Finally it notifies CPUs of the new enqueue segment (we will get to it in more detail later).
 
-Similarly, when a PIM core receives a dequeue request deq(cid) from a CPU with CID cid,
+Similarly, when a PIM core receives a dequeue request deq(cid) from a CPU with CID \emph{cid},
 it first checks whether it still holds the dequeue segment (line 2 of Procedure deq(cid)).
 If so, the PIM core dequeues a node and sends it back to the CPU (lines 5-7).
 Otherwise, it informs the CPU that this request has failed (line 3) and
@@ -193,14 +186,14 @@ the CPU will have to resend its request to the right PIM core.
 If the dequeue segment is empty (line 8) and the dequeue segment is not the same as 
 the enqueue segment (line 11), which indicates that the FIFO queue is not empty 
 and there exists another segment, the PIM core sends a message with a newDeqSeg() request 
-to the PIM core with CID deqSeg.nextSegCid. 
+to the PIM core with CID \emph{deqSeg.nextSegCid}. 
 (We know that this PIM core must hold the next segment, 
 according to how we create new segments in enqueue operations, 
 as shown at lines 14-16 of Procedure enq(cid, $u$).) 
 Upon receiving the newDeqSeg() request, as illustrated in Procedure newDeqSeg(), 
 the PIM core retrieves from its segQueue the oldest segment it has created and 
 makes it the new dequeue segment (line 2). 
-Finally the PIM core notifies CPU that it is holding the new dequeue segment now.
+Finally the PIM core notifies the CPU that it is holding the new dequeue segment now.
 
 Now we explain how CPUs and PIM cores coordinate to make sure that CPUs can find the right enqueue 
 and dequeue segments, when their previous attempts have failed due to changes of those segments. 
