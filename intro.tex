@@ -1,30 +1,37 @@
 %\section{Introduction}
 \section{Near-memory Computing}
 
-The performance gap between memory and CPU has grown exponentially. Memory vendors have focused mainly on improving memory capacity and bandwidth, sometimes even at the cost of increased memory access latencies. To provide higher bandwidth with lower access latencies, hardware architects have proposed near-memory computing (also called \textit{processing-in-memory}, or PIM), where a lightweight processor (called a PIM core) is located close to memory. A memory access from a PIM core is much faster than from a CPU core. 
-Near-memory computing is an old idea, that has been intensely studied in the past 
-(e.g., \cite{Stone1970, Kogge1994, Gokhale1995, Patterson1997, Oskin1998, KangHYKGLTP99, Hall1999}), 
+The performance gap between memory and CPU has grown exponentially. 
+Memory vendors have focused mainly on improving memory capacity and bandwidth, 
+sometimes even at the cost of increased memory access latencies \cite{Chang:2016}. 
+To provide higher bandwidth with lower access latencies, hardware architects have proposed near-memory computing (also called \textit{processing-in-memory}, or PIM), where a lightweight processor (called a PIM core) is located close to memory. A memory access from a PIM core is much faster than from a CPU core. 
+Near-memory computing is an old idea, that has been intensely studied in the past (e.g., 
+\cite{Stone1970, Kogge1994, Gokhale1995, Patterson1997, Oskin1998, KangHYKGLTP99, Hall1999, Elliott:1992}), 
 but so far has not yet materialized. However, new advances in 3D integration and in die-stacked memory 
 likely make near-memory computing viable in the near future. 
-For example, one PIM design assumes memory is organized in multiple vaults, each having an in-order PIM core to manage it. These PIM cores
-can communicate through message passing, but do not share memory, and cannot access each other's vaults. 
+For example, one PIM design \cite{Ahn2015:2, Zhang2014:TTP, Ahn2015:1} assumes that 
+memory is organized in multiple vaults, each having an in-order PIM core to manage it. 
+These PIM corescan communicate through message passing, but do not share memory, and cannot access each other's vaults. 
 
 This new technology promises to revolutionize the interaction between computation and data, 
 as it enables memory to become an active component in managing the data. 
 Therefore, it invites a fundamental rethinking of basic data structures and promotes a tighter dependency between algorithmic design and hardware characteristics. 
 
 Prior work has already shown significant performance improvements by using PIM for embarrassingly parallel 
-and data-intensive applications~\cite{Zhang2014:TTP, Ahn2015:2, ZhuASSHPF13, Akin2015:DRM}, 
+and data-intensive applications~\cite{Zhang2014:TTP, Ahn2015:2, ZhuASSHPF13, Akin2015:DRM, Hsieh:2016:TOM}, 
 as well as for pointer-chasing traversals~\cite{hsieh2016accelerating} in \emph{sequential} data structures. 
 However, current server machines have hundreds of cores; 
 algorithms for concurrent data structures exploit these cores to achieve high throughput and scalability, 
 with significant benefits over sequential data structures 
-(e.g., \cite{practicallf, skiplists-concpugh, valois, Herlihy08}). 
-
-In this paper, we show that naive PIM data structures cannot outperform 
-state-of-the-art \emph{concurrent} data structures. 
+(e.g., \cite{practicallf, skiplists-concpugh, valois, Herlihy08}).
+Unlike prior work, we focus on \emph{concurrent} data structures for PIM 
+and we show that naive PIM data structures cannot outperform 
+state-of-the-art concurrent data structures. 
 In particular, the lower-latency access to memory provided by PIM cannot compensate 
 for the loss of parallelism. 
+For example, we show that if a CPU core takes 2X time to access memory than a PIM core, 
+a PIM-managed linked-list is still slower than a concurrent linked-list serving requests in parallel 
+by only three CPU cores. 
 To be competitive with traditional concurrent data structures, 
 PIM data structures need new algorithms and new approaches to leverage parallelism.  
 

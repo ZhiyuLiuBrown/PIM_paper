@@ -79,8 +79,8 @@ To simplify the analysis, we assume that the size of the linked-list does not fl
 This is achieved when the number of add() requests is similar to the number of delete() requests. 
 We assume that a CPU makes a new operation request immediately after
 its previous one completes.
-Assuming that $n \gg p$ and $N \gg p$, the approximate expected throughputs (per second) 
-of the concurrent linked-lists are presented in Table \ref{tab:linkedlist}, 
+Assuming that $n \gg p$ and $N \gg p$, the approximate expected throughput (per second) of each
+of the concurrent linked-lists is presented in Table \ref{tab:linkedlist}, 
 where $\Sp = \sum\limits_{i=1}^{n} ({i \over n+1})^{p}$.
 
 \renewcommand{\arraystretch}{1.8}
@@ -97,19 +97,19 @@ where $\Sp = \sum\limits_{i=1}^{n} ({i \over n+1})^{p}$.
     PIM-managed linked-list with combining & ${p \over (n-\Sp)\latpim}$ \\ \hline
     \end{tabular}
 \end{center}
-\caption{Throughputs of linked-list algorithms.}
+\caption{Throughput of linked-list algorithms.}
 \label{tab:linkedlist}
 \end{table}
 
-We calculate the throughputs in Table \ref{tab:linkedlist} in the following manner. 
+We calculate the throughput values in Table \ref{tab:linkedlist} in the following manner. 
 In the linked-list with fine-grained locks, which has $(n+1)$ nodes including 
 a dummy head node, each thread (CPU) executes its own operations to the linked-list. 
 Since, the key of a request is generated uniformly at random, 
 the average number of memory accesses by one thread for one operation is $(n+1)/2$ 
 and hence the throughput of one thread is $2/((n+1)\latcpu)$. 
 Since there are $p$ threads running in parallel, the total throughput is $2p/((n+1)\latcpu)$. 
-The throughputs of the flat-combining and the PIM-managed linked-lists without combining optimization 
-are calculated similarly. 
+The throughput of the flat-combining and the PIM-managed linked-lists without combining optimization 
+is calculated similarly. 
 For the flat-combining and the PIM-managed linked-lists with combining, it suffices to prove that
 the average number of memory accesses by a PIM core (or a combiner) batching and executing 
 $p$ random operation requests in one traversal is $n - \Sp$, 
@@ -128,7 +128,7 @@ Given that $0 < \Sp \le {n \over 2}$,
 the PIM-managed linked-list can beat the linked-list with fine-grained locks as long as $r_1 \ge 2$. 
 If we assume $r_1 = 3$, as estimated by prior work, the throughput of the PIM-managed linked-list with combining should be at least 1.5 times the throughput of the linked-list with fine-grained locks.
 Without combining, however, the PIM-managed linked-list \emph{cannot}
-outperform the linked-list with fine-grained locks when there are $p \ge r_1$ threads.
+outperform the linked-list with fine-grained locks run by $p \ge r_1$ threads.
 On the other hand, the PIM-managed linked-list is expected to be $r_1$ times better than 
 the flat-combining linked-list, with or without combining optimization applied to both.  
 
@@ -141,7 +141,7 @@ which is a NUMA node with 14 cores, a 35 MB shared L3 cache,
 and a private L2/L1 cache of size 256 KB/64 KB per core. 
 Each core has 2 hyperthreads, for a total of 28 hyperthreads. 
 
-The throughputs of the algorithms are presented in Figure \ref{figure:linkedlist_data}.
+The throughput of each of the algorithms is presented in Figure \ref{figure:linkedlist_data}.
 The results confirmed the validity of our analysis in Table \ref{tab:linkedlist}.
 The throughput of the flat-combining algorithm without the combining optimization
 is worse than the algorithm with fine-grained locks.
@@ -174,7 +174,7 @@ linked-list with combining optimization now outperforms the throughput of all ot
 
 \begin{figure}[ht!]
     \centering
-    \includegraphics[width=1.0\linewidth]{linkedlist_data.eps} % first figure itself
+    \includegraphics[width=.95\linewidth]{linkedlist_data.eps} 
     \caption{Experimental results of linked-lists. We evaluate the linked-list with fine-grained locks 
         and the flat-combining linked-list (FC) with and without the combining optimization.}
    \label{figure:linkedlist_data}
@@ -228,7 +228,7 @@ and sends the result back to the CPU.
 %\\
 %\\
 \centering
-\includegraphics[width=1.0\linewidth]{skiplist_structure.eps}
+\includegraphics[width=.8\linewidth]{skiplist_structure.eps}
 %$\hrulefill$
 \caption{A PIM-managed skip-list with three partitions}
 \label{figure:skiplist_structure}
@@ -257,7 +257,7 @@ and all the operations are contains() operations
 such that the size of each skip-list nearly doesn't change).
 The keys of requests are generated uniformly at random. 
 
-The approximate throughputs of these skip-lists are presented in Table \ref{tab:skiplist}, 
+The approximate throughput of each of these skip-lists is presented in Table \ref{tab:skiplist}, 
 where $\beta$ is the average number of nodes an operation has to go through
 in order to find the location of its key in a skip-list
 ($\beta = \Theta(\log N)$, where $N$ is the size of the skip-list).
@@ -265,7 +265,7 @@ In the lock-free skip-list, $p$ threads execute their own operations in parallel
 so the throughput is roughly $p/(\beta\latcpu)$. 
 Without the partitioning optimization, a combiner in the flat-combining skip-list and a PIM core 
 in the PIM-managed skip-list both have to execute operations one by one sequentially, 
-leading to throughputs of roughly ${1 \over (\beta\latcpu)}$ and ${1 \over (\beta\latpim + \latmes)}$ respectively, 
+leading to throughput of roughly ${1 \over (\beta\latcpu)}$ and ${1 \over (\beta\latpim + \latmes)}$ respectively, 
 where $\latmes$ is incurred by the PIM core sending a message with a result back to a CPU. 
 After dividing these two skip-lists into $k$ partitions, we can achieve a speedup of $k$ for both of them, 
 as $k$ PIM cores and $k$ combiners can serve requests in parallel now. 
@@ -287,7 +287,7 @@ so their actual performance could be even worse than what we show in Table \ref{
     PIM-managed skip-list with $k$ partitions & ${k \over (\beta\latpim + \latmes)}$ \\ \hline
     \end{tabular}
 \end{center}
-\caption{Throughputs of skip-list algorithms.}
+\caption{Throughput of skip-list algorithms.}
 \label{tab:skiplist}
 \end{table}
 

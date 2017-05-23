@@ -45,7 +45,7 @@ send the node back to the CPU.
 %\\
 %\\
 \centering
-\includegraphics[width=1.0\linewidth]{queue_structure.eps}
+\includegraphics[width=.95\linewidth]{queue_structure.eps}
 %$\hrulefill$
 \caption{A PIM-managed FIFO queue with three segments}
 \label{figure:queue_structure}
@@ -277,14 +277,14 @@ because contended F\&A operations may perform worse in practice.
 %\\
 %\\
 \centering
-\subfigure[]{\includegraphics[width=.8\linewidth]{queue_pipeline.eps}}
+\subfigure[]{\includegraphics[width=.6\linewidth]{queue_pipeline.eps}}
 \\
-\subfigure[]{\includegraphics[width=1.0\linewidth]{queue_pipeline_timeline.eps}}
+\subfigure[]{\includegraphics[width=.7\linewidth]{queue_pipeline_timeline.eps}}
 
 %$\hrulefill$
 \caption{(a) illustrates the pipelining optimization, where a PIM core can start executing 
-a new deq() (step 1 of deq() for the CPU on the left), without waiting for the dequeued node of 
-the previous deq() to return to the CPU on the right (step 3). 
+a new deq() (step 1 of deq() for CPU B), without waiting for the dequeued node of 
+the previous deq() to return to CPU A (step 3). 
 (b) shows the timeline of pipelining four deq() requests.}
 \label{figure:queue_pipeline}
 \end{figure}
@@ -328,7 +328,7 @@ $${1 - 2\latmes \over \latpim + \epsilon} \approx {1 - 2\latmes \over \latpim}
 \approx {1 \over \latpim},$$
 since $\latmes$ is usually only hundreds of nanoseconds. 
 
-Comparing the throughputs of the three FIFO queue algorithms, 
+Comparing the throughput of the three FIFO queue algorithms, 
 we can conclude that the PIM-managed FIFO queue with pipelining outperforms the other two algorithms 
 when $2r_1 / r_2$ and $r_1 r_3$. 
 If we assume $r_1 = r_2 = 3$ and $r_3 = 1$, then the throughput of our FIFO queue is expected 
