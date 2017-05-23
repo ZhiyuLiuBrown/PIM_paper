@@ -13,11 +13,10 @@ pointer-chasing traversals in \emph{sequential} data structures.
 However, current server machines have hundreds of cores; algorithms for 
 concurrent data structures exploit these cores to achieve high throughput and 
 scalability, with significant benefits over sequential data structures. 
-No prior work examines the design of concurrent data structures to take the advantage of PIM. 
-
-In this paper, we show two results:
+Unlike prior work, we focus on \emph{concurrent} data structures for PIM and we 
+show two main results:
 (1) naive PIM data structures cannot outperform state-of-the-art concurrent data structures
-such as pointer-chasing data structures and FIFO queue,
+such as pointer-chasing data structures and FIFO queues,
 (2) novel designs for PIM data structures,
 using techniques such as combining, partitioning and pipelining,
 can outperform traditional concurrent data structures,
