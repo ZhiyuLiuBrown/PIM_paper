@@ -38,7 +38,7 @@ We make the conservative assumption that the latency of a message transferred
 between two PIM cores is also $\latmes$.
 Note that the message latency we consider here is the transfer time of a message
 through a message passing channel, that is, the elapsed time between 
-when a PIM or a CPU core sends off the message and when the message arrives at the buffer of its receiver.
+when a PIM or a CPU core finishes sending off the message and when the message arrives at the buffer of its receiver.
 We ignore the time spent in other parts of a message passing procedure,
-such as preprocessing and constructing the message,
+such as \emph{preprocessing and constructing the message}, and \emph{a PIM or a CPU core sending off the message},
 as it is negligible compared to the time spent in the message transfer \cite{Azarkhish16}.
