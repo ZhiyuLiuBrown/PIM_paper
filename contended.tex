@@ -7,13 +7,13 @@ by many threads concurrently. In these data structures, operations compete for a
 locations, creating a contention spot, which can become a performance bottleneck.
 Examples include head and tail pointers in queues or the top pointer of a stack.
 
-These data structures have good locality and the contention spots are often found 
-in shared CPU caches, such as the last-level cache in a multi-socket non-uniform memory access machine 
-when accessed by threads running only on one socket. Therefore, these data structures might 
+These data structures have good locality; therefore, the contention spots are often found 
+in shared CPU caches, such as the last-level cache in a multi-socket machine 
+when shared by threads running on a single socket. Therefore, these data structures might 
 seem to be a poor fit for near-memory computing: the advantage of faster memory access provided by PIM 
 cannot be exercised because the frequently accessed data might stay in the CPU cache. 
 However, such a perspective does not consider the overhead introduced by contention 
-in a concurrent data structure where \emph{many} threads try to access the same locations. 
+in a concurrent data structure where \emph{many} threads access the \emph{same} locations. 
 
 As a representative example of this class of data structures, we consider a FIFO queue, 
 where concurrent enqueue
@@ -22,8 +22,8 @@ Although a naive PIM FIFO queue is not a good replacement for a well crafted con
 we show that, counterintuitively, PIM can still have benefits over a traditional concurrent FIFO 
 queue. In particular, we exploit the \emph{pipelining} of requests from CPUs, 
 which can be done very efficiently in PIM, to design a PIM FIFO queue that can outperform 
-state-of-the-art concurrent FIFO queues, such as the one using flat combining~\cite{Hendler10} 
-and the one using fetch and add~\cite{Morrison13}.
+state-of-the-art concurrent FIFO queues, such as the flat-combining FIFO queue~\cite{Hendler10} 
+and the fetch-and-add (F\&A) FIFO queue~\cite{Morrison13}.
 
 \subsection{FIFO queues}
 The structure of our PIM-managed FIFO queue is shown in Figure \ref{figure:queue_structure}.
@@ -37,7 +37,7 @@ containing the enqueue segment.
 The PIM core then inserts the node to the head of the segment.
 Similarly, to dequeue a node, a CPU sends a dequeue request to the PIM core of the vault
 holding the dequeue segment. 
-The PIM core then pops out the node at the tail of the dequeue segment and 
+The PIM core then removes the node at the tail of the dequeue segment and 
 sends the node back to the CPU.
 
 \begin{figure}[ht!]
@@ -53,10 +53,11 @@ sends the node back to the CPU.
 
 Initially, the queue consists of an empty segment that acts as both the enqueue segment and 
 the dequeue segment. 
-When the length of enqueue segment exceeds some threshold, the PIM core maintaining it
+When the length of the enqueue segment exceeds some threshold, the PIM core maintaining it
 notifies another PIM core to create a new segment as the new enqueue segment.\footnote{
-Alternative designs are also possible and the decision can also be made by CPUs,
-based on more complex criteria. We omit these alternatives for briefness.}
+Alternative designs where a CPU decides when to create new segments based on more complex 
+criteria are also possible. 
+We leave such designs as future work. }
 When the dequeue segment becomes empty and the queue has other segments, 
 the dequeue segment is deleted and the segment that was created first 
 among all the remaining segments is designated as the new dequeue segment. 
@@ -64,8 +65,8 @@ This segment was created when the old dequeue segment
 acted as the enqueue segment and exceeded the length threshold.
 If the enqueue segment is different from the dequeue segment, 
 enqueue and dequeue operations can be executed by two different PIM cores 
-in parallel, which doubles the throughput compared to a straightforward queue implementation 
-held in a single vault.  
+in parallel, improving the throughput. 
+The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue. 
 
 
 \begin{algorithm*}[ht!]
@@ -186,21 +187,21 @@ If so, the PIM core dequeues a node and sends it back to the CPU (lines 5-7).
 Otherwise, it informs the CPU that this request has failed (line 3) and
 the CPU will have to resend its request to the right PIM core.
 If the dequeue segment is empty (line 8) and the dequeue segment is not the same as 
-the enqueue segment (line 11), which indicates that the FIFO queue is not empty 
-and there exists another segment, the PIM core sends a message with a newDeqSeg() request 
+the enqueue segment (line 11), so the FIFO queue is not empty, 
+the PIM core sends a message with a newDeqSeg() request 
 to the PIM core with CID \textit{deqSeg.nextSegCid}. 
-(We know that this PIM core must hold the next segment, 
+We know that this PIM core must hold the next segment, 
 according to how we create new segments in enqueue operations, 
-as shown in lines 14-16 of Procedure enq(\textit{cid}, $u$).) 
-Upon receiving the newDeqSeg() request, as illustrated in Procedure newDeqSeg(), 
+as shown in lines 14-16 of Procedure enq(\textit{cid}, $u$). 
+Upon receiving the newDeqSeg() request, 
 the PIM core retrieves from its \textit{segQueue} the oldest segment it has created and 
 makes it the new dequeue segment (line 2). 
 Finally the PIM core notifies the CPUs that it is holding the new dequeue segment now.
 
 We now explain how CPUs and PIM cores coordinate to make sure that the CPUs can find the right enqueue 
-and dequeue segments, when their previous attempts have failed due to changes in where those segments are located. 
+and dequeue segments, when their attempts fail due to segments changes. 
 We only discuss how to deal with enqueue segments, 
-since the same methods can be applied to dequeue segments. 
+because the same methods can be applied to dequeue segments. 
 A straightforward way to inform the CPUs is to have the owner PIM core of the new enqueue segment 
 send notification messages to them (line 4 of newEngSeg()) 
 and wait until all the CPUs send back acknowledgement messages. 
@@ -209,13 +210,13 @@ the PIM core has to wait for it and therefore other CPUs cannot have their reque
 A more efficient, non-blocking method is to have the PIM core start serving new requests 
 immediately after it has sent off the notifications to all CPUs. 
 A CPU does not have to reply to those notifications in this case, 
-but if its request later fails, it needs to send messages to (sometimes all) PIM cores 
+but if its request later fails, it needs to send messages to all PIM cores 
 to ask which PIM core is currently in charge of the enqueue segment.
 In either case, the correctness of the algorithm is guaranteed:  
-at any time, there is only one enqueue segment and only one dequeue segment, 
-and only requests sent to them will be executed. 
+at any time, there is only one enqueue segment and only one dequeue segment; 
+only requests sent to them will be executed. 
   
-We would like to mention that the PIM-managed FIFO can be further optimized. 
+The PIM-managed FIFO queue can be further optimized. 
 For example, the PIM core holding the enqueue segment can combine multiple pending enqueue requests 
 and store the nodes to be enqueued in an array as a ``fat" node of the queue, 
 in order to reduce memory accesses. 
@@ -224,7 +225,7 @@ Even without this optimization, our algorithm still performs well, as we will sh
 
 \subsection{Pipelining and Performance Analysis}
 We compare the performance of three concurrent FIFO queues---our PIM-managed FIFO queue, 
-a flat-combining FIFO queue and a F\&A-based FIFO queue \cite{Morrison13}. 
+the flat-combining FIFO queue and the F\&A-based FIFO queue \cite{Morrison13}. 
 The F\&A-based FIFO queue is the most efficient concurrent FIFO queue we are aware of, 
 where threads make F\&A operations on two shared variables, 
 one for enqueues and the other for dequeues, to compete for slots in the FIFO queue to 
@@ -234,21 +235,24 @@ with a modification that threads compete for two ``combiner locks",
 one for enqueues and the other for dequeues. 
 We further simplify it based on the assumption that the queue is always non-empty, 
 so that it doesn't have to deal with synchronization issues between enqueues and dequeues 
-when the queue is empty. 
+when the queue is empty. These assumptions give an advantage to the flat combining queue, 
+to make it competitive with the two other queues, which can perform parallel enqueue and dequeue. 
 
 Let us first assume that a queue is long enough such that the PIM-managed FIFO queue 
 has more than one segment, and enqueue and dequeue requests can be executed separately. 
-Since changes in where enqueue and dequeue segments are located happen very infrequently, 
-the overhead of such changes is negligible and therefore ignored to simplify our analysis.
-(If the threshold of segment length in line 13 of enq(\textit{cid}, $u$) is a large integer $n$, 
-then, in the worst case, changing an enqueue or dequeue segment happens only once every $n$ requests, 
-and the cost is only the latency of sending one message and a few steps of local computation.)
-Since enqueues and dequeues are isolated in all the three algorithms when queues are long enough, 
-we will focus on dequeues. The analysis of enqueues is almost identical. 
+Since segments changes are infrequent, 
+the overhead of such changes is negligible and therefore not included in our analysis.
+For example, if the threshold of segment length in line 13 of enq(\textit{cid}, $u$) is a large integer $n$, 
+then, in the worst case, changing an enqueue or dequeue segment happens only once every $n$ requests.
+Moreover, a segment change only entails sending one message and a few steps of local computation.
+In our analysis, we focus on dequeue operations, because 
+ enqueues and dequeues are isolated in all three algorithms when queues are long enough.
+ The analysis of enqueues is similar. 
 
 Assume there are $p$ concurrent dequeue requests by $p$ threads. 
-Since each thread needs to perform a F\&A operation on a shared variable in the F\&A-based algorithm 
-and F\&As on a shared variable are essentially serialized, 
+In the F\&A algorithm, each thread needs to perform a F\&A operation on a shared variable, 
+serializing access to this shared variable. 
+Therefore, 
 the execution time of $p$ requests is at least $p\latato$. 
 If we assume that each CPU makes a request immediately after its previous request completes, 
 the throughput (per second) of the algorithm is at most ${1 \over \latato}$. 
@@ -261,16 +265,19 @@ to become the ``\emph{combiner}", which incurs one last-level cache access.
 The combiner then goes through the publication list to retrieve requests, executes operations for those requests, 
 and writes results back to the list, while other threads with pending requests spin on their own slots, 
 waiting for the results. 
-The combiner therefore makes two last-level cache accesses to each slot other than its own slot, 
+The combiner therefore makes two last-level cache accesses\footnote{We assume the combiner finds the slots 
+in the last-level cache, to the benefit of the flat combining algorithm. If the slots are not found in cache, 
+the cost will be higher, as the combiner will incur memory accesses instead.} to each slot other than its own, 
 one for reading the request and one for writing the result back. 
 Thus, the execution time of $p$ requests in the algorithm is at least $(2p-1)\latllc$ and 
 the throughput (per second) of the algorithm is at most ${1 \over 2\latllc}$ for large enough $p$.
 
-Note that our analysis of the F\&A-based and the flat-combining algorithms is quite optimistic, 
-as it counts only the costs in part of their executions. 
+Note that our analysis of the F\&A-based and the flat-combining algorithms is performed in favor of these 
+algorithms, 
+as it counts only partial costs of their executions. 
 We have ignored the latency of accessing and modifying queue nodes in the two algorithms. 
-For dequeues, this latency can be high: since nodes to be dequeued in a long queue is unlikely 
-to be cached, the combiner has to perform a sequence of memory accesses to dequeue them one by one.  
+For dequeues, this latency can be high: nodes to be dequeued in a long queue are unlikely 
+to be cached, so the combiner has to perform a sequence of memory accesses to dequeue them one by one.  
 Moreover, the F\&A-based algorithm may also suffer performance degradation under heavy contention, 
 because contended F\&A operations may perform worse in practice \cite{David13}.
 
@@ -299,27 +306,29 @@ Suppose $p$ CPUs send $p$ dequeue requests concurrently to the PIM core.
 The PIM core then retrieves a request from its message buffer (step 1 in the figure), 
 dequeues a node (step 2) for the request, and sends the node back to the CPU (step 3). 
 We can hide the message latency in step 3 as follows. 
-After sending off the message containing the node in step 3, the PIM core \emph{immediately} retrieves the next 
-request to execute, without blocking to wait for that message to arrive at its receiver. 
+After sending the message containing the node in step 3, the PIM core \emph{immediately} retrieves the next 
+request to execute, without blocking to wait for the previous message to arrive at its receiver. 
 This way, the PIM core \emph{pipelines} requests by overlapping the latency of message transfer in step 3  
 and the latency of memory accesses and local computations in steps 1 and 2 across multiple requests 
 (see Figure \ref{figure:queue_pipeline}(b)). 
-Note that the PIM core still executes everything sequentially, 
-as it always first sends off the message for the current request before serving the next.
+Note that the PIM core still executes everything sequentially: 
+ it first sends the message for the current request before serving the next one.
  
-The throughput of the PIM core is eventually decided by the costs of its memory accesses and local computations, 
-as long as it has enough bandwidth to keep sending off messages,  
-which is very likely the case for this algorithm, since only one message is sent per request.
-More specifically, Figure \ref{figure:queue_pipeline}(b) illustrates that 
+The throughput of a PIM core is given by the costs of its memory accesses and local computations, 
+as long as it has enough bandwidth to keep sending messages back to CPUs.  
+In this algorithm the PIM core sends a single small message per request, so bandwidth is unlikely to 
+become a bottleneck. 
+
+Figure \ref{figure:queue_pipeline}(b) illustrates that 
 the total execution time of $p$ requests is the sum of the execution times of the first two steps 
 for the $p$ requests, plus the message transfer time of step 3 for the last request.   
-Since the PIM core in the execution of a dequeue only makes one memory access to read the node 
-to be dequeued, and two L1 cache accesses to read and modify the tail node of the dequeue segment,   
-the total execution time of $p$ requests, 
-including the time $\latmes$ spent by CPUs to their requests to the PIM core concurrently, 
-is only $\latmes + p(\latpim + \epsilon) + \latmes$, where $\epsilon$ 
-is the total latency of the PIM core making two L1 cache accesses and sending off one message, 
-which is negligible in our performance model. 
+The PIM core in the execution of a dequeue only makes one memory access to read the node 
+to be dequeued, and two L1 cache accesses to read and modify the tail node of the dequeue segment.   
+The CPUs spend $\latmes$ time to send their requests to a PIM core concurrently. 
+Therefore, the total execution time of $p$ requests 
+is $\latmes + p(\latpim + \epsilon) + \latmes$. $\epsilon$ 
+is the total latency of the PIM core making two L1 cache accesses and sending one message. 
+This is negligible in our performance model. 
 
 Assume that each CPU makes another request immediately after it receives the result of its previous request 
 and that there are enough (at least $2\latmes / \latpim$) CPUs sending requests.
@@ -340,5 +349,5 @@ twice the throughput of the flat-combining queue and three times that of the F\&
 When the PIM-managed FIFO queue is short, it may contain only one segment 
 which deals with both enqueue and dequeue requests. 
 In this case, its throughput is only half of the throughput shown above, 
-but it should still be at least as good as the throughput of the other two algorithms. 
+but it is still at least as good as the throughput of the other two algorithms. 
 
