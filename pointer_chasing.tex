@@ -86,10 +86,10 @@ where $\Sp = \sum\limits_{i=1}^{n} ({i \over n+1})^{p}$.
 \renewcommand{\arraystretch}{1.8}
 \begin{table}[ht!]
 \begin{center}
-    %\begin{tabular}{| >{\small}l l |}
-	\begin{tabular}{| m{0.68\linewidth}  | c |}    
+    \begin{tabular}{| >{\small}l | l |}
+	%\begin{tabular}{| m{0.68\linewidth}  | c |}    
     \hline
-    Algorithm & Throughput\\ \hhline{|=|=|}
+    \textbf{Algorithm} & \textbf{Throughput}\\ \hhline{|=|=|}
     Linked-list with fine-grained locks & ${2p \over (n+1)\latcpu}$ \\ \hline
     Flat-combining linked-list without combining & ${2 \over (n+1)\latcpu}$ \\ \hline
     PIM-managed linked-list without combining & ${2 \over (n+1)\latpim}$ \\ \hline
@@ -276,10 +276,10 @@ so their actual performance could be even worse than what we show in Table \ref{
 
 \begin{table}[ht!]
 \begin{center}
-	%\begin{tabular}{| >{\small}l | l |}
-    \begin{tabular}{| m{0.55\linewidth}  | c |}
+	\begin{tabular}{| >{\small}l | l |}
+    %\begin{tabular}{| m{0.55\linewidth}  | c |}
     \hline
-    Algorithm & Throughput \\ \hhline{|=|=|} 
+    \textbf{Algorithm} & \textbf{Throughput} \\ \hhline{|=|=|} 
     Lock-free skip-list & ${p \over \beta\latcpu}$ \\ \hline
     Flat-combining skip-list & ${1 \over \beta\latcpu}$ \\ \hline
     PIM-managed skip-list & ${1 \over (\beta\latpim + \latmes)}$ \\ \hline
