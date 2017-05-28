@@ -51,24 +51,6 @@ sends the node back to the CPU.
 \label{figure:queue_structure}
 \end{figure}
 
-Initially, the queue consists of an empty segment that acts as both the enqueue segment and 
-the dequeue segment. 
-When the length of the enqueue segment exceeds some threshold, the PIM core maintaining it
-notifies another PIM core to create a new segment as the new enqueue segment.\footnote{
-Alternative designs where a CPU decides when to create new segments based on more complex 
-criteria are also possible. 
-We leave such designs as future work. }
-When the dequeue segment becomes empty and the queue has other segments, 
-the dequeue segment is deleted and the segment that was created first 
-among all the remaining segments is designated as the new dequeue segment. 
-This segment was created when the old dequeue segment 
-acted as the enqueue segment and exceeded the length threshold.
-If the enqueue segment is different from the dequeue segment, 
-enqueue and dequeue operations can be executed by two different PIM cores 
-in parallel, improving the throughput. 
-The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue. 
-
-
 \begin{algorithm*}[ht!]
 {\footnotesize
 %scriptsize
@@ -101,19 +83,22 @@ The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue.
     \EndIf
 \item[]
 \EndProcedure
+\algstore{}
 \end{algorithmic}
 
 \begin{algorithmic}[1]
+\algrestore{}
 \Procedure{newEnqSeg}{\null}
 	\State enqSeg = new Segment();
 	\State segQueue.enq(engSeg) ;
 	\State notify the CPUs of the new enqueue segment;
 \EndProcedure
+\algstore{}
 \end{algorithmic}
-
 \columnbreak
 
 \begin{algorithmic}[1]
+\algrestore{}
 \Procedure{deq}{cid}
 	\If{deqSeg == null}
         \State send message(cid, false);
@@ -137,10 +122,11 @@ The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue.
 %\item[]
 %\item[]
 \EndProcedure
+\algstore{}
 \end{algorithmic}
 
-
 \begin{algorithmic}[1]
+\algrestore{}
 \Procedure{newDeqSeg}{\null}
 	\State deqSeg = segQueue.deq();
 	\State notify the CPUs of the new dequeue segment; 
@@ -152,6 +138,22 @@ The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue.
 \vspace{-2ex}
 \end{algorithm*}
 
+Initially, the queue consists of an empty segment that acts as both the enqueue segment and 
+the dequeue segment. 
+When the length of the enqueue segment exceeds some threshold, the PIM core maintaining it
+notifies another PIM core to create a new segment as the new enqueue segment.\footnote{
+Alternative designs where a CPU decides when to create new segments based on more complex 
+criteria are also possible. 
+We leave such designs as future work. }
+When the dequeue segment becomes empty and the queue has other segments, 
+the dequeue segment is deleted and the segment that was created first 
+among all the remaining segments is designated as the new dequeue segment. 
+This segment was created when the old dequeue segment 
+acted as the enqueue segment and exceeded the length threshold.
+If the enqueue segment is different from the dequeue segment, 
+enqueue and dequeue operations can be executed by two different PIM cores 
+in parallel, improving the throughput. 
+The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue. 
 
 The pseudocode of the algorithm is presented in Algorithm \ref{alg:queue}. 
 Each PIM core has local variables \textit{enqSeg} and \textit{deqSeg} that are references to 
@@ -281,6 +283,22 @@ to be cached, so the combiner has to perform a sequence of memory accesses to de
 Moreover, the F\&A-based algorithm may also suffer performance degradation under heavy contention, 
 because contended F\&A operations may perform worse in practice \cite{David13}.
 
+The performance of our PIM-managed FIFO queue seems poor at first sight: although a PIM core can update 
+the queue efficiently, it takes a lot of time for the PIM core to send results back to CPUs one by one. 
+To improve its performance, the PIM core can \textit{pipeline} the execution of requests, 
+as illustrated in Figure \ref{figure:queue_pipeline}(a). 
+Suppose $p$ CPUs send $p$ dequeue requests concurrently to the PIM core. 
+The PIM core then retrieves a request from its message buffer (step 1 in the figure), 
+dequeues a node (step 2) for the request, and sends the node back to the CPU (step 3). 
+We can hide the message latency in step 3 as follows. 
+After sending the message containing the node in step 3, the PIM core \emph{immediately} retrieves the next 
+request to execute, without blocking to wait for the previous message to arrive at its receiver. 
+This way, the PIM core \emph{pipelines} requests by overlapping the latency of message transfer in step 3  
+and the latency of memory accesses and local computations in steps 1 and 2 across multiple requests 
+(see Figure \ref{figure:queue_pipeline}(b)). 
+Note that the PIM core still executes everything sequentially: 
+it first sends the message for the current request before serving the next one.
+
 \begin{figure}[ht!]
 %$\hrulefill$
 %\\
@@ -297,22 +315,6 @@ the previous deq() to return to CPU A (step 3).
 (b) The timeline of pipelining four deq() requests.}
 \label{figure:queue_pipeline}
 \end{figure}
-
-The performance of our PIM-managed FIFO queue seems poor at first sight: although a PIM core can update 
-the queue efficiently, it takes a lot of time for the PIM core to send results back to CPUs one by one. 
-To improve its performance, the PIM core can \textit{pipeline} the execution of requests, 
-as illustrated in Figure \ref{figure:queue_pipeline}(a). 
-Suppose $p$ CPUs send $p$ dequeue requests concurrently to the PIM core. 
-The PIM core then retrieves a request from its message buffer (step 1 in the figure), 
-dequeues a node (step 2) for the request, and sends the node back to the CPU (step 3). 
-We can hide the message latency in step 3 as follows. 
-After sending the message containing the node in step 3, the PIM core \emph{immediately} retrieves the next 
-request to execute, without blocking to wait for the previous message to arrive at its receiver. 
-This way, the PIM core \emph{pipelines} requests by overlapping the latency of message transfer in step 3  
-and the latency of memory accesses and local computations in steps 1 and 2 across multiple requests 
-(see Figure \ref{figure:queue_pipeline}(b)). 
-Note that the PIM core still executes everything sequentially: 
- it first sends the message for the current request before serving the next one.
  
 The throughput of a PIM core is given by the costs of its memory accesses and local computations, 
 as long as it has enough bandwidth to keep sending messages back to CPUs.  
