@@ -3,7 +3,7 @@
 
 The performance gap between memory and CPU has grown exponentially.
 Memory vendors have focused mainly on improving memory capacity and
-bandwidth, sometimes even at the cost of increased memory access
+bandwidth, sometimes even at the cost of higher memory access
 latencies \cite{Chang:2016, DBLP:conf/hpca/LeeKSLSM13,
   DBLP:conf/hpca/LeeKPKSCM15, Chang:2017, Lee:2017}.  To provide
 higher bandwidth with lower access latencies, hardware architects have
@@ -11,10 +11,10 @@ proposed near-memory computing (also called
 \textit{processing-in-memory}, or PIM), where a lightweight processor
 (called a PIM core) is located close to memory. A memory access from a
 PIM core is much faster than that from a CPU core.  Near-memory
-computing is an old idea that has been intensely studied in the past
+computing is an old idea that has been intensively studied in the past
 (e.g., \cite{Stone1970, Kogge1994, Gokhale1995, Patterson1997,
   Oskin1998, KangHYKGLTP99, Hall1999, Elliott:1992}), but so far has
-not yet materialized. However, new advances in 3D integration and in
+not yet materialized. However, new advances in 3D integration and
 die-stacked memory likely make near-memory computing viable in the
 near future.  For example, one PIM design \cite{Ahn2015:2,
   Zhang2014:TTP, Ahn2015:1, boroumand2016} assumes that memory is
@@ -22,100 +22,95 @@ organized in multiple vaults, each having an in-order PIM core to
 manage it.  These PIM cores can communicate through message passing,
 but do not share memory, and cannot access each other's vaults.
 
-This new technology promises to revolutionize the interaction between 
-computation and data, 
-as it enables memory to become an active component in managing the data. 
-Therefore, it invites a fundamental rethinking of basic data structures and 
-promotes a tighter dependency between algorithmic design and hardware 
-characteristics. 
+This new technology promises to revolutionize the interaction between
+computation and data, as it enables memory to become an active
+component in managing the data.  Therefore, it invites a fundamental
+rethinking of basic data structures and promotes a tighter dependency
+between algorithmic design and hardware characteristics.
 
-Prior work has already shown significant performance improvements by using PIM 
-for embarrassingly parallel 
-and data-intensive applications~\cite{Zhang2014:TTP, Ahn2015:2, ZhuASSHPF13, 
-Akin2015:DRM, Hsieh:2016:TOM}, 
-as well as for pointer-chasing traversals~\cite{hsieh2016accelerating} in 
-\emph{sequential} data structures. 
-However, current server machines have hundreds of cores; 
-algorithms for concurrent data structures exploit these cores to achieve high 
-throughput and scalability, 
-with significant benefits over sequential data structures 
-(e.g., \cite{practicallf, skiplists-concpugh, valois, Herlihy08}).
-Unlike prior work, we focus on \emph{concurrent} data structures for PIM 
-and we show that naive PIM data structures \emph{cannot} outperform 
-state-of-the-art concurrent data structures. 
-In particular, the lower-latency access to memory provided by PIM cannot 
-compensate 
-for the loss of parallelism. 
-For example, even if a PIM memory access is two times faster than a CPU memory access, a 
-sequential PIM linked-list is still slower than a traditional concurrent linked-list accessed in parallel by only three 
+Prior work has already shown significant performance improvements by
+using PIM for embarrassingly parallel and data-intensive
+applications~\cite{Zhang2014:TTP, Ahn2015:2, ZhuASSHPF13,
+  Akin2015:DRM, Hsieh:2016:TOM}, as well as for pointer-chasing
+traversals~\cite{hsieh2016accelerating,Hashemi:2016} in
+\emph{sequential} data structures.  However, current server machines
+have hundreds of cores, and algorithms for concurrent data structures
+exploit these cores to achieve high throughput and scalability, with
+significant benefits over sequential data structures (e.g.,
+\cite{practicallf, skiplists-concpugh, valois, Herlihy08}).  Unlike
+prior work, we focus on \emph{concurrent} data structures for PIM and
+we show that naive PIM data structures \emph{cannot} outperform
+state-of-the-art concurrent data structures.  In particular, the
+lower-latency access to memory provided by PIM cannot compensate for
+the loss of parallelism in data structure manipulation.  For example,
+even if a PIM memory access is two times faster than a CPU memory
+access, a sequential PIM linked-list is still slower than a
+traditional concurrent linked-list accessed in parallel by only three
 CPU cores.
 
-Therefore, to be competitive with traditional concurrent data structures, 
-PIM data structures need new algorithms and new approaches to leverage 
-parallelism.  
-As the PIM technology approaches fruition, it is crucial to investigate how to 
-best utilize it to exploit the lower latencies, while still using the vast amount of previous research 
-related to concurrent data structures. 
+Therefore, to be competitive with traditional concurrent data
+structures, PIM data structures need new algorithms and new approaches
+to leverage parallelism.  As the PIM technology approaches fruition,
+it is crucial to investigate how to best utilize it to exploit the
+lower latencies, while still leveraging the vast amount of previous
+research related to concurrent data structures.
 
-In this paper, we provide answers to the following questions. 
-How do we design and optimize data structures for PIM? And, how do these 
-optimized PIM data structures compare to traditional CPU-managed concurrent data structures? To 
-answer these questions, even before the hardware becomes available, we develop a 
-simplified model of the expected performance of PIM. Using this model, we 
-investigate two classes of data structures. 
+In this paper, we provide answers to the following key questions: 1)
+How do we design and optimize data structures for PIM? 2) How do these
+optimized PIM data structures compare to traditional CPU-managed
+concurrent data structures? To answer these questions, even before the
+hardware becomes available, we develop a simplified model of the
+expected performance of PIM. Using this model, we investigate two
+classes of data structures.
 
-First, we analyze \emph{pointer chasing data structures} (Section 
-\ref{section:pointer_chasing}), 
-which have a high degree of inherent parallelism and low contention, 
-but which incur significant overhead due to hard-to-predict memory access patterns. 
-We propose using techniques such as combining and partitioning 
-the data across vaults to reintroduce parallelism for these data structures.
+First, we analyze \emph{pointer chasing data structures} (Section
+\ref{section:pointer_chasing}), which have a high degree of inherent
+parallelism and low contention, but which incur significant overhead
+due to hard-to-predict memory access patterns.  We propose using
+techniques such as combining and partitioning the data across vaults
+to reintroduce parallelism for these data structures.
 
-Second, we explore \emph{contended data structures} (Section 
-\ref{section:contended}), such as FIFO queues, 
-which can leverage CPU caches to exploit their inherent high locality. 
-Therefore, FIFO queues might not seem to be able to leverage PIM's faster memory 
-accesses. 
-Nevertheless, these data structures exhibit a high degree of contention, which 
-makes it difficult even for 
-the most advanced data structures to obtain good performance when many threads access 
-the data concurrently. 
-We use pipelining of requests, which can be done very efficiently in PIM, to 
-design a new FIFO queue 
-suitable for PIM that can outperform state-of-the-art concurrent FIFO 
-queues~\cite{Morrison13, Hendler10}.
+Second, we explore \emph{contended data structures} (Section
+\ref{section:contended}), such as FIFO queues, which can leverage CPU
+caches to exploit their inherent high locality.  As they exploit the
+fast on-chip caches well, FIFO queues might not seem to be a good fit
+for leveraging PIM's faster memory accesses.  Nevertheless, these data
+structures exhibit a high degree of contention, which makes it
+difficult, even for the most advanced data structures, to obtain good
+performance when many threads access the data concurrently.  We use
+pipelining of requests, which can be done very efficiently in PIM, to
+design a new FIFO queue suitable for PIM that can outperform
+state-of-the-art concurrent FIFO queues~\cite{Morrison13, Hendler10}.
 
 The contributions of this paper are as follows:
 \begin{itemize}
-\item We propose a simple and intuitive model to analyze the performance of PIM data 
-structures and of 
-concurrent data structures. This model considers the number of atomic operations, the number of 
-memory accesses and the number of accesses that can be served from the CPU cache. 
-\item Using this model, we show that the lower-latency memory accesses provided 
-by PIM 
-are not sufficient for sequential PIM data structures to outperform efficient traditional concurrent 
-data structures.
- \item We propose new designs for PIM data structures using 
-techniques such as combining, partitioning and pipelining.
-Our evaluations show that these new PIM data structures can outperform 
-traditional 
-concurrent data structures, with a significantly simpler design. 
+\item We propose a simple and intuitive model to analyze the
+  performance of PIM data structures and of concurrent data
+  structures. This model considers the number of atomic operations,
+  the number of memory accesses and the number of accesses that can be
+  served from the CPU cache.
+\item Using this model, we show that the lower-latency memory accesses
+  provided by PIM are \emph{not} sufficient for sequential PIM data
+  structures to outperform efficient traditional concurrent data
+  structures.
+ \item We propose new designs for PIM data structures using techniques
+   such as combining, partitioning and pipelining.  Our evaluations
+   show that these new PIM data structures can outperform traditional
+   concurrent data structures, with a significantly simpler design.
 \end{itemize}
 
-The paper is organized as follows. In Section~\ref{section:hardware_model}, we 
-briefly describe 
-our assumptions about the hardware architecture. 
-In Section~\ref{section:performance_model}, we introduce a simplified performance 
-model 
-that we use throughout this paper to estimate the performance of our data structures using 
-the hardware 
-architecture described in Section~\ref{section:hardware_model}. 
-In Sections~\ref{section:pointer_chasing} and \ref{section:contended}, 
-we describe and analyze our PIM data structures and use our model to compare 
-them to prior work. 
-We also use current DRAM architectures to simulate the behavior of our 
-data structures and 
-evaluate them compared to state-of-the-art concurrent data structures. 
-Finally, we present related work in Section~\ref{section:related_work} 
-and conclude in Section~\ref{section:conclusion}. 
+The paper is organized as follows. In
+Section~\ref{section:hardware_model}, we briefly describe our
+assumptions about the hardware architecture.  In
+Section~\ref{section:performance_model}, we introduce a simplified
+performance model that we use throughout this paper to estimate the
+performance of our data structures using the hardware architecture
+described in Section~\ref{section:hardware_model}.  In
+Sections~\ref{section:pointer_chasing} and \ref{section:contended}, we
+describe and analyze our PIM data structures and use our model to
+compare them to prior work.  We also use current DRAM architectures to
+simulate the behavior of our data structures and evaluate them
+compared to state-of-the-art concurrent data structures.  Finally, we
+present related work in Section~\ref{section:related_work} and
+conclude in Section~\ref{section:conclusion}.
 
