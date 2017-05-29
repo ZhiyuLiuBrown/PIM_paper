@@ -1,6 +1,6 @@
 
 %\section{Pointer-Chasing Data Structures}
-\section{Low Contention Data Structures}
+\section{Low-Contention Data Structures}
 \label{section:pointer_chasing}
 
 In this section we consider data structures with low contention. 
@@ -27,18 +27,18 @@ have shown that these data structures can scale to hundreds of cores under low c
 Unfortunately, each vault in 
 PIM memory has a single core. 
 As a consequence, prior work has only compared PIM data structures with sequential data structures, 
-not with carefully crafted concurrent data structures.
+\emph{not} with carefully crafted concurrent data structures.
 
 We analyze linked-lists and skip-lists, and show that the naive PIM data structure in each case cannot 
 outperform the equivalent CPU-managed concurrent data structure even for a small number of cores. 
-Next, we show how to use state-of-the art techniques from the concurrent computing literature to 
-optimize algorithms for near-memory computing to outperform well-known concurrent data 
+Next, we show how to use state-of-the art techniques from concurrent computing to 
+optimize data structures for near-memory computing such that they outperform well-known concurrent data 
 structures designed for multi-core CPUs. 
 
 %\subsection{PIM-managed linked-list}
 \subsection{Linked-lists}
 \label{section:linked_list}
-We now describe a naive PIM linked-list.
+We first describe a naive PIM linked-list.
 The linked-list is stored in a vault, maintained by the local PIM core.
 Whenever a CPU\footnote{We use the term CPU to refer to a CPU core, as opposed to a PIM core.} 
 wants to perform an operation on the linked-list,
@@ -46,19 +46,19 @@ it sends a request to the PIM core.
 The PIM core then retrieves the message, executes the operation, and sends the result back to the CPU.
 The PIM linked-list is sequential, as it can only be accessed by one PIM core. 
 
-Performing pointer chasing on sequential data structures by PIM cores is not a new idea. 
+Performing pointer chasing on sequential data structures using PIM cores is not a new idea. 
 Prior work (\cite{hsieh2016accelerating, Ahn2015:2, Hashemi:2016}) has shown that 
 pointer chasing can be done more efficiently by a PIM core for a sequential data structure.
 However, we are not aware of any prior comparison between the performance of
-PIM-managed data structures and concurrent data structures, 
+PIM-managed data structures and \emph{concurrent} data structures, 
 for which CPUs can make operations in parallel.
 In fact, our analytical and experimental results show that 
 the naive PIM-managed linked-list is not competitive with 
-the concurrent linked-list with fine-grained locks~\cite{Heller05}.
+a concurrent linked-list that uses fine-grained locks~\cite{Heller05}.
 
 We use the \textit{combining optimization} proposed by 
 flat combining~\cite{Hendler10} to improve this data structure:
-a PIM core can execute all concurrent requests by CPU cores using a single 
+a PIM core can execute all concurrent requests by CPU cores using \emph{a single} 
 traversal over the linked-list. 
 
 The role of the PIM core in our PIM-managed linked-list
@@ -67,7 +67,7 @@ using \textit{flat combining} \cite{Hendler10}, where, roughly speaking,
 threads compete for a ``combiner lock" to become the combiner, and
 the combiner takes over all operation requests from other threads and executes them.
 Therefore, we consider the performance of the flat-combining linked-list as an indicator 
-of the performance of our PIM-managed linked-list.
+of the performance of our proposed PIM-managed linked-list.
 
 Based on our performance model, we can calculate the approximate expected throughput 
 (in operations per second) of each of the linked-list algorithms mentioned above, 
