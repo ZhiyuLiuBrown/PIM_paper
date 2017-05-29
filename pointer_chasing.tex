@@ -197,7 +197,10 @@ As we will see, this skip-list is less efficient than some existing skip-list al
 
 Unfortunately, the combining optimization \emph{cannot} be applied to skip-lists effectively.
 The reason is that for any two distant nodes in the skip-list,
-the paths threads must traverse to reach such nodes do \emph{not} have large overlapping sub-paths.
+the paths threads must traverse to reach such nodes do \emph{not} have large overlapping sub-paths. 
+FloDB~\cite{flodb} uses a multi-insert operation for skip-lists, similar to the combining 
+optimization we use for linked-lists. However, FloDB can ensure that the operations performed in 
+a single traversal are close together because the operations are first grouped using a hash-table.  
 
 On the other hand, PIM memory usually consists of many vaults and PIM cores.
 For instance, the first generation of Hybrid Memory Cube \cite{website:HMC} has up to 32 vaults.
