@@ -1,28 +1,26 @@
 %\section{Introduction}
 \section{Near-memory Computing}
 
-The performance gap between memory and CPU has grown exponentially. 
-Memory vendors have focused mainly on improving memory capacity and bandwidth, 
-sometimes even at the cost of increased memory access latencies 
-\cite{Chang:2016, DBLP:conf/hpca/LeeKPKSCM15}. 
-To provide higher bandwidth with lower access latencies, hardware architects 
-have proposed near-memory computing (also called \textit{processing-in-memory}, 
-or PIM), where a lightweight processor (called a PIM core) is located close to 
-memory. A memory access from a PIM core is much faster than that from a CPU 
-core. 
-Near-memory computing is an old idea that has been intensely studied in the 
-past (e.g., 
-\cite{Stone1970, Kogge1994, Gokhale1995, Patterson1997, Oskin1998, 
-KangHYKGLTP99, Hall1999, Elliott:1992}), 
-but so far has not yet materialized. However, new advances in 3D integration and 
-in die-stacked memory 
-likely make near-memory computing viable in the near future. 
-For example, one PIM design \cite{Ahn2015:2, Zhang2014:TTP, Ahn2015:1, boroumand2016} assumes 
-that 
-memory is organized in multiple vaults, each having an in-order PIM core to 
-manage it. 
-These PIM cores can communicate through message passing, but do not share memory, 
-and cannot access each other's vaults. 
+The performance gap between memory and CPU has grown exponentially.
+Memory vendors have focused mainly on improving memory capacity and
+bandwidth, sometimes even at the cost of increased memory access
+latencies \cite{Chang:2016, DBLP:conf/hpca/LeeKSLSM13,
+  DBLP:conf/hpca/LeeKPKSCM15, Chang:2017, Lee:2017}.  To provide
+higher bandwidth with lower access latencies, hardware architects have
+proposed near-memory computing (also called
+\textit{processing-in-memory}, or PIM), where a lightweight processor
+(called a PIM core) is located close to memory. A memory access from a
+PIM core is much faster than that from a CPU core.  Near-memory
+computing is an old idea that has been intensely studied in the past
+(e.g., \cite{Stone1970, Kogge1994, Gokhale1995, Patterson1997,
+  Oskin1998, KangHYKGLTP99, Hall1999, Elliott:1992}), but so far has
+not yet materialized. However, new advances in 3D integration and in
+die-stacked memory likely make near-memory computing viable in the
+near future.  For example, one PIM design \cite{Ahn2015:2,
+  Zhang2014:TTP, Ahn2015:1, boroumand2016} assumes that memory is
+organized in multiple vaults, each having an in-order PIM core to
+manage it.  These PIM cores can communicate through message passing,
+but do not share memory, and cannot access each other's vaults.
 
 This new technology promises to revolutionize the interaction between 
 computation and data, 
