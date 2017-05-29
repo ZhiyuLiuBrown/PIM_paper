@@ -7,8 +7,8 @@ concurrent data structures in the literature.
 To this end, we propose a simplified performance model for PIM memory. 
 We show that naive PIM-managed data structures \emph{cannot} outperform traditional concurrent data structures, 
 due to the lack of parallelism and the high communication cost between the CPUs and the PIM cores.  
-To improve the performance of PIM data structures, we propose novel designs for low contention 
-pointer-chasing data structures, such as linked-lists and skip-lists, and for high-contention  
+To improve the performance of PIM data structures, we propose novel designs for low-contention 
+pointer-chasing data structures, such as linked-lists and skip-lists, and for contended  
 data structures, such as FIFO queues. 
 We show that our PIM-managed data structures can outperform state-of-the-art concurrent 
 data structures, making PIM memory a promising platform for managing data structures.
