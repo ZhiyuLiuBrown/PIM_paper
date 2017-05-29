@@ -84,7 +84,7 @@ Assuming that $n \gg p$ and $N \gg p$, the approximate expected throughput (per 
 of the concurrent linked-lists is presented in Table \ref{tab:linkedlist}, 
 where $\Sp = \sum\limits_{i=1}^{n} ({i \over n+1})^{p}$.
 
-\renewcommand{\arraystretch}{1.8}
+\renewcommand{\arraystretch}{1.6}
 \begin{table}[ht!]
 \begin{center}
     \begin{tabular}{| >{\small}l | l |}
@@ -98,7 +98,7 @@ where $\Sp = \sum\limits_{i=1}^{n} ({i \over n+1})^{p}$.
     PIM-managed linked-list with combining & ${p \over (n-\Sp)\latpim}$ \\ \hline
     \end{tabular}
 \end{center}
-\caption{Throughput of linked-list algorithms.}
+\caption{Throughput of linked-list algorithms}
 \label{tab:linkedlist}
 \end{table}
 
@@ -109,7 +109,7 @@ The key of a request is generated uniformly at random,
 so the average number of memory accesses by one thread for one operation is $(n+1)/2$ 
 and hence the throughput of one thread is $2/((n+1)\latcpu)$. 
 There are $p$ threads running in parallel, so the total throughput is $2p/((n+1)\latcpu)$. 
-The throughput of the flat-combining and the PIM-managed linked-lists without combining optimization 
+The throughput of the flat-combining and the PIM-managed linked-lists without the combining optimization 
 is calculated in a similar manner. 
 For the flat-combining and the PIM-managed linked-lists with combining, it suffices to prove that
 the average number of memory accesses by a PIM core (or a combiner) batching and executing 
@@ -126,13 +126,13 @@ It is easy to see that the PIM-managed linked-list with combining outperforms
 the linked-list with fine-grained locks, which is the best one among other algorithms, 
 if ${\latcpu \over \latpim} = r_1 > {2(n - \Sp)\over n + 1}$.
 Given that $0 < \Sp \le {n \over 2}$, 
-the PIM-managed linked-list can beat the linked-list with fine-grained locks as long as $r_1 \ge 2$. 
+the PIM-managed linked-list can outperform the linked-list with fine-grained locks as long as $r_1 \ge 2$. 
 If we assume $r_1 = 3$, as estimated by prior work, the throughput of the PIM-managed linked-list with 
 combining should be at least 1.5 times the throughput of the linked-list with fine-grained locks.
 Without combining, however, the PIM-managed linked-list \emph{cannot}
 outperform the linked-list with fine-grained locks accessed by $p \ge r_1$ concurrent threads.
 On the other hand, the PIM-managed linked-list is expected to be $r_1$ times better than 
-the flat-combining linked-list, with or without combining optimization applied to both.  
+the flat-combining linked-list, with or without the combining optimization applied to both.  
 
 We implemented the linked-list with fine-grained locks and the flat-combining linked-list 
 with and without the combining optimization.
@@ -143,18 +143,20 @@ which is a NUMA node with 14 cores, a 35 MB shared L3 cache,
 and a private L2/L1 cache of size 256 KB/64 KB per core. 
 Each core has 2 hyperthreads, for a total of 28 hyperthreads. 
 
-The throughput of each of the algorithms is presented in Figure \ref{figure:linkedlist_data}.
-The results confirmed the validity of our analysis in Table \ref{tab:linkedlist}.
+The throughput of each of the algorithms, measured in operations per second,
+is presented in Figure \ref{figure:linkedlist_data}. 
+The results confirm the validity of our analysis in Table \ref{tab:linkedlist}.
 The throughput of the flat-combining algorithm without the combining optimization
 is worse than the algorithm with fine-grained locks.
-Since the performance of the flat-combining linked-list is a good 
+Since the throughput of the flat-combining linked-list is a good 
 indicator of the performance of the PIM-managed linked-list, 
 we triple the throughput of the flat-combining linked-list to obtain the expected throughput 
 of the PIM-managed linked-list, based on the assumption that $r_1 = 3$. 
 As we can see, it is still below the throughput of the one with fined-grained locks.
 However, with the combining optimization, the performance of the flat-combining
-algorithm improves significantly and the estimated throughput of our PIM-managed
-linked-list with combining optimization now outperforms the throughput of all other data structures.
+algorithm improves significantly and our PIM-managed
+linked-list with the combining optimization now outperforms all other data structures. 
+We conclude that our PIM-managed linked-list is effective.
 
 \begin{comment}
 \begin{figure}[ht!]
@@ -190,12 +192,12 @@ linked-list with combining optimization now outperforms the throughput of all ot
 
 Like the naive PIM-managed linked-list,
 the naive PIM-managed skip-list keeps the skip-list in a single vault and
-CPUs send operation requests to the local PIM core that executes those operations.
+CPU cores send operation requests to the local PIM core that executes those operations.
 As we will see, this algorithm is less efficient than some existing algorithms.
 
 Unfortunately, the combining optimization \emph{cannot} be applied to skip-lists effectively.
-The reason is that for any two nodes not close enough to each other in the skip-list,
-the paths threads traverse to reach such nodes do not have large overlapping sub-paths.
+The reason is that for any two distant nodes in the skip-list,
+the paths threads must traverse to reach such nodes do \emph{not} have large overlapping sub-paths.
 
 On the other hand, PIM memory usually consists of many vaults and PIM cores.
 For instance, the first generation of Hybrid Memory Cube \cite{website:HMC} has up to 32 vaults.
@@ -212,7 +214,7 @@ which is a node with maximum height.
 For simplicity, assume that the max height $H_{max}$ is predefined.
 A partition covers a key range between the key of its sentinel node and
 the key of the sentinel node of the next partition.
-CPUs also store a copy of each sentinel node in the normal DRAM and 
+CPUs also store a copy of each sentinel node in regular DRAM (see Figure~\ref{figure:model}) and 
 this copy has an extra variable indicating the vault containing the sentinel node.
 The number of nodes with max height is very small with high probability, 
 so the sentinel nodes can likely be found in the CPU caches  
@@ -246,7 +248,7 @@ The sentinel nodes are never deleted.
 If a new node to be added has the same key as a sentinel node,
 we insert it immediately after the sentinel node.
 
-We compare the performance of our PIM-managed skip-list with partitions 
+We compare the performance of our PIM-managed skip-list with $k$ partitions 
 to the performance of a flat-combining skip-list \cite{Hendler10}
 and a lock-free skip-list \cite{Herlihy08}, 
 accessed concurrently by $p$ CPUs.
@@ -254,7 +256,7 @@ We also apply the partitioning optimization to the flat-combining skip-list,
 so that $k$ combiners are in charge of $k$ partitions of the skip-list. 
 To simplify the comparison, we assume that all skip-lists have the same
 initial structure, i.e. skip-lists with partitions have extra sentinel nodes.
-We execute an equal percentage of add() and remove() requests, so that the size of the 
+We execute an equal number of add() and remove() requests, so that the size of the 
 skip-list does not change dramatically. 
 The keys of requests are generated uniformly at random. 
 
@@ -288,7 +290,7 @@ so their actual performance could be even worse than what we show in Table \ref{
     PIM-managed skip-list with $k$ partitions & ${k \over (\beta\latpim + \latmes)}$ \\ \hline
     \end{tabular}
 \end{center}
-\caption{Throughput of skip-list algorithms.}
+\caption{Throughput of skip-list algorithms}
 \label{tab:skiplist}
 \end{table}
 
@@ -300,17 +302,17 @@ It is also easy to see that the performance of the PIM-managed skip-list is
 ${\beta r_1 \over \beta + r_1} \approx r_1$ times better than the flat-combining skip-list, 
 when they have the same number of partitions. 
 
-Our experiments have revealed similar results, 
+Our experimental evaluation reveals similar results, 
 as presented in Figure \ref{figure:skiplist_data}.
 We have implemented and run the flat-combining skip-list with different numbers of
 partitions and compared them with the lock-free skip-list.
 As the number of partitions increases, the performance of the flat-combining skip-list
-gets better, attesting to the effectiveness of the partitioning optimization.
+improves, attesting to the effectiveness of the partitioning optimization.
 Again, we believe the performance of the flat-combining skip-list is a good indicator
-to the performance of our PIM-managed skip-list.
+of the performance of our PIM-managed skip-list.
 Therefore, according to the analytical results in Table \ref{tab:skiplist}, we can triple the throughput 
 of a flat-combining skip-list to estimate the expected performance of a PIM-managed skip-list.
-As Figure \ref{figure:skiplist_data} illustrates, when the PIM-managed skip-list has $8$ or $16$ 
+As Figure \ref{figure:skiplist_data} illustrates, when our PIM-managed skip-list has $8$ or $16$ 
 partitions, it is expected to outperform the lock-free skip-list with up to 28 hardware threads.
 
 \begin{figure}[ht!]
@@ -326,7 +328,7 @@ partitions, it is expected to outperform the lock-free skip-list with up to 28 h
 \subsubsection{Skip-list Rebalancing}
 The PIM-managed skip-list performs well with a uniform distribution of requests.
 However, if the distribution of requests is \emph{not} uniform, a static partitioning scheme 
-will result in unbalanced partitions, with some PIM cores being idle, while others having to 
+will result in unbalanced partitions, with some PIM cores potentially being idle, while others having to 
 serve a majority of the requests. To address this problem, we introduce a non-blocking protocol for 
 migrating consecutive nodes from one vault to another. 
 
