@@ -346,10 +346,10 @@ Comparing the throughput values of the three FIFO queue algorithms,
 we can conclude that the PIM-managed FIFO queue with pipelining outperforms the other two algorithms 
 when $2r_1 / r_2 > 1$ and $r_1 r_3 > 1$. 
 If we assume $r_1 = r_2 = 3$ and $r_3 = 1$, then the throughput of our FIFO queue is expected to be 
-twice the throughput of the flat-combining queue and three times that of the F\&A queue 
-\footnote{This does not imply that the F\&A queue is faster than the flat combining queue. Remember we 
+twice the throughput of the flat-combining queue and three times that
+of the F\&A queue.~\footnote{This does not imply that the F\&A queue is faster than the flat combining queue. Remember we 
 are assuming that the flat combining queue can enqueue and dequeue in parallel, which is not described 
-in the original algorithm.}.
+in the original algorithm.}
 
 When the PIM-managed FIFO queue is short, it may contain only one segment 
 which deals with both enqueue and dequeue requests. 
