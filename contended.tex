@@ -138,22 +138,22 @@ sends the node back to the CPU.
 \vspace{-2ex}
 \end{algorithm*}
 
-Initially, the queue consists of an empty segment that acts as both the enqueue segment and 
-the dequeue segment. 
-When the length of the enqueue segment exceeds some threshold, the PIM core maintaining it
-notifies another PIM core to create a new segment as the new enqueue segment.\footnote{
-Alternative designs where a CPU decides when to create new segments based on more complex 
-criteria are also possible. 
-We leave such designs as future work. }
-When the dequeue segment becomes empty and the queue has other segments, 
-the dequeue segment is deleted and the segment that was created first 
-among all the remaining segments is designated as the new dequeue segment. 
-This segment was created when the old dequeue segment 
-acted as the enqueue segment and exceeded the length threshold.
-If the enqueue segment is different from the dequeue segment, 
-enqueue and dequeue operations can be executed by two different PIM cores 
-in parallel, improving the throughput. 
-The F\&A queue~\cite{Morrison13} also allows parallel enqueue and dequeue. 
+Initially, the queue consists of an empty segment that acts as both
+the enqueue segment and the dequeue segment.  When the length of the
+enqueue segment exceeds some threshold, the PIM core maintaining it
+notifies another PIM core to create a new segment as the new enqueue
+segment.\footnote{ Alternative designs where a CPU decides when to
+  create new segments based on more complex criteria are also
+  possible.  We leave such designs as future work. } When the dequeue
+segment becomes empty and the queue has other segments, the dequeue
+segment is deleted and the segment that was created first among all
+the remaining segments is designated as the new dequeue segment.  This
+segment was created when the old dequeue segment acted as the enqueue
+segment and exceeded the length threshold.  If the enqueue segment is
+different from the dequeue segment, enqueue and dequeue operations can
+be executed by two different PIM cores in parallel, improving the
+throughput.  The F\&A queue~\cite{Morrison13} also allows parallel
+enqueue and dequeue.
 
 The pseudocode of the PIM-managed FIFO queue is presented in Algorithm \ref{alg:queue}. 
 Each PIM core has local variables \textit{enqSeg} and \textit{deqSeg} that are references to 
@@ -258,20 +258,25 @@ the execution time of $p$ requests is at least $p\latato$.
 If we assume that each CPU makes a request immediately after its previous request completes, 
 the throughput (per second) of the F\&A queue is at most ${1 \over \latato}$. 
 
-The flat-combining FIFO queue maintains a sequential FIFO queue and 
-threads submit their requests into a \emph{publication list}. 
-The publication list consists of slots, one for each thread, to store their requests.
-After writing a request into the list, a thread competes with others for acquiring a lock 
-to become the ``\emph{combiner}", which incurs one last-level cache access. 
-The combiner then goes through the publication list to retrieve requests, executes operations for those requests, 
-and writes results back to the list, while other threads with pending requests spin on their own slots, 
-waiting for the results. 
-The combiner therefore makes two last-level cache accesses\footnote{We assume the combiner finds the slots 
-in the last-level cache, to the benefit of the flat combining algorithm. If the slots are not found in cache, 
-the cost will be higher, as the combiner will incur memory accesses instead.} to each slot other than its own, 
-one for reading the request and one for writing the result back. 
-Thus, the execution time of $p$ requests in this FIFO queue is at least $(2p-1)\latllc$ and 
-the throughput (per second) of this FIFO queue is at most ${1 \over 2\latllc}$ for large enough $p$.
+The flat-combining FIFO queue maintains a sequential FIFO queue and
+threads submit their requests into a \emph{publication list}.  The
+publication list consists of slots, one for each thread, to store
+their requests.  After writing a request into the list, a thread
+competes with others for acquiring a lock to become the
+``\emph{combiner}", which incurs one last-level cache access.  The
+combiner then goes through the publication list to retrieve requests,
+executes operations for those requests, and writes results back to the
+list, while other threads with pending requests spin on their own
+slots, waiting for the results.  The combiner therefore makes two
+last-level cache accesses\footnote{ We assume the combiner finds the
+  slots in the last-level cache, to the benefit of the flat combining
+  algorithm. If the slots are not found in cache, the cost will be
+  higher, as the combiner will incur memory accesses instead.} to each
+slot other than its own, one for reading the request and one for
+writing the result back.  Thus, the execution time of $p$ requests in
+this FIFO queue is at least $(2p-1)\latllc$ and the throughput (per
+second) of this FIFO queue is at most ${1 \over 2\latllc}$ for large
+enough $p$.
 
 Note that our analysis of the F\&A-based and the flat-combining queues is performed in favor of them, 
 as we consider only partial costs of their executions. 
@@ -330,7 +335,7 @@ is $\latmes + p(\latpim + \epsilon) + \latmes$,
 where $p(\latpim + \epsilon)$ is the sum of the execution times of the first two steps 
 for the $p$ requests, and the second $\latmes$ is message transfer time of step 3 for the last request. 
 $\epsilon$ is the total latency of the PIM core making two L1 cache accesses and sending one message.  
-This is negligible in our performance model. 
+$\epsilon$ is negligible in our performance model. 
 
 Assume that each CPU makes another request immediately after it receives the result of its previous request 
 and that there are enough (at least $2\latmes / \latpim$) CPUs sending requests.
@@ -348,7 +353,7 @@ we can conclude that the PIM-managed FIFO queue with pipelining outperforms the 
 when $2r_1 / r_2 > 1$ and $r_1 r_3 > 1$. 
 If we assume $r_1 = r_2 = 3$ and $r_3 = 1$, then the throughput of our PIM-managed FIFO queue is expected to be 
 twice the throughput of the flat-combining queue and three times that
-of the F\&A queue.~\footnote{This does not imply that the F\&A queue is faster than the flat combining queue, 
+of the F\&A queue.\footnote{ This does not imply that the F\&A queue is faster than the flat combining queue, 
 since we only consider part of the costs of these queues in our analysis.}
 
 When the PIM-managed FIFO queue is short, it may contain only one segment 
