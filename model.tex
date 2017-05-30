@@ -1,9 +1,10 @@
 \section{Performance Model}
 %\subsection{Performance model}
 \label{section:performance_model}
-We propose the following simple performance model to compare 
-our PIM-managed data structures with existing concurrent data structures.
-For read and write operations, we assume 
+
+We propose the following simple performance model to compare our
+PIM-managed data structures with existing concurrent data structures.
+For read and write operations, we assume
 $$\latcpu = r_1\latpim = r_2\latllc$$
 where $\latcpu$ is the latency of a memory access by a CPU,
 $\latpim$ is the latency of a local memory access by a PIM core, and
@@ -19,8 +20,8 @@ more concrete with actual latency numbers.
 In our performance model, we ignore the costs of accesses to other cache levels, such as L1 or L2, 
 as they are negligible in the concurrent data structures we consider.
 
-We assume that the latency of a CPU performing an atomic operation, such as a CAS or a F\&A,
-to a cache line is 
+We assume that the latency of a CPU performing an atomic operation,
+such as a CAS or a F\&A, to a cache line is
 $$\latato = r_3\latcpu$$ 
 where $r_3 = 1$, even if the cache line is currently in the cache.
 This is because an atomic operation hitting in the cache is usually 
@@ -29,10 +30,11 @@ When there are $k$ atomic operations competing for a cache line concurrently,
 we assume that they are executed sequentially, that is,
 they complete in times $\latato, 2\latato,..., k\cdot\latato$, respectively.
 
-We also assume that the size of a message sent by a PIM core or a CPU core is at most 
-the size of a cache line.
-Given that a message transferred between a CPU and a PIM core goes through
-the crossbar network, we assume that the latency for a message to arrive at its receiver is 
+We also assume that the size of a message sent by a PIM core or a CPU
+core is at most the size of a cache line.  Given that a message
+transferred between a CPU and a PIM core goes through the crossbar
+network, we assume that the latency for a message to arrive at its
+receiver is
 $$\latmes = \latcpu$$
 We make the conservative assumption that the latency of a message transferred 
 between two PIM cores is also $\latmes$.
