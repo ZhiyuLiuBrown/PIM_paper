@@ -1,16 +1,25 @@
 \section{Conclusion}
 \label{section:conclusion}
-In this paper, we study how to exploit the low access latency 
-of PIM memory to design efficient concurrent data structures for the PIM memory.
-We analyze and compare the performance of our PIM-managed data structures with 
-concurrent data structures in the literature.
-To this end, we propose a simplified performance model for PIM memory. 
-We show that naive PIM-managed data structures \emph{cannot} outperform traditional concurrent data structures, 
-due to the lack of parallelism and the high communication cost between the CPUs and the PIM cores.  
-To improve the performance of PIM data structures, we propose novel designs for low-contention 
-pointer-chasing data structures, such as linked-lists and skip-lists, and for contended  
-data structures, such as FIFO queues. 
-We show that our PIM-managed data structures can outperform state-of-the-art concurrent 
-data structures, making PIM memory a promising platform for managing data structures.
+
+In this paper, we study how to design efficient data structures that
+can take advantage of the promising benefits offered by the Processing
+in Memory (PIM) paradigm.  We analyze and compare the performance of
+our new PIM-managed data structures with traditional concurrent data
+structures that were proposed in the literature to take advantage of
+multiple processors.  To this end, we develop a simplified performance
+model for PIM.  Using this model, along with empirical performance
+measurements from a modern system, we show that naive PIM-managed data
+structures \emph{cannot} outperform traditional concurrent data
+structures, due to the lack of parallelism and the high communication
+cost between the CPUs and the PIM cores.  To improve the performance
+of PIM data structures, we propose novel designs for low-contention
+pointer-chasing data structures, such as linked-lists and skip-lists,
+and for contended data structures, such as FIFO queues.  We show that
+our new PIM-managed data structures can outperform state-of-the-art
+concurrent data structures, making PIM memory a promising platform for
+managing data structures. We conclude that it is very promising to
+examine novel data structure designs for the PIM paradigm, and hope
+future work builds upon our analyses to develop other types of
+PIM-managed data structures.
 
  
