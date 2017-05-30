@@ -155,7 +155,7 @@ be executed by two different PIM cores in parallel, improving the
 throughput.  The F\&A queue~\cite{Morrison13} also allows parallel
 enqueue and dequeue.
 
-The pseudocode of the PIM-managed FIFO queue is presented in Algorithm \ref{alg:queue}. 
+The pseudo-code of the PIM-managed FIFO queue is presented in Algorithm \ref{alg:queue}. 
 Each PIM core has local variables \textit{enqSeg} and \textit{deqSeg} that are references to 
 local enqueue and dequeue segments.
 When \textit{enqSeg} (or \textit{deqSeg}) is not null, it indicates that the PIM core is currently 
