@@ -43,7 +43,7 @@ we show that naive PIM data structures \emph{cannot} outperform
 state-of-the-art concurrent data structures.  In particular, the
 lower-latency access to memory provided by PIM cannot compensate for
 the loss of parallelism in data structure manipulation.  For example,
-even if a PIM memory access is two times faster than a CPU memory
+we show that even if a PIM memory access is two times faster than a CPU memory
 access, a sequential PIM linked-list is still slower than a
 traditional concurrent linked-list accessed in parallel by only three
 CPU cores.
